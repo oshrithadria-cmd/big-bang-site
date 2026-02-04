@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Big Bang Scroll</title>
+  <!-- Preload video frames for smooth scroll animation -->
+  <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-001.png">
+  <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-007.png">
+  <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-014.png">
+  <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-021.png">
+  <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-028.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;800&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+    }
+    
+    /* Milky Way background - behind canvas and purple */
+    .milkyway-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/milkyway-bg.png') center center / cover no-repeat;
+      z-index: -2;
+      opacity: 0;
+      transition: opacity 2.5s ease;
+      pointer-events: none;
+    }
+    
+    .milkyway-bg.visible {
+      opacity: 1;
+    }
+    
+    /* Purple Milky Way background - for 0.33-0.58 section */
+    .gray-milkyway-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/purple-milkyway-bg.png') center center / cover no-repeat;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 2.5s ease;
+      pointer-events: none;
+    }
+    
+    .gray-milkyway-bg.visible {
+      opacity: 1;
+    }
+    
+    /* Scroll Frames - fills screen height with faded edges (0.40-0.58) */
+    .scroll-frames {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      height: 100%;
+      object-fit: contain;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    
+    .scroll-frames.visible {
+      opacity: 1;
+    }
+    
+    /* Purple Galaxy background - above space bg, below canvas */
+    .purple-galaxy-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/purple-galaxy.png') center center / cover no-repeat;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      pointer-events: none;
+    }
+    
+    .purple-galaxy-bg.visible {
+      opacity: 1;
+    }
+    
+    /* Black Hole Video */
+    .blackhole-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70vw;
+      height: auto;
+      z-index: 3;
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: screen; /* Makes black transparent! */
+      filter: brightness(1.1) contrast(1.1);
+    }
+    
+    .blackhole-video.visible {
+      opacity: 1;
+    }
+    
+    /* Planets Section Background */
+    .planets-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/planets-bg.png') center center / cover no-repeat;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      pointer-events: none;
+    }
+    
+    .planets-bg.visible {
+      opacity: 1;
+    }
+    
+    /* Planets/Solar System Section */
+    .solar-system-section {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 15;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+    
+    .solar-system-section.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    /* Navigation bar at top */
+    .planet-nav {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 40px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    .planet-nav-item {
+      color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .planet-nav-item:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .planet-nav-item.active {
+      color: #ffffff;
+    }
+    
+    /* Main planet display */
+    .planet-display {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+    
+    .planet-image-container {
+      position: relative;
+    }
+    
+    .planet-main-image {
+      width: 450px;
+      height: 450px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 60px rgba(255, 150, 50, 0.4));
+    }
+    
+    .planet-title-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 80px;
+      color: rgba(255, 255, 255, 0.15);
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    
+    /* Planet info panel */
+    .planet-info {
+      max-width: 350px;
+    }
+    
+    .planet-info-row {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 30px;
+    }
+    
+    .planet-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .planet-info-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .planet-info-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+    
+    .planet-description {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 20px;
+    }
+    
+    /* Navigation arrows */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 20px;
+    }
+    
+    .nav-arrow:hover {
+      border-color: rgba(255, 255, 255, 0.6);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-arrow.prev {
+      left: 40px;
+    }
+    
+    .nav-arrow.next {
+      right: 40px;
+    }
+    
+    /* Side planets preview */
+    .side-planet {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+    
+    .side-planet:hover {
+      opacity: 1;
+    }
+    
+    .side-planet.left {
+      left: 80px;
+    }
+    
+    .side-planet.right {
+      right: 80px;
+    }
+    
+    .side-planet img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    
+    .side-planet-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+      margin-top: 10px;
+    }
+    
+    /* Vertical Timeline Navigation */
+    .timeline-nav {
+      position: fixed;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .timeline-nav-line {
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .timeline-nav-progress {
+      position: absolute;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.8);
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      height: 0%;
+      transition: height 0.3s ease;
+    }
+    
+    .timeline-nav-points {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      position: relative;
+      padding: 20px 0;
+    }
+    
+    .timeline-nav-point {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .timeline-nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+    
+    .timeline-nav-point:hover .timeline-nav-dot {
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(1.2);
+    }
+    
+    .timeline-nav-point.active .timeline-nav-dot {
+      background: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      transform: scale(1.3);
+    }
+    
+    .timeline-nav-label {
+      position: absolute;
+      right: 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+    
+    .timeline-nav-point:hover .timeline-nav-label,
+    .timeline-nav-point.active .timeline-nav-label {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .timeline-nav-point.active .timeline-nav-label {
+      color: #ffffff;
+    }
+    
+    /* Left Section Navigation */
+    .section-nav {
+      position: fixed;
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .section-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+    
+    .section-nav-item:hover {
+      opacity: 0.8;
+    }
+    
+    .section-nav-item.active {
+      opacity: 1;
+    }
+    
+    .section-nav-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .section-nav-item:hover .section-nav-icon {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .section-nav-item.active .section-nav-icon {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+    
+    .section-nav-icon img {
+      width: 35px;
+      height: 35px;
+      object-fit: contain;
+    }
+    
+    .section-nav-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.5px;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .section-nav-item:hover .section-nav-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .section-nav-item.active .section-nav-label {
+      color: #ffffff;
+    }
+    
+    .section-nav-item.active::after {
+      content: '';
+      position: absolute;
+      left: -30px;
+      width: 3px;
+      height: 50px;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.8), transparent);
+    }
+    
+    /* Black Holes Section */
+    .blackholes-text {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 15;
+      pointer-events: none;
+    }
+    
+    .blackholes-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: clamp(50px, 10vw, 150px);
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: 2px;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .blackholes-title.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .blackholes-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 30px auto 0;
+      line-height: 1.8;
+      text-align: center;
+      max-width: 750px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .blackholes-subtitle.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Text being sucked into black hole - controlled by JS */
+    .blackholes-title.sucking,
+    .blackholes-subtitle.sucking {
+      transition: none;
+    }
+    
+    @media (max-width: 768px) {
+      .blackholes-title {
+        white-space: normal;
+      }
+      .blackholes-subtitle {
+        font-size: 14px;
+        max-width: 90%;
+      }
+    }
+    .ui {
+      position: fixed;
+      left: 24px;
+      top: 24px;
+      z-index: 1;
+      color: rgba(255,255,255,0.85);
+      max-width: 480px;
+      line-height: 1.3;
+      pointer-events: none;
+    }
+    .ui .small {
+      opacity: 0.7;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    .ui h1 {
+      font-size: 48px;
+      font-weight: 300;
+      margin: 0 0 8px 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+    .ui .subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+      margin: 0 0 24px 0;
+      font-weight: 300;
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.6;
+      font-size: 14px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(4px); }
+    }
+    .scroll-space {
+      height: 1200vh;
+    }
+    .content-sections {
+      position: relative;
+      z-index: 2;
+    }
+    .section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .section.visible {
+      opacity: 1;
+    }
+    .section-content {
+      max-width: 600px;
+      text-align: center;
+      color: rgba(255,255,255,0.95);
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .section-content h2 {
+      font-size: 36px;
+      font-weight: 300;
+      margin: 0 0 16px 0;
+      letter-spacing: 1px;
+    }
+    .section-content p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 0;
+      opacity: 0.9;
+    }
+    @media (max-width: 768px) {
+      .ui {
+        left: 16px;
+        top: 16px;
+        max-width: calc(100% - 32px);
+      }
+      .ui h1 {
+        font-size: 32px;
+      }
+      .ui .subtitle {
+        font-size: 16px;
+      }
+      .section {
+        padding: 40px 20px;
+      }
+      .section-content {
+        padding: 24px;
+      }
+      .section-content h2 {
+        font-size: 28px;
+      }
+      .section-content p {
+        font-size: 16px;
+      }
+    }
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      z-index: 10;
+      background: rgba(255,255,255,0.1);
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4a9eff, #7b68ee, #ff6b9d);
+      transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(74, 158, 255, 0.5);
+    }
+
+/* --- Animated space background --- */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-inner {
+  position: absolute;
+  inset: 0;
+
+  background-image: url("assets/space-bg.png.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  will-change: transform;
+  transform: translateY(0px) scale(1.05);
+  filter: brightness(0.9) contrast(1.05) saturate(1.05);
+}
+
+/* breathing motion */
+@keyframes drift {
+  0%   { transform: translateY(0px) scale(1.05); }
+  50%  { transform: translateY(-18px) scale(1.07); }
+  100% { transform: translateY(0px) scale(1.05); }
+}
+
+.bg-inner {
+  animation: drift 22s ease-in-out infinite;
+  transition: opacity 1s ease;
+}
+
+.bg-inner.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* UI above everything */
+.ui { 
+  position: fixed; 
+  left: 20px; 
+  top: 20px; 
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Logo video */
+.logo-container {
+  position: fixed;
+  top: 10px;
+  left: 35px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.logo-video {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  margin-bottom: -10px;
+}
+
+.logo-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 100;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Three.js canvas above frames */
+canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  display: block;
+}
+
+/* Hero text section */
+.hero-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(50px, 10vw, 150px);
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 2px;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 30px auto 0;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* Galaxy Section Text */
+.galaxy-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.galaxy-text.visible {
+  opacity: 1;
+}
+
+.galaxy-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(50px, 10vw, 150px);
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 2px;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.galaxy-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 30px auto 0;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* Scroll to start hint */
+.scroll-hint-bottom {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .hero-subtitle {
+    font-size: 14px;
+  }
+}
+
+/* Timeline text sections */
+.timeline-text {
+  position: fixed;
+  left: 80px;
+  bottom: 100px;
+  width: calc(100vw - 160px);
+  max-width: 1400px;
+  z-index: 5;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.timeline-layout {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.timeline-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 130px;
+  color: #A5A5A5;
+  margin: 0;
+  letter-spacing: 0.02em;
+  line-height: 120px;
+  text-shadow: none;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.timeline-content {
+  flex: 1;
+  max-width: 360px;
+  margin-left: -120px;
+  margin-bottom: -78px;
+}
+
+/* Interactive Explosion Hotspots */
+.explosion-hotspots {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.explosion-hotspots.visible {
+  opacity: 1;
+}
+
+.hotspot {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,200,100,0.6) 40%, transparent 70%);
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  animation: hotspot-pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255,200,100,0.8), 0 0 40px rgba(255,150,50,0.4);
+}
+
+.hotspot::before {
+  content: '+';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+@keyframes hotspot-pulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 20px rgba(255,200,100,0.8), 0 0 40px rgba(255,150,50,0.4);
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.3);
+    box-shadow: 0 0 30px rgba(255,200,100,1), 0 0 60px rgba(255,150,50,0.6);
+  }
+}
+
+.hotspot-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 200, 100, 0.5);
+  border-radius: 8px;
+  padding: 16px 20px;
+  max-width: 280px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.hotspot-tooltip.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.hotspot-tooltip h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffcc66;
+}
+
+.hotspot-tooltip p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.hotspot-tooltip .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.hotspot-tooltip .close-btn:hover {
+  color: white;
+}
+
+.timeline-description {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #ffffff;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.timeline-description:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .timeline-text {
+    left: 20px;
+    bottom: 60px;
+    width: calc(100vw - 40px);
+  }
+  
+  .timeline-layout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  
+  .timeline-title {
+    font-size: 60px;
+    line-height: 56px;
+  }
+  
+  .timeline-content {
+    padding-bottom: 0;
+  }
+  
+  .timeline-description {
+    font-size: 14px;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- Left Section Navigation -->
+  <div class="section-nav" id="section-nav">
+    <div class="section-nav-item active" data-section="bigbang" data-scroll="0.10">
+      <div class="section-nav-icon">
+        <svg viewBox="0 0 50 50" width="35" height="35">
+          <circle cx="25" cy="25" r="8" fill="#fff" opacity="0.9"/>
+          <circle cx="25" cy="25" r="15" fill="none" stroke="#fff" stroke-width="1" opacity="0.4"/>
+          <circle cx="25" cy="25" r="22" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.2"/>
+          <line x1="25" y1="3" x2="25" y2="10" stroke="#fff" stroke-width="1" opacity="0.5"/>
+          <line x1="25" y1="40" x2="25" y2="47" stroke="#fff" stroke-width="1" opacity="0.5"/>
+          <line x1="3" y1="25" x2="10" y2="25" stroke="#fff" stroke-width="1" opacity="0.5"/>
+          <line x1="40" y1="25" x2="47" y2="25" stroke="#fff" stroke-width="1" opacity="0.5"/>
+        </svg>
+      </div>
+      <span class="section-nav-label">The Big Bang</span>
+    </div>
+    
+    <div class="section-nav-item" data-section="blackhole" data-scroll="0.40">
+      <div class="section-nav-icon">
+        <svg viewBox="0 0 50 50" width="35" height="35">
+          <circle cx="25" cy="25" r="10" fill="#000" stroke="#fff" stroke-width="1"/>
+          <ellipse cx="25" cy="25" rx="20" ry="8" fill="none" stroke="#fff" stroke-width="1" opacity="0.6" transform="rotate(-20 25 25)"/>
+          <ellipse cx="25" cy="25" rx="18" ry="6" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.3" transform="rotate(-20 25 25)"/>
+        </svg>
+      </div>
+      <span class="section-nav-label">Black Hole</span>
+    </div>
+    
+    <div class="section-nav-item" data-section="galaxy" data-scroll="0.68">
+      <div class="section-nav-icon">
+        <svg viewBox="0 0 50 50" width="35" height="35">
+          <ellipse cx="25" cy="25" rx="20" ry="8" fill="none" stroke="#fff" stroke-width="1" opacity="0.7" transform="rotate(-30 25 25)"/>
+          <ellipse cx="25" cy="25" rx="15" ry="5" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.5" transform="rotate(-30 25 25)"/>
+          <ellipse cx="25" cy="25" rx="10" ry="3" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.4" transform="rotate(-30 25 25)"/>
+          <circle cx="25" cy="25" r="3" fill="#fff" opacity="0.8"/>
+        </svg>
+      </div>
+      <span class="section-nav-label">Galaxy</span>
+    </div>
+    
+    <div class="section-nav-item" data-section="planets" data-scroll="0.88">
+      <div class="section-nav-icon">
+        <svg viewBox="0 0 50 50" width="35" height="35">
+          <circle cx="25" cy="25" r="15" fill="#4a90d9"/>
+          <ellipse cx="25" cy="20" rx="12" ry="6" fill="#6ab04c" opacity="0.7"/>
+          <ellipse cx="25" cy="32" rx="10" ry="4" fill="#6ab04c" opacity="0.5"/>
+          <circle cx="30" cy="18" r="3" fill="#fff" opacity="0.3"/>
+        </svg>
+      </div>
+      <span class="section-nav-label">Planets</span>
+    </div>
+  </div>
+
+  <!-- Vertical Timeline Navigation -->
+  <div class="timeline-nav" id="timeline-nav">
+    <div class="timeline-nav-line"></div>
+    <div class="timeline-nav-progress" id="timeline-nav-progress"></div>
+    <div class="timeline-nav-points">
+      <div class="timeline-nav-point active" data-scroll="0">
+        <span class="timeline-nav-label">-13.7B</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.15">
+        <span class="timeline-nav-label">Big Bang</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.31">
+        <span class="timeline-nav-label">-13.2B</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.48">
+        <span class="timeline-nav-label">Black Holes</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.58">
+        <span class="timeline-nav-label">-10.8B</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.68">
+        <span class="timeline-nav-label">Galaxy</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.88">
+        <span class="timeline-nav-label">Solar System</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg">
+    <div class="bg-inner"></div>
+  </div>
+  
+  <!-- Milky Way Background -->
+  <div class="milkyway-bg" id="milkyway-bg"></div>
+  <div class="gray-milkyway-bg" id="gray-milkyway-bg"></div>
+  <div class="purple-galaxy-bg" id="purple-galaxy-bg"></div>
+  <div class="planets-bg" id="planets-bg"></div>
+  
+  <!-- Scroll Frames (0.40-0.58) -->
+  <img class="scroll-frames" id="scroll-frames" src="assets/video-frames/ezgif-frame-001.png" alt="">
+  
+  <!-- Black Hole section - placeholder for future content -->
+  
+  <!-- Solar System Section -->
+  <div class="solar-system-section" id="solar-system-section">
+    <!-- Top navigation -->
+    <nav class="planet-nav">
+      <span class="planet-nav-item" data-planet="saturn">Saturn</span>
+      <span class="planet-nav-item" data-planet="uranus">Uranus</span>
+      <span class="planet-nav-item" data-planet="neptune">Neptune</span>
+      <span class="planet-nav-item" data-planet="pluto">Pluto</span>
+      <span class="planet-nav-item" data-planet="moon">Moon</span>
+      <span class="planet-nav-item active" data-planet="sun">The Sun</span>
+      <span class="planet-nav-item" data-planet="mercury">Mercury</span>
+      <span class="planet-nav-item" data-planet="venus">Venus</span>
+      <span class="planet-nav-item" data-planet="earth">Earth</span>
+      <span class="planet-nav-item" data-planet="mars">Mars</span>
+      <span class="planet-nav-item" data-planet="jupiter">Jupiter</span>
+    </nav>
+    
+    <!-- Navigation arrows -->
+    <div class="nav-arrow prev" id="planet-prev">&#8249;</div>
+    <div class="nav-arrow next" id="planet-next">&#8250;</div>
+    
+    <!-- Main display area -->
+    <div class="planet-display">
+      <!-- Planet image with title overlay -->
+      <div class="planet-image-container">
+        <img src="assets/sun.png" alt="The Sun" class="planet-main-image" id="planet-image">
+        <div class="planet-title-overlay" id="planet-title-overlay">THE SUN</div>
+      </div>
+      
+      <!-- Planet info -->
+      <div class="planet-info">
+        <div class="planet-info-row">
+          <div class="planet-info-item">
+            <span class="planet-info-label">Planet Type</span>
+            <span class="planet-info-value" id="info-type">Star</span>
+          </div>
+          <div class="planet-info-item">
+            <span class="planet-info-label">Diameter</span>
+            <span class="planet-info-value" id="info-diameter">1,392,700 km</span>
+          </div>
+        </div>
+        <div class="planet-info-row">
+          <div class="planet-info-item">
+            <span class="planet-info-label">Avg Temperature</span>
+            <span class="planet-info-value" id="info-temp">5,500°C</span>
+          </div>
+          <div class="planet-info-item">
+            <span class="planet-info-label">Climate</span>
+            <span class="planet-info-value" id="info-climate">Extreme plasma environment</span>
+          </div>
+        </div>
+        <div class="planet-info-row">
+          <div class="planet-info-item">
+            <span class="planet-info-label">Day Length</span>
+            <span class="planet-info-value" id="info-day">25 days (equator) /<br>35 days (poles)</span>
+          </div>
+        </div>
+        <p class="planet-description" id="planet-description">
+          The Sun is the star at the center of our Solar System. It is a nearly perfect ball of hot plasma, heated to incandescence by nuclear fusion reactions in its core. The Sun radiates energy mainly as visible light and infrared radiation, and is the most important source of energy for life on Earth.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Black Holes Section -->
+  <div class="blackholes-text" id="blackholes-text">
+    <h1 class="blackholes-title">BLACK HOLES</h1>
+    <p class="blackholes-subtitle">A black hole is a region in space where the force of gravity is so strong, not even light—the fastest known entity in our universe—can escape. The boundary of a black hole is called the event horizon, a point of no return beyond which we truly cannot see.</p>
+  </div>
+  
+  <!-- Timeline 2 - 13.2B Years Ago -->
+  <div class="timeline-text" id="timeline-2">
+    <div class="timeline-layout">
+      <h2 class="timeline-title">13.2B<br>YEARS<br>AGO</h2>
+      <div class="timeline-content">
+        <p class="timeline-description">
+          A black hole is a region in space where the force of gravity is so strong, not even light—the fastest known entity in our universe—can escape. The boundary of a black hole is called the event horizon, a point of no return beyond which we truly cannot see.
+        </p>
+        <p class="timeline-description">
+          When something crosses the event horizon, it collapses into the black hole's singularity—an infinitely small, infinitely dense point where space-time and the laws of physics no longer apply.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Logo -->
+  <div class="logo-container">
+    <video class="logo-video" autoplay loop muted playsinline>
+      <source src="assets/logo-video.mp4" type="video/mp4">
+    </video>
+    <span class="logo-text">Origin</span>
+  </div>
+
+  <!-- Hero Text -->
+  <div class="hero-text">
+    <h1 class="hero-title">THE BIG BANG</h1>
+    <p class="hero-subtitle">The Big Bang Theory states that the universe began as a hot and<br>infinitely dense point only a few millimeters wide. It was similar to a<br>supercharged black hole about 13.7 billion years ago.</p>
+  </div>
+
+  <!-- Galaxy Section Text -->
+  <div class="galaxy-text" id="galaxy-text">
+    <h1 class="galaxy-title">GALAXY</h1>
+    <p class="galaxy-subtitle">A galaxy is a gravitationally bound system of stars, stellar remnants,<br>interstellar gas, dust, and dark matter. The word is derived from the Greek<br>galaxias, literally meaning "milky," a reference to our own Milky Way galaxy.</p>
+  </div>
+  
+  <!-- Galaxy Timeline Text -->
+  <div class="timeline-text" id="timeline-galaxy">
+    <div class="timeline-layout">
+      <h2 class="timeline-title">10.8B<br>YEARS<br>AGO</h2>
+      <div class="timeline-content">
+        <p class="timeline-description">
+          The first galaxies began to form, as gravity pulled together vast clouds of hydrogen gas left over from the Big Bang. These early galaxies were small and irregular, merging over billions of years to form the majestic spirals and ellipticals we see today.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint-bottom">Scroll to start</div>
+
+  <!-- Timeline text sections -->
+  <div class="timeline-text" id="timeline-1">
+    <div class="timeline-layout">
+      <h2 class="timeline-title">13.7B<br>YEARS<br>AGO</h2>
+      <div class="timeline-content">
+        <p class="timeline-description">
+          This tiny singularity violently exploded, and it is from this explosion—this "bang"—that all matter, energy, space, and time were created.
+        </p>
+        <p class="timeline-description">
+          What happened next were two major stages of the universe's evolution called the radiation and matter eras. They're defined by key events that help shape the universe.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Space Hotspots -->
+  <!-- Original Explosion Hotspots -->
+  <div class="explosion-hotspots" id="explosion-hotspots">
+    <!-- Hotspot 1 - Stars -->
+    <div class="hotspot" id="hotspot-1" style="top: 25%; left: 20%;">
+      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+        <button class="close-btn">&times;</button>
+        <h4>The First Stars</h4>
+        <p>About 100-200 million years after the Big Bang, the first stars ignited. These "Population III" stars were massive giants, hundreds of times larger than our Sun, burning hot and bright but living short lives.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 2 - Galaxies -->
+    <div class="hotspot" id="hotspot-2" style="top: 45%; left: 75%;">
+      <div class="hotspot-tooltip" style="top: 30px; left: -280px;">
+        <button class="close-btn">&times;</button>
+        <h4>Galaxy Formation</h4>
+        <p>Gravity slowly pulled matter together into vast cosmic structures. The first galaxies formed about 400 million years after the Big Bang - small, irregular clumps of stars that would eventually merge into the magnificent spirals we see today.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 3 - Dark Matter -->
+    <div class="hotspot" id="hotspot-3" style="top: 65%; left: 35%;">
+      <div class="hotspot-tooltip" style="top: -120px; left: 15px;">
+        <button class="close-btn">&times;</button>
+        <h4>Dark Matter</h4>
+        <p>An invisible substance that makes up about 27% of the universe. We can't see it, but its gravitational effects shaped the cosmic web - the vast network of filaments connecting galaxies across space.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 4 - Expansion -->
+    <div class="hotspot" id="hotspot-4" style="top: 35%; left: 55%;">
+      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+        <button class="close-btn">&times;</button>
+        <h4>Cosmic Expansion</h4>
+        <p>The universe is still expanding today, and that expansion is accelerating. Distant galaxies are moving away from us faster than the speed of light - not through space, but because space itself is stretching.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 5 - Elements -->
+    <div class="hotspot" id="hotspot-5" style="top: 70%; left: 65%;">
+      <div class="hotspot-tooltip" style="top: -140px; left: -200px;">
+        <button class="close-btn">&times;</button>
+        <h4>Stellar Nucleosynthesis</h4>
+        <p>Every atom of carbon in your body was forged in the heart of a dying star. Elements heavier than hydrogen and helium are created through nuclear fusion in stars and scattered across space when they explode as supernovae.</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Black Hole Hotspots -->
+  <div class="explosion-hotspots" id="blackhole-hotspots">
+    <!-- Hotspot 1 - Event Horizon (top) -->
+    <div class="hotspot" style="top: 20%; left: 50%; transform: translateX(-50%);">
+      <div class="hotspot-tooltip" style="top: 30px; left: -120px;">
+        <button class="close-btn">&times;</button>
+        <h4>Event Horizon</h4>
+        <p>The boundary of no return. Once anything crosses this invisible sphere, not even light can escape the black hole's gravitational pull. Time itself appears to stop at the event horizon from an outside observer's perspective.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 2 - Singularity (right) -->
+    <div class="hotspot" style="top: 50%; left: 80%; transform: translateY(-50%);">
+      <div class="hotspot-tooltip" style="top: -60px; left: -280px;">
+        <button class="close-btn">&times;</button>
+        <h4>The Singularity</h4>
+        <p>At the center lies a point of infinite density where all the black hole's mass is concentrated. Our current physics breaks down here - understanding singularities may require a theory of quantum gravity.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 3 - Accretion Disk (bottom) -->
+    <div class="hotspot" style="top: 80%; left: 50%; transform: translateX(-50%);">
+      <div class="hotspot-tooltip" style="top: -140px; left: -120px;">
+        <button class="close-btn">&times;</button>
+        <h4>Accretion Disk</h4>
+        <p>Matter spiraling into a black hole forms a superheated disk of gas and dust. Friction heats this material to millions of degrees, making it glow brightly in X-rays - which is how we detect black holes.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 4 - Hawking Radiation (left) -->
+    <div class="hotspot" style="top: 50%; left: 20%; transform: translateY(-50%);">
+      <div class="hotspot-tooltip" style="top: -60px; left: 30px;">
+        <button class="close-btn">&times;</button>
+        <h4>Hawking Radiation</h4>
+        <p>Stephen Hawking predicted that black holes slowly emit radiation due to quantum effects near the event horizon. Over incredibly long timescales, black holes will eventually evaporate completely.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 5 - Gravitational Lensing (top-right) -->
+    <div class="hotspot" style="top: 30%; left: 72%;">
+      <div class="hotspot-tooltip" style="top: 30px; left: -250px;">
+        <button class="close-btn">&times;</button>
+        <h4>Gravitational Lensing</h4>
+        <p>Black holes bend light so strongly that we can see objects behind them. This "gravitational lensing" creates stunning visual effects - light from distant stars wraps around the black hole, creating rings and arcs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Galaxy Hotspots (Third Set) -->
+  <div class="explosion-hotspots" id="galaxy-hotspots">
+    <!-- Hotspot 1 - Spiral Arms -->
+    <div class="hotspot" style="top: 25%; left: 25%;">
+      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+        <button class="close-btn">&times;</button>
+        <h4>Spiral Arms</h4>
+        <p>The spiral arms of galaxies are regions of active star formation. They're not solid structures but density waves - areas where stars and gas are temporarily compressed, triggering the birth of new stars.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 2 - Galactic Core -->
+    <div class="hotspot" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+        <button class="close-btn">&times;</button>
+        <h4>Galactic Core</h4>
+        <p>At the heart of most galaxies lies a supermassive black hole, millions to billions of times the mass of our Sun. Our Milky Way's central black hole, Sagittarius A*, is about 4 million solar masses.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 3 - Star Clusters -->
+    <div class="hotspot" style="top: 35%; left: 75%;">
+      <div class="hotspot-tooltip" style="top: 30px; left: -250px;">
+        <button class="close-btn">&times;</button>
+        <h4>Star Clusters</h4>
+        <p>Galaxies contain two types of star clusters: open clusters with hundreds of young stars, and globular clusters - ancient spherical collections of hundreds of thousands of old stars orbiting the galactic core.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 4 - Dark Matter Halo -->
+    <div class="hotspot" style="top: 70%; left: 30%;">
+      <div class="hotspot-tooltip" style="top: -120px; left: 15px;">
+        <button class="close-btn">&times;</button>
+        <h4>Dark Matter Halo</h4>
+        <p>Every galaxy is surrounded by a massive halo of invisible dark matter that extends far beyond the visible stars. This dark matter provides the gravitational glue that holds galaxies together.</p>
+      </div>
+    </div>
+    
+    <!-- Hotspot 5 - Interstellar Medium -->
+    <div class="hotspot" style="top: 65%; left: 70%;">
+      <div class="hotspot-tooltip" style="top: -140px; left: -250px;">
+        <button class="close-btn">&times;</button>
+        <h4>Interstellar Medium</h4>
+        <p>The space between stars isn't empty - it's filled with gas and dust called the interstellar medium. This material is the raw ingredient for new stars and contains complex molecules, including the building blocks of life.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-progress">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="scroll-space"></div>
+
+  <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // Update scroll progress bar
+    function updateProgressBar() {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = window.scrollY;
+      const progress = (scrolled / scrollHeight) * 100;
+      document.querySelector('.progress-bar').style.width = progress + '%';
+    }
+
+    // Show/hide sections based on scroll
+    function updateSections() {
+      const sections = document.querySelectorAll('.section');
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      sections.forEach((section, index) => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        const isVisible = scrollY + windowHeight * 0.6 > sectionTop && scrollY < sectionBottom;
+        
+        if (isVisible) {
+          section.classList.add('visible');
+        } else {
+          section.classList.remove('visible');
+        }
+      });
+
+      // Fade out initial UI as user scrolls - based on scroll percentage
+      const ui = document.querySelector('.ui');
+      const heroText = document.querySelector('.hero-text');
+      const scrollHint = document.querySelector('.scroll-hint-bottom');
+      const logoContainer = document.querySelector('.logo-container');
+      
+      const maxScroll = document.documentElement.scrollHeight - windowHeight;
+      const scrollPercent = scrollY / maxScroll; // 0 to 1
+      
+      // Hero text fades when clusters are formed (6% to 10%)
+      const heroFadeStart = 0.06;
+      const heroFadeEnd = 0.10;
+      const heroFadeProgress = Math.min(1, Math.max(0, (scrollPercent - heroFadeStart) / (heroFadeEnd - heroFadeStart)));
+      
+      // Scroll hint fades earlier (3% to 6%)
+      const hintFadeStart = 0.03;
+      const hintFadeEnd = 0.06;
+      const hintFadeProgress = Math.min(1, Math.max(0, (scrollPercent - hintFadeStart) / (hintFadeEnd - hintFadeStart)));
+      
+      // Logo fades with hero text (6% to 10%)
+      const logoFadeStart = 0.06;
+      const logoFadeEnd = 0.10;
+      const logoFadeProgress = Math.min(1, Math.max(0, (scrollPercent - logoFadeStart) / (logoFadeEnd - logoFadeStart)));
+      
+      if (ui) ui.style.opacity = 1 - heroFadeProgress;
+      if (heroText) heroText.style.opacity = 1 - heroFadeProgress;
+      if (scrollHint) scrollHint.style.opacity = 1 - hintFadeProgress;
+      if (logoContainer) logoContainer.style.opacity = 1 - logoFadeProgress;
+
+      // Timeline text animations - continuous scroll reveal
+      const timeline1 = document.getElementById('timeline-1');
+      
+      // Timeline 1 appears when clusters are formed - faster scroll (6% to 16%)
+      const timeline1Start = 0.06;
+      const timeline1End = 0.16;
+      
+      if (scrollPercent >= timeline1Start && scrollPercent <= timeline1End) {
+        // Calculate progress within this range (0 to 1)
+        const progress = (scrollPercent - timeline1Start) / (timeline1End - timeline1Start);
+        
+        // Start from below screen (100vh) and move up
+        const translateY = 100 - (progress * 170); // Moves from 100vh to -70vh
+        const opacity = progress < 0.05 ? progress * 20 : (progress > 0.85 ? (1 - progress) * 6.67 : 1);
+        
+        timeline1.style.transform = `translateY(${translateY}vh)`;
+        timeline1.style.opacity = opacity;
+      } else if (scrollPercent < timeline1Start) {
+        // Before the range - hide below screen
+        timeline1.style.transform = 'translateY(100vh)';
+        timeline1.style.opacity = '0';
+      } else {
+        // After the range - hide above screen
+        timeline1.style.transform = 'translateY(-150vh)';
+        timeline1.style.opacity = '0';
+      }
+      
+      // Timeline 2 - 13.2B YEARS AGO (scrolls up then gets sucked into black hole)
+      const timeline2 = document.getElementById('timeline-2');
+      
+      const timeline2Start = 999;   // DISABLED
+      const timeline2ScrollEnd = 999;
+      const timeline2SuckEnd = 999;
+      
+      if (scrollPercent >= timeline2Start && scrollPercent <= timeline2SuckEnd) {
+        
+        if (scrollPercent <= timeline2ScrollEnd) {
+          // PHASE 1: Scroll up from below
+          const scrollProgress = (scrollPercent - timeline2Start) / (timeline2ScrollEnd - timeline2Start);
+          const translateY = 100 - (scrollProgress * 150); // Moves from 100vh to -50vh
+          const opacity = scrollProgress < 0.1 ? scrollProgress * 10 : 1;
+          
+          timeline2.style.transform = `translateY(${translateY}vh)`;
+          timeline2.style.opacity = opacity;
+          timeline2.style.filter = 'blur(0px)';
+          
+        } else {
+          // PHASE 2: Get sucked into black hole!
+          const suckProgress = (scrollPercent - timeline2ScrollEnd) / (timeline2SuckEnd - timeline2ScrollEnd);
+          
+          const scale = Math.max(0, 1 - suckProgress * 1.5);
+          const rotation = suckProgress * 720;
+          const blur = suckProgress * 15;
+          const opacity = Math.max(0, 1 - suckProgress * 1.5);
+          
+          timeline2.style.transform = `translateY(-50vh) scale(${scale}) rotate(${rotation}deg)`;
+          timeline2.style.opacity = opacity;
+          timeline2.style.filter = `blur(${blur}px)`;
+        }
+        
+      } else if (scrollPercent < timeline2Start) {
+        // Before - hide below screen
+        timeline2.style.transform = 'translateY(100vh)';
+        timeline2.style.opacity = '0';
+        timeline2.style.filter = 'blur(0px)';
+      } else {
+        // After - completely hidden
+        timeline2.style.transform = 'translateY(-150vh) scale(0)';
+        timeline2.style.opacity = '0';
+        timeline2.style.filter = 'blur(0px)';
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      updateProgressBar();
+      updateSections();
+      updateHotspots();
+    });
+
+    // Initial call
+    updateProgressBar();
+    updateSections();
+    
+    // Hotspots functionality - THREE SETS!
+    const explosionHotspots = document.getElementById('explosion-hotspots');
+    const blackholeHotspots = document.getElementById('blackhole-hotspots');
+    const galaxyHotspots = document.getElementById('galaxy-hotspots');
+    const hotspots = document.querySelectorAll('.hotspot');
+    
+    function updateHotspots() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = window.scrollY / maxScroll;
+      
+      // Original explosion hotspots (0.25 - 0.30)
+      const explosionStart = 0.25;
+      const explosionEnd = 0.30;
+      
+      if (scrollPercent >= explosionStart && scrollPercent <= explosionEnd) {
+        explosionHotspots.classList.add('visible');
+      } else {
+        explosionHotspots.classList.remove('visible');
+      }
+      
+      // Black hole hotspots - DISABLED
+      const blackholeStart = 999;
+      const blackholeEnd = 999;
+      
+      if (scrollPercent >= blackholeStart && scrollPercent <= blackholeEnd) {
+        blackholeHotspots.classList.add('visible');
+      } else {
+        blackholeHotspots.classList.remove('visible');
+      }
+      
+      // Galaxy hotspots (0.78 - 0.88) - after galaxy forms
+      const galaxyStart = 0.78;
+      const galaxyEnd = 0.88;
+      
+      if (scrollPercent >= galaxyStart && scrollPercent <= galaxyEnd) {
+        galaxyHotspots.classList.add('visible');
+      } else {
+        galaxyHotspots.classList.remove('visible');
+      }
+      
+      // Close tooltips when all are hidden
+      const anyVisible = 
+        (scrollPercent >= explosionStart && scrollPercent <= explosionEnd) ||
+        (scrollPercent >= blackholeStart && scrollPercent <= blackholeEnd) ||
+        (scrollPercent >= galaxyStart && scrollPercent <= galaxyEnd);
+      
+      if (!anyVisible) {
+        document.querySelectorAll('.hotspot-tooltip').forEach(t => t.classList.remove('active'));
+      }
+    }
+    
+    // Handle hotspot clicks
+    hotspots.forEach(hotspot => {
+      hotspot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const tooltip = hotspot.querySelector('.hotspot-tooltip');
+        const isActive = tooltip.classList.contains('active');
+        
+        // Close all other tooltips
+        document.querySelectorAll('.hotspot-tooltip').forEach(t => t.classList.remove('active'));
+        
+        // Toggle this tooltip
+        if (!isActive) {
+          tooltip.classList.add('active');
+        }
+      });
+    });
+    
+    // Handle close buttons
+    document.querySelectorAll('.hotspot-tooltip .close-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        btn.closest('.hotspot-tooltip').classList.remove('active');
+      });
+    });
+    
+    // Close tooltips when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.hotspot')) {
+        document.querySelectorAll('.hotspot-tooltip').forEach(t => t.classList.remove('active'));
+      }
+    });
+    
+    // Preload all video frames for smooth scroll animation
+    const frameCache = [];
+    for (let i = 1; i <= 28; i++) {
+      const img = new Image();
+      img.src = `assets/video-frames/ezgif-frame-${String(i).padStart(3, '0')}.png`;
+      frameCache.push(img);
+    }
+    
+    // Milky Way background control
+    const milkywayBg = document.getElementById('milkyway-bg');
+    const grayMilkywayBg = document.getElementById('gray-milkyway-bg');
+    const purpleGalaxyBg = document.getElementById('purple-galaxy-bg');
+    const planetsBg = document.getElementById('planets-bg');
+    // const blackholeVideo = document.getElementById('blackhole-video'); // REMOVED
+    const blackholesTitle = document.querySelector('.blackholes-title');
+    const blackholesSubtitle = document.querySelector('.blackholes-subtitle');
+    
+    function updateMilkywayBg() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = window.scrollY / maxScroll;
+      
+      // Original Milky way visible from 31% with overlap for smooth blend
+      if (scrollPercent >= 0.31 && scrollPercent < 0.38) {
+        milkywayBg.classList.add('visible');
+      } else {
+        milkywayBg.classList.remove('visible');
+      }
+      
+      // Purple Milky Way starts at 0.32 (overlap with green for smooth blend)
+      if (scrollPercent >= 0.32 && scrollPercent < 0.58) {
+        grayMilkywayBg.classList.add('visible');
+      } else {
+        grayMilkywayBg.classList.remove('visible');
+      }
+      
+      // Scroll Frames (0.40 - 0.58) - image sequence based on scroll
+      const scrollFrames = document.getElementById('scroll-frames');
+      const totalFrames = 28;
+      if (scrollPercent >= 0.40 && scrollPercent < 0.58) {
+        scrollFrames.classList.add('visible');
+        grayMilkywayBg.classList.remove('visible');
+        milkywayBg.classList.remove('visible');
+        const bgEl = document.querySelector('.bg');
+        if (bgEl) bgEl.style.display = 'none';
+        
+        // Calculate which frame to show based on scroll progress
+        const frameProgress = (scrollPercent - 0.40) / (0.58 - 0.40);
+        const frameIndex = Math.min(Math.floor(frameProgress * totalFrames) + 1, totalFrames);
+        const frameNumber = String(frameIndex).padStart(3, '0');
+        scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
+      } else {
+        scrollFrames.classList.remove('visible');
+        // החזרת רקעים כשיוצאים מטווח הפריימים
+        const bgEl = document.querySelector('.bg');
+        if (bgEl && scrollPercent < 0.58) bgEl.style.display = 'block';
+        if (scrollPercent < 0.40) {
+          scrollFrames.src = 'assets/video-frames/ezgif-frame-001.png'; // Reset to first frame
+        }
+      }
+      
+      // BLACK HOLES text - DISABLED
+      const textStart = 999; // disabled
+      const suckStart = 999;
+      const suckEnd = 999;
+      
+      // Black holes title pops in at 33%
+      if (scrollPercent >= textStart && scrollPercent <= suckEnd) {
+        blackholesTitle.classList.add('visible');
+        blackholesSubtitle.classList.add('visible');
+        
+        // Sucking effect starts at 42%
+        if (scrollPercent >= suckStart) {
+          const suckProgress = (scrollPercent - suckStart) / (suckEnd - suckStart);
+          
+          blackholesTitle.classList.add('sucking');
+          blackholesSubtitle.classList.add('sucking');
+          
+          // Text gets pulled toward center and shrinks with crazy spin
+          const scale = Math.max(0, 1 - suckProgress * 1.2);
+          const rotation = suckProgress * 1080; // 3 full rotations!
+          const stretch = 1 + suckProgress * 3;
+          
+          blackholesTitle.style.transform = `scale(${scale}) rotate(${rotation}deg) scaleX(${1/stretch})`;
+          blackholesTitle.style.opacity = Math.max(0, 1 - suckProgress * 1.5);
+          blackholesTitle.style.filter = `blur(${suckProgress * 15}px)`;
+          
+          blackholesSubtitle.style.transform = `translateY(0) scale(${scale * 0.8}) rotate(${rotation * 1.2}deg)`;
+          blackholesSubtitle.style.opacity = Math.max(0, 1 - suckProgress * 2);
+          blackholesSubtitle.style.filter = `blur(${suckProgress * 20}px)`;
+        } else {
+          // Reset transforms when not sucking
+          blackholesTitle.style.transform = '';
+          blackholesTitle.style.opacity = '';
+          blackholesTitle.style.filter = '';
+          blackholesSubtitle.style.transform = '';
+          blackholesSubtitle.style.opacity = '';
+          blackholesSubtitle.style.filter = '';
+          blackholesTitle.classList.remove('sucking');
+          blackholesSubtitle.classList.remove('sucking');
+        }
+      } else {
+        blackholesTitle.classList.remove('visible');
+        blackholesSubtitle.classList.remove('visible');
+        // Reset transforms
+        blackholesTitle.style.transform = '';
+        blackholesTitle.style.opacity = '';
+        blackholesTitle.style.filter = '';
+        blackholesSubtitle.style.transform = '';
+        blackholesSubtitle.style.opacity = '';
+        blackholesSubtitle.style.filter = '';
+      }
+      
+      // Purple Galaxy background - appears after black hole hotspots (0.58+)
+      const bgInner = document.querySelector('.bg-inner');
+      const galaxyText = document.getElementById('galaxy-text');
+      const timelineGalaxy = document.getElementById('timeline-galaxy');
+      
+      if (scrollPercent >= 0.58) {
+        purpleGalaxyBg.classList.add('visible');
+        grayMilkywayBg.classList.remove('visible'); // Hide gray milky way
+        if (bgInner) bgInner.classList.add('hidden'); // Hide space bg to show purple
+        
+        // GALAXY title visible from 0.58 to 0.68
+        if (scrollPercent < 0.68) {
+          if (galaxyText) galaxyText.classList.add('visible');
+        } else {
+          if (galaxyText) galaxyText.classList.remove('visible');
+        }
+        
+        // Timeline "10.8B YEARS AGO" visible from 0.68 onwards
+        if (scrollPercent >= 0.68 && scrollPercent < 0.85) {
+          if (timelineGalaxy) {
+            timelineGalaxy.style.opacity = '1';
+            timelineGalaxy.style.transform = 'translateY(-50%)';
+          }
+        } else {
+          if (timelineGalaxy) {
+            timelineGalaxy.style.opacity = '0';
+            timelineGalaxy.style.transform = 'translateY(100vh)';
+          }
+        }
+      } else {
+        purpleGalaxyBg.classList.remove('visible');
+        if (bgInner) bgInner.classList.remove('hidden');
+        
+        // Hide galaxy text
+        if (galaxyText) galaxyText.classList.remove('visible');
+        if (timelineGalaxy) {
+          timelineGalaxy.style.opacity = '0';
+          timelineGalaxy.style.transform = 'translateY(100vh)';
+        }
+      }
+      
+      // Planets background - appears after galaxy hotspots (0.88+)
+      const solarSystemSection = document.getElementById('solar-system-section');
+      
+      if (scrollPercent >= 0.88) {
+        planetsBg.classList.add('visible');
+        purpleGalaxyBg.classList.remove('visible'); // Hide purple galaxy
+        if (galaxyText) galaxyText.classList.remove('visible');
+        if (timelineGalaxy) {
+          timelineGalaxy.style.opacity = '0';
+        }
+        // Show solar system section
+        if (solarSystemSection) solarSystemSection.classList.add('visible');
+      } else {
+        planetsBg.classList.remove('visible');
+        // Hide solar system section
+        if (solarSystemSection) solarSystemSection.classList.remove('visible');
+      }
+      
+    }
+    
+    window.addEventListener('scroll', updateMilkywayBg);
+    updateMilkywayBg();
+    
+    // Timeline Navigation
+    const timelineNavPoints = document.querySelectorAll('.timeline-nav-point');
+    const timelineNavProgress = document.getElementById('timeline-nav-progress');
+    
+    function updateTimelineNav() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = window.scrollY / maxScroll;
+      
+      // Update progress line
+      if (timelineNavProgress) {
+        timelineNavProgress.style.height = (scrollPercent * 100) + '%';
+      }
+      
+      // Update active point
+      let activeIndex = 0;
+      timelineNavPoints.forEach((point, index) => {
+        const targetScroll = parseFloat(point.dataset.scroll);
+        if (scrollPercent >= targetScroll) {
+          activeIndex = index;
+        }
+      });
+      
+      timelineNavPoints.forEach((point, index) => {
+        if (index === activeIndex) {
+          point.classList.add('active');
+        } else {
+          point.classList.remove('active');
+        }
+      });
+    }
+    
+    // Click to navigate
+    timelineNavPoints.forEach(point => {
+      point.addEventListener('click', () => {
+        const targetScroll = parseFloat(point.dataset.scroll);
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollTo = targetScroll * maxScroll;
+        window.scrollTo({
+          top: scrollTo,
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    window.addEventListener('scroll', updateTimelineNav);
+    updateTimelineNav();
+    
+    // Left Section Navigation
+    const sectionNavItems = document.querySelectorAll('.section-nav-item');
+    
+    function updateSectionNav() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = window.scrollY / maxScroll;
+      
+      let activeIndex = 0;
+      sectionNavItems.forEach((item, index) => {
+        const targetScroll = parseFloat(item.dataset.scroll);
+        if (scrollPercent >= targetScroll) {
+          activeIndex = index;
+        }
+      });
+      
+      sectionNavItems.forEach((item, index) => {
+        if (index === activeIndex) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+    
+    // Click to navigate
+    sectionNavItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const targetScroll = parseFloat(item.dataset.scroll);
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollTo = targetScroll * maxScroll;
+        window.scrollTo({
+          top: scrollTo,
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    window.addEventListener('scroll', updateSectionNav);
+    updateSectionNav();
+  </script>
+</body>
+</html>
