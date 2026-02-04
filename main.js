@@ -307,8 +307,8 @@ if (explodeRaw < 0.7) {
   tExplode = 0.25 + easeOutExpo(fastPart) * 0.75;
 }
 
-// חזרה לכוכבים (0.30 עד 0.35)
-const tAfter      = easeInOutCubic(phaseT(scrollProgress, 0.30, 0.35));
+// חזרה לכוכבים (0.30 עד 0.32)
+const tAfter      = easeInOutCubic(phaseT(scrollProgress, 0.30, 0.32));
 
 // *** BLACK HOLE - DISABLED ***
 const tHole = 0;
@@ -459,11 +459,20 @@ if (isLeft || isRight) {
       colors[ix+2] = lerp(colors[ix+2], origB, tAfter);
     }
 
-    // ---- טווח 0.33-0.58: רק 14000 כוכבים נראים ----
-    if (scrollProgress >= 0.33 && scrollProgress < 0.58) {
-      // מסתירים רק את חלקיקי שמאל/ימין (8000)
-      // נשארים כל 14000 כוכבי הרקע
-      const isHidden = i < (leftCount + rightCount);
+    // ---- טווח 0.31-0.58: רק 10000 כוכבים נראים ----
+    if (scrollProgress >= 0.31 && scrollProgress < 0.58) {
+      // מסתירים הכל מלבד 10000 האחרונים
+      const isHidden = i < 12000;
+      if (isHidden) {
+        x = 1000;
+        y = 1000;
+        z = 1000;
+      }
+    }
+    // ---- טווח 0.58+: רק 10000 כוכבים נראים ----
+    else if (scrollProgress >= 0.58) {
+      // מסתירים הכל מלבד 10000 האחרונים
+      const isHidden = i < 12000;
       if (isHidden) {
         x = 1000;
         y = 1000;

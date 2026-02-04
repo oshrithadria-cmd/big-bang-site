@@ -812,6 +812,23 @@ canvas {
   text-align: center;
 }
 
+/* Black Holes Section Text */
+.blackhole-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.blackhole-text.visible {
+  opacity: 1;
+}
+
 /* Galaxy Section Text */
 .galaxy-text {
   position: fixed;
@@ -928,44 +945,79 @@ canvas {
 
 .hotspot {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,200,100,0.6) 40%, transparent 70%);
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.9);
   cursor: pointer;
   pointer-events: auto;
   transform: translate(-50%, -50%);
-  animation: hotspot-pulse 2s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255,200,100,0.8), 0 0 40px rgba(255,150,50,0.4);
+  animation: hotspot-float 6s ease-in-out infinite, hotspot-pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.4), inset 0 0 10px rgba(255,255,255,0.3);
+  transition: opacity 0.3s ease;
 }
 
+/* כשעוברים על נקודה, שאר הנקודות נעלמות */
+.explosion-hotspots.hotspot-active .hotspot {
+  opacity: 0;
+}
+
+.explosion-hotspots.hotspot-active .hotspot.hovered {
+  opacity: 1;
+}
+
+.hotspot:nth-child(2) { animation-delay: -1s, 0s; }
+.hotspot:nth-child(3) { animation-delay: -2s, 0s; }
+.hotspot:nth-child(4) { animation-delay: -3s, 0s; }
+.hotspot:nth-child(5) { animation-delay: -4s, 0s; }
+.hotspot:nth-child(6) { animation-delay: -0.5s, 0s; }
+.hotspot:nth-child(7) { animation-delay: -2.5s, 0s; }
+.hotspot:nth-child(8) { animation-delay: -4.5s, 0s; }
+.hotspot:nth-child(9) { animation-delay: -1.5s, 0s; }
+
 .hotspot::before {
-  content: '+';
+  content: '!';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+  text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5);
+}
+
+@keyframes hotspot-float {
+  0%, 100% { 
+    transform: translate(-50%, -50%) translate(0px, 0px);
+  }
+  25% { 
+    transform: translate(-50%, -50%) translate(8px, -12px);
+  }
+  50% { 
+    transform: translate(-50%, -50%) translate(-5px, -8px);
+  }
+  75% { 
+    transform: translate(-50%, -50%) translate(-10px, 6px);
+  }
 }
 
 @keyframes hotspot-pulse {
   0%, 100% { 
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 0 20px rgba(255,200,100,0.8), 0 0 40px rgba(255,150,50,0.4);
+    box-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.4), inset 0 0 10px rgba(255,255,255,0.3);
+    opacity: 0.9;
   }
   50% { 
-    transform: translate(-50%, -50%) scale(1.3);
-    box-shadow: 0 0 30px rgba(255,200,100,1), 0 0 60px rgba(255,150,50,0.6);
+    box-shadow: 0 0 25px rgba(255,255,255,1), 0 0 50px rgba(255,255,255,0.6), inset 0 0 15px rgba(255,255,255,0.5);
+    opacity: 1;
   }
 }
 
 .hotspot-tooltip {
   position: absolute;
   background: rgba(0, 0, 0, 0.9);
-  border: 1px solid rgba(255, 200, 100, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   padding: 16px 20px;
   max-width: 280px;
@@ -1015,6 +1067,48 @@ canvas {
 
 .hotspot-tooltip .close-btn:hover {
   color: white;
+}
+
+/* Tooltip with video */
+.hotspot-tooltip-video {
+  width: 540px;
+  max-width: 90vw;
+}
+
+.tooltip-content-row {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+}
+
+.hotspot-video {
+  width: 280px;
+  min-width: 280px;
+  border-radius: 8px;
+}
+
+/* עצירת ריחוף כשנקודה פעילה */
+.hotspot.active-hotspot {
+  animation: none !important;
+}
+
+.tooltip-text h4 {
+  margin: 0 0 8px 0;
+}
+
+.tooltip-text p {
+  margin: 0;
+}
+
+/* הסתרת נקודות כשתיבה פתוחה */
+.explosion-hotspots.tooltip-open .hotspot {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.explosion-hotspots.tooltip-open .hotspot.active-hotspot {
+  opacity: 1 !important;
+  pointer-events: auto;
 }
 
 .timeline-description {
@@ -1263,6 +1357,12 @@ canvas {
     <p class="hero-subtitle">The Big Bang Theory states that the universe began as a hot and<br>infinitely dense point only a few millimeters wide. It was similar to a<br>supercharged black hole about 13.7 billion years ago.</p>
   </div>
 
+  <!-- Black Holes Section Text -->
+  <div class="blackhole-text" id="blackhole-text">
+    <h1 class="hero-title">BLACK HOLES</h1>
+    <p class="hero-subtitle">A black hole is a region in space where the force of gravity is so strong,<br>not even light—the fastest known entity in our universe—can escape.<br>The boundary of a black hole is called the event horizon, a point of no return beyond which we truly cannot see.</p>
+  </div>
+
   <!-- Galaxy Section Text -->
   <div class="galaxy-text" id="galaxy-text">
     <h1 class="galaxy-title">GALAXY</h1>
@@ -1302,48 +1402,147 @@ canvas {
   <!-- Interactive Space Hotspots -->
   <!-- Original Explosion Hotspots -->
   <div class="explosion-hotspots" id="explosion-hotspots">
-    <!-- Hotspot 1 - Stars -->
-    <div class="hotspot" id="hotspot-1" style="top: 25%; left: 20%;">
-      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+    <!-- Hotspot 1 - Planck Epoch (למעלה שמאל) -->
+    <div class="hotspot" id="hotspot-1" style="top: 20%; left: 22%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
-        <h4>The First Stars</h4>
-        <p>About 100-200 million years after the Big Bang, the first stars ignited. These "Population III" stars were massive giants, hundreds of times larger than our Sun, burning hot and bright but living short lives.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/planck-epoch.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Planck Epoch</h4>
+            <p>The earliest is the Planck epoch. No matter existed in the universe at this time — only energy and the ancestor to the four forces of nature, the "super force." At the end of this stage, however, a key event occurred in which gravity split away from the super force.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 2 - Galaxies -->
-    <div class="hotspot" id="hotspot-2" style="top: 45%; left: 75%;">
-      <div class="hotspot-tooltip" style="top: 30px; left: -280px;">
+    <!-- Hotspot 2 - Grand Unification Epoch (ימין) -->
+    <div class="hotspot" id="hotspot-2" style="top: 45%; left: 78%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -540px;">
         <button class="close-btn">&times;</button>
-        <h4>Galaxy Formation</h4>
-        <p>Gravity slowly pulled matter together into vast cosmic structures. The first galaxies formed about 400 million years after the Big Bang - small, irregular clumps of stars that would eventually merge into the magnificent spirals we see today.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/grand-unification.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Grand Unification Epoch</h4>
+            <p>Next came the Grand Unification epoch, named for the three remaining unified forces of nature. This epoch ended when one of those forces, called "strong," broke away.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 3 - Dark Matter -->
-    <div class="hotspot" id="hotspot-3" style="top: 65%; left: 35%;">
-      <div class="hotspot-tooltip" style="top: -120px; left: 15px;">
+    <!-- Hotspot 3 - Inflationary Epoch (למטה שמאל) -->
+    <div class="hotspot" id="hotspot-3" style="top: 75%; left: 25%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: 15px;">
         <button class="close-btn">&times;</button>
-        <h4>Dark Matter</h4>
-        <p>An invisible substance that makes up about 27% of the universe. We can't see it, but its gravitational effects shaped the cosmic web - the vast network of filaments connecting galaxies across space.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/inflationary-epoch.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Inflationary Epoch</h4>
+            <p>Then the inflationary epoch began, during which the universe rapidly expanded. Almost instantly, it grew from the size of an atom to the size of a grapefruit. The universe at this time was piping hot and it churned with electrons, quarks, and other particles.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 4 - Expansion -->
-    <div class="hotspot" id="hotspot-4" style="top: 35%; left: 55%;">
-      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+    <!-- Hotspot 4 - Quark Epoch (מרכז למעלה שמאלה) -->
+    <div class="hotspot" id="hotspot-4" style="top: 30%; left: 38%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
-        <h4>Cosmic Expansion</h4>
-        <p>The universe is still expanding today, and that expansion is accelerating. Distant galaxies are moving away from us faster than the speed of light - not through space, but because space itself is stretching.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/quark-epoch.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Quark Epoch</h4>
+            <p>During the next stage, the quark epoch, all of the universe's ingredients were present. However, the universe was still too hot and dense for subatomic particles to form.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 5 - Elements -->
-    <div class="hotspot" id="hotspot-5" style="top: 70%; left: 65%;">
-      <div class="hotspot-tooltip" style="top: -140px; left: -200px;">
+    <!-- Hotspot 5 - Hadron Epoch (למטה ימין) -->
+    <div class="hotspot" id="hotspot-5" style="top: 78%; left: 72%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: -540px;">
         <button class="close-btn">&times;</button>
-        <h4>Stellar Nucleosynthesis</h4>
-        <p>Every atom of carbon in your body was forged in the heart of a dying star. Elements heavier than hydrogen and helium are created through nuclear fusion in stars and scattered across space when they explode as supernovae.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/hadron-epoch.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Hadron Epoch</h4>
+            <p>Then, in the Hadron epoch, the universe cooled down enough for quarks to bind together and form protons and neutrons.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 6 - Radiation Era (למעלה ימין) -->
+    <div class="hotspot" id="hotspot-6" style="top: 18%; left: 70%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -540px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/radiation-era.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Radiation Era</h4>
+            <p>First came the radiation era, named for the dominance of radiation right after the Big Bang. This era is made of smaller stages called epochs that occurred within the universe's first tens of thousands of years.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 7 - Lepton & Nuclear Epochs (שמאל) -->
+    <div class="hotspot" id="hotspot-7" style="top: 48%; left: 18%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: 15px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/lepton-nuclear-epochs.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Lepton & Nuclear Epochs</h4>
+            <p>In the lepton and nuclear epochs — the radiation era's last two stages — the protons and neutrons underwent a significant change. They fused and created nuclei, and in doing so, they created the first chemical element in the universe: helium.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 8 - Formation of Atoms & Gas Clouds (מרכז למטה) -->
+    <div class="hotspot" id="hotspot-8" style="top: 65%; left: 48%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: -270px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/atoms-gas-clouds.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Formation of Atoms & Gas Clouds</h4>
+            <p>This hydrogen, along with helium atoms, dotted the universe with atomic clouds. Within the clouds, small pockets of gas may have had enough gravity to cause atoms to collect.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 9 - Galactic & Stellar Epoch (מרכז ימינה) -->
+    <div class="hotspot" id="hotspot-9" style="top: 50%; left: 62%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: -540px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/galactic-stellar-epoch.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>The Galactic Epoch & Stellar Epoch</h4>
+            <p>These clusters of atoms formed during the Galactic epoch became the seedlings of galaxies. Nestled inside those galaxies, stars began to form, and in doing so, they cued the latest and current stage of the universe's development: the stellar epoch.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1511,8 +1710,8 @@ canvas {
       // Timeline text animations - continuous scroll reveal
       const timeline1 = document.getElementById('timeline-1');
       
-      // Timeline 1 appears when clusters are formed - faster scroll (6% to 16%)
-      const timeline1Start = 0.06;
+      // Timeline 1 appears when clusters are formed - faster scroll (7% to 16%)
+      const timeline1Start = 0.07;
       const timeline1End = 0.16;
       
       if (scrollPercent >= timeline1Start && scrollPercent <= timeline1End) {
@@ -1601,9 +1800,9 @@ canvas {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = window.scrollY / maxScroll;
       
-      // Original explosion hotspots (0.25 - 0.30)
+      // Original explosion hotspots (0.25 - 0.28)
       const explosionStart = 0.25;
-      const explosionEnd = 0.30;
+      const explosionEnd = 0.28;
       
       if (scrollPercent >= explosionStart && scrollPercent <= explosionEnd) {
         explosionHotspots.classList.add('visible');
@@ -1648,13 +1847,18 @@ canvas {
         e.stopPropagation();
         const tooltip = hotspot.querySelector('.hotspot-tooltip');
         const isActive = tooltip.classList.contains('active');
+        const container = hotspot.closest('.explosion-hotspots');
         
-        // Close all other tooltips
+        // Close all other tooltips and remove classes
         document.querySelectorAll('.hotspot-tooltip').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active-hotspot'));
+        document.querySelectorAll('.explosion-hotspots').forEach(c => c.classList.remove('tooltip-open'));
         
         // Toggle this tooltip
         if (!isActive) {
           tooltip.classList.add('active');
+          hotspot.classList.add('active-hotspot');
+          if (container) container.classList.add('tooltip-open');
         }
       });
     });
@@ -1664,6 +1868,8 @@ canvas {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         btn.closest('.hotspot-tooltip').classList.remove('active');
+        document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active-hotspot'));
+        document.querySelectorAll('.explosion-hotspots').forEach(c => c.classList.remove('tooltip-open'));
       });
     });
     
@@ -1671,8 +1877,28 @@ canvas {
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.hotspot')) {
         document.querySelectorAll('.hotspot-tooltip').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active-hotspot'));
+        document.querySelectorAll('.explosion-hotspots').forEach(c => c.classList.remove('tooltip-open'));
       }
     });
+    
+    // Explosion hotspots - hide others on hover
+    const explosionHotspotsEl = document.getElementById('explosion-hotspots');
+    if (explosionHotspotsEl) {
+      const explosionDots = explosionHotspotsEl.querySelectorAll('.hotspot');
+      explosionDots.forEach(dot => {
+        dot.addEventListener('mouseenter', () => {
+          explosionDots.forEach(d => {
+            if (d !== dot) d.style.opacity = '0';
+          });
+        });
+        dot.addEventListener('mouseleave', () => {
+          explosionDots.forEach(d => {
+            d.style.opacity = '1';
+          });
+        });
+      });
+    }
     
     // Preload all video frames for smooth scroll animation
     const frameCache = [];
@@ -1695,24 +1921,38 @@ canvas {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = window.scrollY / maxScroll;
       
-      // Original Milky way visible from 31% with overlap for smooth blend
-      if (scrollPercent >= 0.31 && scrollPercent < 0.38) {
+      // Original Milky way visible from start until 0.29
+      if (scrollPercent >= 0.00 && scrollPercent < 0.29) {
         milkywayBg.classList.add('visible');
       } else {
         milkywayBg.classList.remove('visible');
       }
       
-      // Purple Milky Way starts at 0.32 (overlap with green for smooth blend)
-      if (scrollPercent >= 0.32 && scrollPercent < 0.58) {
+      // Purple Milky Way starts at 0.29 (after green background)
+      if (scrollPercent >= 0.29 && scrollPercent < 0.58) {
         grayMilkywayBg.classList.add('visible');
       } else {
         grayMilkywayBg.classList.remove('visible');
       }
       
-      // Scroll Frames (0.40 - 0.58) - image sequence based on scroll
+      // Scroll Frames - כניסה אלגנטית מ-0.35, אנימציה מלאה מ-0.40 עד 0.56
       const scrollFrames = document.getElementById('scroll-frames');
       const totalFrames = 28;
-      if (scrollPercent >= 0.40 && scrollPercent < 0.58) {
+      
+      // Elegant fade in: 0.35-0.40
+      if (scrollPercent >= 0.35 && scrollPercent < 0.40) {
+        const t = (scrollPercent - 0.35) / 0.05; // 0 to 1
+        // easeOutCubic for smooth deceleration
+        const eased = 1 - Math.pow(1 - t, 3);
+        
+        scrollFrames.style.opacity = eased * 0.95;
+        scrollFrames.src = 'assets/video-frames/ezgif-frame-001.png';
+        grayMilkywayBg.classList.remove('visible');
+        milkywayBg.classList.remove('visible');
+      }
+      // Full animation: 0.40-0.56
+      else if (scrollPercent >= 0.40 && scrollPercent < 0.56) {
+        scrollFrames.style.opacity = 1;
         scrollFrames.classList.add('visible');
         grayMilkywayBg.classList.remove('visible');
         milkywayBg.classList.remove('visible');
@@ -1720,16 +1960,17 @@ canvas {
         if (bgEl) bgEl.style.display = 'none';
         
         // Calculate which frame to show based on scroll progress
-        const frameProgress = (scrollPercent - 0.40) / (0.58 - 0.40);
+        const frameProgress = (scrollPercent - 0.40) / (0.56 - 0.40);
         const frameIndex = Math.min(Math.floor(frameProgress * totalFrames) + 1, totalFrames);
         const frameNumber = String(frameIndex).padStart(3, '0');
         scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
       } else {
         scrollFrames.classList.remove('visible');
+        scrollFrames.style.opacity = 0;
         // החזרת רקעים כשיוצאים מטווח הפריימים
         const bgEl = document.querySelector('.bg');
-        if (bgEl && scrollPercent < 0.58) bgEl.style.display = 'block';
-        if (scrollPercent < 0.40) {
+        if (bgEl && scrollPercent < 0.56) bgEl.style.display = 'block';
+        if (scrollPercent < 0.35) {
           scrollFrames.src = 'assets/video-frames/ezgif-frame-001.png'; // Reset to first frame
         }
       }
@@ -1786,6 +2027,14 @@ canvas {
         blackholesSubtitle.style.filter = '';
       }
       
+      // Black Holes text - visible from 0.31 to 0.35
+      const blackholeText = document.getElementById('blackhole-text');
+      if (scrollPercent >= 0.31 && scrollPercent < 0.35) {
+        if (blackholeText) blackholeText.classList.add('visible');
+      } else {
+        if (blackholeText) blackholeText.classList.remove('visible');
+      }
+      
       // Purple Galaxy background - appears after black hole hotspots (0.58+)
       const bgInner = document.querySelector('.bg-inner');
       const galaxyText = document.getElementById('galaxy-text');
@@ -1796,8 +2045,8 @@ canvas {
         grayMilkywayBg.classList.remove('visible'); // Hide gray milky way
         if (bgInner) bgInner.classList.add('hidden'); // Hide space bg to show purple
         
-        // GALAXY title visible from 0.58 to 0.68
-        if (scrollPercent < 0.68) {
+        // GALAXY title visible from 0.60 to 0.68
+        if (scrollPercent >= 0.60 && scrollPercent < 0.68) {
           if (galaxyText) galaxyText.classList.add('visible');
         } else {
           if (galaxyText) galaxyText.classList.remove('visible');
