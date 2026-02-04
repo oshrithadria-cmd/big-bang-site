@@ -307,8 +307,8 @@ if (explodeRaw < 0.7) {
   tExplode = 0.25 + easeOutExpo(fastPart) * 0.75;
 }
 
-// חזרה לכוכבים (0.30 עד 0.32)
-const tAfter      = easeInOutCubic(phaseT(scrollProgress, 0.30, 0.32));
+// חזרה לכוכבים (0.30 עד 0.36) - יותר הדרגתי
+const tAfter      = easeInOutCubic(phaseT(scrollProgress, 0.30, 0.36));
 
 // *** BLACK HOLE - DISABLED ***
 const tHole = 0;
@@ -340,10 +340,10 @@ const tGalaxy     = easeInOutCubic(phaseT(scrollProgress, 0.70, 0.80));
     const by = basePositions[ix+1];
     const bz = basePositions[ix+2];
 
-    // star drift (subtle, always)
-    let x = bx + Math.sin(time + i*0.01) * 0.03;
-    let y = by + Math.cos(time + i*0.008) * 0.03;
-    let z = bz + Math.sin(time*0.4 + i*0.004) * 0.02;
+    // star drift (subtle, always) - קצת יותר מהיר
+    let x = bx + Math.sin(time * 1.3 + i*0.01) * 0.05;
+    let y = by + Math.cos(time * 1.2 + i*0.008) * 0.05;
+    let z = bz + Math.sin(time*0.6 + i*0.004) * 0.03;
 
     const isLeft  = i < leftCount;
     const isRight = i >= leftCount && i < leftCount + rightCount;
@@ -469,10 +469,20 @@ if (isLeft || isRight) {
         z = 1000;
       }
     }
-    // ---- טווח 0.58+: רק 10000 כוכבים נראים ----
-    else if (scrollProgress >= 0.58) {
+    // ---- טווח 0.58-0.88: רק 10000 כוכבים נראים ----
+    else if (scrollProgress >= 0.58 && scrollProgress < 0.88) {
       // מסתירים הכל מלבד 10000 האחרונים
       const isHidden = i < 12000;
+      if (isHidden) {
+        x = 1000;
+        y = 1000;
+        z = 1000;
+      }
+    }
+    // ---- טווח 0.88+: רק 2000 כוכבים נראים ----
+    else if (scrollProgress >= 0.88) {
+      // מסתירים הכל מלבד 2000 האחרונים
+      const isHidden = i < 20000;
       if (isHidden) {
         x = 1000;
         y = 1000;

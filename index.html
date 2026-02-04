@@ -64,7 +64,7 @@
       opacity: 1;
     }
     
-    /* Scroll Frames - fills screen height with faded edges (0.40-0.58) */
+    /* Scroll Frames - fills screen height with faded edges (0.37-0.56) */
     .scroll-frames {
       position: fixed;
       top: 50%;
@@ -136,6 +136,380 @@
     
     .planets-bg.visible {
       opacity: 1;
+    }
+    
+    /* Astrological Star Map Section */
+    .starmap-section {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 16;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      background: radial-gradient(ellipse at center, #0a0a1a 0%, #000005 100%);
+    }
+    
+    .starmap-section.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .starmap-title {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Inter', sans-serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: #ffffff;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+    }
+    
+    .starmap-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80vmin;
+      height: 80vmin;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: radial-gradient(ellipse at center, rgba(20, 20, 50, 0.3) 0%, transparent 70%);
+    }
+    
+    .constellation {
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .constellation:hover {
+      transform: scale(1.1);
+    }
+    
+    .constellation svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+    }
+    
+    .constellation:hover svg {
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    }
+    
+    .constellation-name {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.7);
+      white-space: nowrap;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    .constellation-tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 20px 24px;
+      width: 280px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+    
+    .constellation-tooltip.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    
+    .constellation-tooltip h4 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffd700;
+    }
+    
+    .constellation-tooltip .zodiac-date {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 12px;
+    }
+    
+    .constellation-tooltip p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .constellation-tooltip .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    .starmap-stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    
+    .starmap-star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    
+    /* Footer Section */
+    .site-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 70%, transparent 100%);
+      padding: 60px 80px 40px;
+      z-index: 20;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      pointer-events: none;
+    }
+    
+    .site-footer.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 60px;
+    }
+    
+    .footer-brand {
+      flex: 1;
+    }
+    
+    .footer-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 15px;
+      letter-spacing: 2px;
+    }
+    
+    .footer-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 60px;
+    }
+    
+    .footer-column h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer-column li {
+      margin-bottom: 12px;
+    }
+    
+    .footer-column a {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-column a:hover {
+      color: #ffffff;
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-social a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+      color: #ffffff;
+    }
+    
+    .footer-bottom {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+    
+    .footer-copyright {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+      .site-footer {
+        padding: 40px 20px 30px;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        gap: 40px;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 30px;
+      }
+    }
+    
+    /* Music Player */
+    .music-player {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .music-player:hover {
+      transform: scale(1.05);
+    }
+    
+    .music-wave-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+    }
+    
+    .music-player.paused .music-wave-video {
+      opacity: 0.3;
+      filter: grayscale(1);
+    }
+    
+    .music-player-container {
+      position: relative;
+      width: 120px;
+      height: 60px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .music-player:not(.paused) .music-player-container {
+      box-shadow: 0 4px 30px rgba(100, 200, 200, 0.4);
+      border-color: rgba(100, 200, 200, 0.4);
+    }
+    
+    .music-stop-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    }
+    
+    .music-player.paused .music-stop-icon {
+      opacity: 1;
+    }
+    
+    .music-label {
+      position: absolute;
+      bottom: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      white-space: nowrap;
+      letter-spacing: 1px;
+    }
+    
+    @media (max-width: 768px) {
+      .music-player {
+        bottom: 20px;
+        right: 20px;
+      }
+      
+      .music-player-container {
+        width: 80px;
+        height: 40px;
+      }
     }
     
     /* Planets/Solar System Section */
@@ -817,16 +1191,22 @@ canvas {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.9);
   text-align: center;
   z-index: 2;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.8s ease;
+  transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
 .blackhole-text.visible {
   opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.blackhole-text.fade-out {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 /* Galaxy Section Text */
@@ -1252,8 +1632,11 @@ canvas {
   <div class="purple-galaxy-bg" id="purple-galaxy-bg"></div>
   <div class="planets-bg" id="planets-bg"></div>
   
-  <!-- Scroll Frames (0.40-0.58) -->
+  <!-- Scroll Frames (0.37-0.56) -->
   <img class="scroll-frames" id="scroll-frames" src="assets/video-frames/ezgif-frame-001.png" alt="">
+  
+  <!-- Galaxy Scroll Frames (0.63-0.85) -->
+  <img class="scroll-frames" id="galaxy-scroll-frames" src="assets/galaxy-frames/ezgif-frame-001.png" alt="">
   
   <!-- Black Hole section - placeholder for future content -->
   
@@ -1321,6 +1704,280 @@ canvas {
     </div>
   </div>
   
+  <!-- Astrological Star Map Section -->
+  <div class="starmap-section" id="starmap-section">
+    <h2 class="starmap-title">Constellations</h2>
+    
+    <!-- Background stars -->
+    <div class="starmap-stars" id="starmap-stars"></div>
+    
+    <div class="starmap-container">
+      <!-- Aries -->
+      <div class="constellation" id="const-aries" style="top: 10%; left: 45%; width: 60px; height: 50px;">
+        <svg viewBox="0 0 60 50">
+          <circle cx="10" cy="25" r="3" fill="white"/>
+          <circle cx="30" cy="15" r="3" fill="white"/>
+          <circle cx="50" cy="25" r="3" fill="white"/>
+          <line x1="10" y1="25" x2="30" y2="15" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="30" y1="15" x2="50" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Aries</span>
+        <div class="constellation-tooltip" style="top: 60px; left: -110px;">
+          <button class="close-btn">&times;</button>
+          <h4>♈ Aries</h4>
+          <div class="zodiac-date">March 21 - April 19</div>
+          <p>The Ram constellation represents courage and leadership. In Greek mythology, it's the golden ram that rescued Phrixus and Helle.</p>
+        </div>
+      </div>
+      
+      <!-- Taurus -->
+      <div class="constellation" id="const-taurus" style="top: 20%; left: 70%; width: 70px; height: 60px;">
+        <svg viewBox="0 0 70 60">
+          <circle cx="15" cy="20" r="3" fill="white"/>
+          <circle cx="35" cy="30" r="4" fill="#ffd700"/>
+          <circle cx="55" cy="20" r="3" fill="white"/>
+          <circle cx="25" cy="45" r="2" fill="white"/>
+          <circle cx="45" cy="45" r="2" fill="white"/>
+          <line x1="15" y1="20" x2="35" y2="30" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="30" x2="55" y2="20" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="30" x2="25" y2="45" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="30" x2="45" y2="45" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Taurus</span>
+        <div class="constellation-tooltip" style="top: 70px; left: -200px;">
+          <button class="close-btn">&times;</button>
+          <h4>♉ Taurus</h4>
+          <div class="zodiac-date">April 20 - May 20</div>
+          <p>The Bull is one of the oldest constellations. The bright star Aldebaran marks the bull's eye, glowing with an orange hue.</p>
+        </div>
+      </div>
+      
+      <!-- Gemini -->
+      <div class="constellation" id="const-gemini" style="top: 45%; left: 85%; width: 50px; height: 70px;">
+        <svg viewBox="0 0 50 70">
+          <circle cx="15" cy="10" r="3" fill="#ffd700"/>
+          <circle cx="35" cy="10" r="3" fill="#ffd700"/>
+          <circle cx="15" cy="35" r="2" fill="white"/>
+          <circle cx="35" cy="35" r="2" fill="white"/>
+          <circle cx="15" cy="60" r="2" fill="white"/>
+          <circle cx="35" cy="60" r="2" fill="white"/>
+          <line x1="15" y1="10" x2="15" y2="60" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="10" x2="35" y2="60" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="15" y1="35" x2="35" y2="35" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Gemini</span>
+        <div class="constellation-tooltip" style="top: 0; left: -290px;">
+          <button class="close-btn">&times;</button>
+          <h4>♊ Gemini</h4>
+          <div class="zodiac-date">May 21 - June 20</div>
+          <p>The Twins represent Castor and Pollux from Greek mythology. These two bright stars make the heads of the twin brothers.</p>
+        </div>
+      </div>
+      
+      <!-- Cancer -->
+      <div class="constellation" id="const-cancer" style="top: 70%; left: 75%; width: 55px; height: 45px;">
+        <svg viewBox="0 0 55 45">
+          <circle cx="10" cy="22" r="2" fill="white"/>
+          <circle cx="27" cy="10" r="2" fill="white"/>
+          <circle cx="27" cy="35" r="2" fill="white"/>
+          <circle cx="45" cy="22" r="2" fill="white"/>
+          <line x1="10" y1="22" x2="27" y2="10" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="27" y1="10" x2="45" y2="22" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="10" y1="22" x2="27" y2="35" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="27" y1="35" x2="45" y2="22" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Cancer</span>
+        <div class="constellation-tooltip" style="top: -150px; left: -200px;">
+          <button class="close-btn">&times;</button>
+          <h4>♋ Cancer</h4>
+          <div class="zodiac-date">June 21 - July 22</div>
+          <p>The Crab is a faint constellation containing the famous Beehive Cluster, a swarm of over 1,000 stars visible to the naked eye.</p>
+        </div>
+      </div>
+      
+      <!-- Leo -->
+      <div class="constellation" id="const-leo" style="top: 85%; left: 50%; width: 80px; height: 60px;">
+        <svg viewBox="0 0 80 60">
+          <circle cx="10" cy="30" r="3" fill="#ffd700"/>
+          <circle cx="30" cy="15" r="2" fill="white"/>
+          <circle cx="50" cy="20" r="2" fill="white"/>
+          <circle cx="70" cy="30" r="2" fill="white"/>
+          <circle cx="55" cy="45" r="2" fill="white"/>
+          <circle cx="35" cy="50" r="2" fill="white"/>
+          <line x1="10" y1="30" x2="30" y2="15" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="30" y1="15" x2="50" y2="20" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="50" y1="20" x2="70" y2="30" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="70" y1="30" x2="55" y2="45" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="55" y1="45" x2="35" y2="50" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Leo</span>
+        <div class="constellation-tooltip" style="top: -160px; left: -100px;">
+          <button class="close-btn">&times;</button>
+          <h4>♌ Leo</h4>
+          <div class="zodiac-date">July 23 - August 22</div>
+          <p>The Lion features Regulus, one of the brightest stars in the night sky. Ancient cultures saw this as the king of beasts.</p>
+        </div>
+      </div>
+      
+      <!-- Virgo -->
+      <div class="constellation" id="const-virgo" style="top: 70%; left: 20%; width: 70px; height: 65px;">
+        <svg viewBox="0 0 70 65">
+          <circle cx="35" cy="8" r="2" fill="white"/>
+          <circle cx="20" cy="25" r="2" fill="white"/>
+          <circle cx="50" cy="25" r="2" fill="white"/>
+          <circle cx="35" cy="40" r="3" fill="#ffd700"/>
+          <circle cx="20" cy="55" r="2" fill="white"/>
+          <circle cx="50" cy="55" r="2" fill="white"/>
+          <line x1="35" y1="8" x2="20" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="8" x2="50" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="20" y1="25" x2="35" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="50" y1="25" x2="35" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="40" x2="20" y2="55" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="40" x2="50" y2="55" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Virgo</span>
+        <div class="constellation-tooltip" style="top: -160px; left: 0;">
+          <button class="close-btn">&times;</button>
+          <h4>♍ Virgo</h4>
+          <div class="zodiac-date">August 23 - September 22</div>
+          <p>The Maiden holds Spica, a brilliant blue-white star. Virgo is the second-largest constellation in the sky.</p>
+        </div>
+      </div>
+      
+      <!-- Libra -->
+      <div class="constellation" id="const-libra" style="top: 45%; left: 5%; width: 60px; height: 50px;">
+        <svg viewBox="0 0 60 50">
+          <circle cx="30" cy="10" r="2" fill="white"/>
+          <circle cx="10" cy="25" r="2" fill="white"/>
+          <circle cx="50" cy="25" r="2" fill="white"/>
+          <circle cx="10" cy="40" r="2" fill="white"/>
+          <circle cx="50" cy="40" r="2" fill="white"/>
+          <line x1="30" y1="10" x2="10" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="30" y1="10" x2="50" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="10" y1="25" x2="10" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="50" y1="25" x2="50" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Libra</span>
+        <div class="constellation-tooltip" style="top: 0; left: 70px;">
+          <button class="close-btn">&times;</button>
+          <h4>♎ Libra</h4>
+          <div class="zodiac-date">September 23 - October 22</div>
+          <p>The Scales is the only zodiac constellation representing an object rather than a living creature, symbolizing balance and justice.</p>
+        </div>
+      </div>
+      
+      <!-- Scorpio -->
+      <div class="constellation" id="const-scorpio" style="top: 20%; left: 10%; width: 65px; height: 70px;">
+        <svg viewBox="0 0 65 70">
+          <circle cx="10" cy="15" r="3" fill="#ff4444"/>
+          <circle cx="25" cy="25" r="2" fill="white"/>
+          <circle cx="35" cy="40" r="2" fill="white"/>
+          <circle cx="45" cy="55" r="2" fill="white"/>
+          <circle cx="55" cy="65" r="2" fill="white"/>
+          <line x1="10" y1="15" x2="25" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="25" y1="25" x2="35" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="35" y1="40" x2="45" y2="55" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="45" y1="55" x2="55" y2="65" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Scorpio</span>
+        <div class="constellation-tooltip" style="top: 80px; left: 0;">
+          <button class="close-btn">&times;</button>
+          <h4>♏ Scorpio</h4>
+          <div class="zodiac-date">October 23 - November 21</div>
+          <p>The Scorpion features red supergiant Antares, whose name means "rival of Mars" due to its similar color.</p>
+        </div>
+      </div>
+      
+      <!-- Sagittarius -->
+      <div class="constellation" id="const-sagittarius" style="top: 5%; left: 25%; width: 70px; height: 60px;">
+        <svg viewBox="0 0 70 60">
+          <circle cx="10" cy="50" r="2" fill="white"/>
+          <circle cx="25" cy="35" r="2" fill="white"/>
+          <circle cx="40" cy="20" r="2" fill="white"/>
+          <circle cx="60" cy="10" r="3" fill="white"/>
+          <circle cx="50" cy="40" r="2" fill="white"/>
+          <line x1="10" y1="50" x2="25" y2="35" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="25" y1="35" x2="40" y2="20" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="40" y1="20" x2="60" y2="10" stroke="white" stroke-width="1" opacity="0.5"/>
+          <line x1="25" y1="35" x2="50" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="constellation-name">Sagittarius</span>
+        <div class="constellation-tooltip" style="top: 70px; left: -50px;">
+          <button class="close-btn">&times;</button>
+          <h4>♐ Sagittarius</h4>
+          <div class="zodiac-date">November 22 - December 21</div>
+          <p>The Archer points toward the center of the Milky Way galaxy. This region is rich with nebulae and star clusters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="site-footer" id="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">ORIGIN</div>
+        <p class="footer-tagline">Exploring the universe from the Big Bang to the stars that guide us today.</p>
+        <div class="footer-social">
+          <a href="#" title="Twitter">𝕏</a>
+          <a href="#" title="Instagram">◐</a>
+          <a href="#" title="YouTube">▶</a>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="#">The Big Bang</a></li>
+            <li><a href="#">Black Holes</a></li>
+            <li><a href="#">Galaxies</a></li>
+            <li><a href="#">Solar System</a></li>
+            <li><a href="#">Constellations</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h4>Learn</h4>
+          <ul>
+            <li><a href="#">Timeline</a></li>
+            <li><a href="#">Glossary</a></li>
+            <li><a href="#">Resources</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h4>About</h4>
+          <ul>
+            <li><a href="#">Our Mission</a></li>
+            <li><a href="#">Team</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2026 Origin. All rights reserved. Made with ✦ among the stars.</p>
+    </div>
+  </footer>
+  
+  <!-- Music Player -->
+  <div class="music-player" id="music-player">
+    <div class="music-player-container">
+      <video class="music-wave-video" id="music-wave-video" loop muted playsinline>
+        <source src="assets/music-wave-video.mp4" type="video/mp4">
+      </video>
+      <span class="music-stop-icon">✕</span>
+    </div>
+    <span class="music-label">Sound On</span>
+  </div>
+  <audio id="background-music" loop>
+    <source src="assets/background-music.mp3" type="audio/mpeg">
+  </audio>
+  
   <!-- Black Holes Section -->
   <div class="blackholes-text" id="blackholes-text">
     <h1 class="blackholes-title">BLACK HOLES</h1>
@@ -1386,6 +2043,21 @@ canvas {
 
   <!-- Timeline text sections -->
   <div class="timeline-text" id="timeline-1">
+    <div class="timeline-layout">
+      <h2 class="timeline-title">13.7B<br>YEARS<br>AGO</h2>
+      <div class="timeline-content">
+        <p class="timeline-description">
+          This tiny singularity violently exploded, and it is from this explosion—this "bang"—that all matter, energy, space, and time were created.
+        </p>
+        <p class="timeline-description">
+          What happened next were two major stages of the universe's evolution called the radiation and matter eras. They're defined by key events that help shape the universe.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Timeline 3 - Copy of Timeline 1 at 0.37 -->
+  <div class="timeline-text" id="timeline-3">
     <div class="timeline-layout">
       <h2 class="timeline-title">13.7B<br>YEARS<br>AGO</h2>
       <div class="timeline-content">
@@ -1734,49 +2406,107 @@ canvas {
         timeline1.style.opacity = '0';
       }
       
-      // Timeline 2 - 13.2B YEARS AGO (scrolls up then gets sucked into black hole)
-      const timeline2 = document.getElementById('timeline-2');
+      // Timeline 3 - Scroll up then get sucked into black hole
+      const timeline3 = document.getElementById('timeline-3');
       
-      const timeline2Start = 999;   // DISABLED
-      const timeline2ScrollEnd = 999;
-      const timeline2SuckEnd = 999;
+      const timeline3Start = 0.37;
+      const timeline3ScrollEnd = 0.43;  // End of scroll phase
+      const timeline3SuckEnd = 0.48;    // End of black hole suck phase
       
-      if (scrollPercent >= timeline2Start && scrollPercent <= timeline2SuckEnd) {
+      if (scrollPercent >= timeline3Start && scrollPercent <= timeline3SuckEnd) {
         
-        if (scrollPercent <= timeline2ScrollEnd) {
+        // Use consistent top/left positioning throughout
+        const vh = window.innerHeight / 100;
+        const vw = window.innerWidth / 100;
+        
+        if (scrollPercent <= timeline3ScrollEnd) {
           // PHASE 1: Scroll up from below
-          const scrollProgress = (scrollPercent - timeline2Start) / (timeline2ScrollEnd - timeline2Start);
-          const translateY = 100 - (scrollProgress * 150); // Moves from 100vh to -50vh
+          const scrollProgress = (scrollPercent - timeline3Start) / (timeline3ScrollEnd - timeline3Start);
+          
+          // Start below screen (120vh), end at 30vh from top
+          const startTop = 120 * vh;
+          const endTop = 30 * vh;
+          const currentTop = startTop + (endTop - startTop) * scrollProgress;
+          
           const opacity = scrollProgress < 0.1 ? scrollProgress * 10 : 1;
           
-          timeline2.style.transform = `translateY(${translateY}vh)`;
-          timeline2.style.opacity = opacity;
-          timeline2.style.filter = 'blur(0px)';
+          timeline3.style.left = '80px';
+          timeline3.style.top = currentTop + 'px';
+          timeline3.style.bottom = 'auto';
+          timeline3.style.transform = 'none';
+          timeline3.style.opacity = opacity;
+          timeline3.style.filter = 'blur(0px)';
           
         } else {
-          // PHASE 2: Get sucked into black hole!
-          const suckProgress = (scrollPercent - timeline2ScrollEnd) / (timeline2SuckEnd - timeline2ScrollEnd);
+          // PHASE 2: Get sucked into black hole - exact center of screen!
+          const suckProgress = (scrollPercent - timeline3ScrollEnd) / (timeline3SuckEnd - timeline3ScrollEnd);
           
-          const scale = Math.max(0, 1 - suckProgress * 1.5);
-          const rotation = suckProgress * 720;
-          const blur = suckProgress * 15;
-          const opacity = Math.max(0, 1 - suckProgress * 1.5);
+          // Move toward exact center of screen while shrinking and spinning
+          const scale = Math.max(0, 1 - suckProgress * 1.2);
+          const rotation = suckProgress * 720; // 2 full rotations
+          const blur = suckProgress * 12;
+          const opacity = Math.max(0, 1 - suckProgress * 1.3);
           
-          timeline2.style.transform = `translateY(-50vh) scale(${scale}) rotate(${rotation}deg)`;
-          timeline2.style.opacity = opacity;
-          timeline2.style.filter = `blur(${blur}px)`;
+          // Smoothly move from end of phase 1 position to exact center
+          const startLeft = 80; // px
+          const startTop = 30 * vh; // where phase 1 ended
+          const centerX = 50 * vw; // exact center X
+          const centerY = 50 * vh; // exact center Y
+          
+          const currentLeft = startLeft + (centerX - startLeft) * suckProgress;
+          const currentTop = startTop + (centerY - startTop) * suckProgress;
+          
+          timeline3.style.left = currentLeft + 'px';
+          timeline3.style.top = currentTop + 'px';
+          timeline3.style.bottom = 'auto';
+          timeline3.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`;
+          timeline3.style.transformOrigin = 'center center';
+          timeline3.style.opacity = opacity;
+          timeline3.style.filter = `blur(${blur}px)`;
         }
         
-      } else if (scrollPercent < timeline2Start) {
+      } else if (scrollPercent < timeline3Start) {
         // Before - hide below screen
+        timeline3.style.left = '80px';
+        timeline3.style.top = '120vh';
+        timeline3.style.bottom = 'auto';
+        timeline3.style.transform = 'none';
+        timeline3.style.opacity = '0';
+        timeline3.style.filter = 'blur(0px)';
+      } else {
+        // After - completely hidden at center
+        timeline3.style.left = '50%';
+        timeline3.style.top = '50%';
+        timeline3.style.bottom = 'auto';
+        timeline3.style.transform = 'translate(-50%, -50%) scale(0)';
+        timeline3.style.opacity = '0';
+        timeline3.style.filter = 'blur(0px)';
+      }
+      
+      // Timeline 2 - 13.2B YEARS AGO (simple scroll up like Timeline 1)
+      const timeline2 = document.getElementById('timeline-2');
+      
+      const timeline2Start = 0.50;
+      const timeline2End = 0.58;
+      
+      if (scrollPercent >= timeline2Start && scrollPercent <= timeline2End) {
+        // Calculate progress within this range (0 to 1)
+        const progress = (scrollPercent - timeline2Start) / (timeline2End - timeline2Start);
+        
+        // Start from below screen (100vh) and move up
+        const translateY = 100 - (progress * 170); // Moves from 100vh to -70vh
+        const opacity = progress < 0.05 ? progress * 20 : (progress > 0.85 ? (1 - progress) * 6.67 : 1);
+        
+        timeline2.style.transform = `translateY(${translateY}vh)`;
+        timeline2.style.opacity = opacity;
+      } else if (scrollPercent < timeline2Start) {
+        // Before the range - hide below screen
         timeline2.style.transform = 'translateY(100vh)';
         timeline2.style.opacity = '0';
-        timeline2.style.filter = 'blur(0px)';
       } else {
-        // After - completely hidden
-        timeline2.style.transform = 'translateY(-150vh) scale(0)';
+        // After the range - hide above screen
+        timeline2.style.transform = 'translateY(-150vh)';
         timeline2.style.opacity = '0';
-        timeline2.style.filter = 'blur(0px)';
       }
     }
 
@@ -1810,9 +2540,9 @@ canvas {
         explosionHotspots.classList.remove('visible');
       }
       
-      // Black hole hotspots - DISABLED
-      const blackholeStart = 999;
-      const blackholeEnd = 999;
+      // Black hole hotspots (0.50 - 0.56)
+      const blackholeStart = 0.50;
+      const blackholeEnd = 0.56;
       
       if (scrollPercent >= blackholeStart && scrollPercent <= blackholeEnd) {
         blackholeHotspots.classList.add('visible');
@@ -1900,6 +2630,99 @@ canvas {
       });
     }
     
+    // Constellation click handlers for Star Map
+    const constellations = document.querySelectorAll('.constellation');
+    constellations.forEach(constellation => {
+      constellation.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Close all other tooltips
+        document.querySelectorAll('.constellation-tooltip').forEach(t => t.classList.remove('active'));
+        // Open this tooltip
+        const tooltip = constellation.querySelector('.constellation-tooltip');
+        if (tooltip) tooltip.classList.add('active');
+      });
+    });
+    
+    // Handle constellation close buttons
+    document.querySelectorAll('.constellation-tooltip .close-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        btn.closest('.constellation-tooltip').classList.remove('active');
+      });
+    });
+    
+    // Close constellation tooltips when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.constellation')) {
+        document.querySelectorAll('.constellation-tooltip').forEach(t => t.classList.remove('active'));
+      }
+    });
+    
+    // Generate random background stars for star map
+    const starmapStars = document.getElementById('starmap-stars');
+    if (starmapStars) {
+      for (let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.className = 'starmap-star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.style.width = (Math.random() * 2 + 1) + 'px';
+        star.style.height = star.style.width;
+        starmapStars.appendChild(star);
+      }
+    }
+    
+    // Music Player functionality
+    const musicPlayer = document.getElementById('music-player');
+    const backgroundMusic = document.getElementById('background-music');
+    const musicWaveVideo = document.getElementById('music-wave-video');
+    const musicLabel = musicPlayer.querySelector('.music-label');
+    let isPlaying = false;
+    
+    // Start music on first user interaction (required by browsers)
+    function startMusic() {
+      if (!isPlaying) {
+        backgroundMusic.volume = 0.3;
+        backgroundMusic.play().then(() => {
+          musicWaveVideo.play();
+          isPlaying = true;
+          musicPlayer.classList.remove('paused');
+          musicLabel.textContent = 'Sound On';
+        }).catch(e => console.log('Audio play failed:', e));
+      }
+      // Remove listeners after first interaction
+      document.removeEventListener('click', startMusic);
+      document.removeEventListener('scroll', startMusic);
+    }
+    
+    // Try to autoplay on user interaction
+    document.addEventListener('click', startMusic, { once: true });
+    document.addEventListener('scroll', startMusic, { once: true });
+    
+    // Toggle music on player click
+    musicPlayer.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isPlaying) {
+        backgroundMusic.pause();
+        musicWaveVideo.pause();
+        isPlaying = false;
+        musicPlayer.classList.add('paused');
+        musicLabel.textContent = 'Sound Off';
+      } else {
+        backgroundMusic.play().then(() => {
+          musicWaveVideo.play();
+          isPlaying = true;
+          musicPlayer.classList.remove('paused');
+          musicLabel.textContent = 'Sound On';
+        }).catch(e => console.log('Audio play failed:', e));
+      }
+    });
+    
+    // Initially paused state
+    musicPlayer.classList.add('paused');
+    musicLabel.textContent = 'Click to Play';
+    
     // Preload all video frames for smooth scroll animation
     const frameCache = [];
     for (let i = 1; i <= 28; i++) {
@@ -1935,17 +2758,22 @@ canvas {
         grayMilkywayBg.classList.remove('visible');
       }
       
-      // Scroll Frames - כניסה אלגנטית מ-0.35, אנימציה מלאה מ-0.40 עד 0.56
+      // Scroll Frames - כניסה אלגנטית מ-0.37, אנימציה מלאה מ-0.40 עד 0.56
       const scrollFrames = document.getElementById('scroll-frames');
       const totalFrames = 28;
       
-      // Elegant fade in: 0.35-0.40
-      if (scrollPercent >= 0.35 && scrollPercent < 0.40) {
-        const t = (scrollPercent - 0.35) / 0.05; // 0 to 1
-        // easeOutCubic for smooth deceleration
-        const eased = 1 - Math.pow(1 - t, 3);
+      // Strong fade in: 0.37-0.40
+      if (scrollPercent >= 0.37 && scrollPercent < 0.40) {
+        const t = (scrollPercent - 0.37) / 0.03; // 0 to 1
+        // easeOutQuint for dramatic entrance
+        const eased = 1 - Math.pow(1 - t, 5);
         
-        scrollFrames.style.opacity = eased * 0.95;
+        // Strong fade + scale + blur effect
+        scrollFrames.style.opacity = eased;
+        const scale = 0.85 + (eased * 0.15); // Scale from 0.85 to 1
+        const blur = (1 - eased) * 8; // Blur from 8px to 0
+        scrollFrames.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        scrollFrames.style.filter = `blur(${blur}px)`;
         scrollFrames.src = 'assets/video-frames/ezgif-frame-001.png';
         grayMilkywayBg.classList.remove('visible');
         milkywayBg.classList.remove('visible');
@@ -1953,6 +2781,8 @@ canvas {
       // Full animation: 0.40-0.56
       else if (scrollPercent >= 0.40 && scrollPercent < 0.56) {
         scrollFrames.style.opacity = 1;
+        scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+        scrollFrames.style.filter = 'blur(0px)';
         scrollFrames.classList.add('visible');
         grayMilkywayBg.classList.remove('visible');
         milkywayBg.classList.remove('visible');
@@ -1970,8 +2800,29 @@ canvas {
         // החזרת רקעים כשיוצאים מטווח הפריימים
         const bgEl = document.querySelector('.bg');
         if (bgEl && scrollPercent < 0.56) bgEl.style.display = 'block';
-        if (scrollPercent < 0.35) {
+        if (scrollPercent < 0.37) {
           scrollFrames.src = 'assets/video-frames/ezgif-frame-001.png'; // Reset to first frame
+        }
+      }
+      
+      // Galaxy Scroll Frames - 0.63 to 0.85
+      const galaxyScrollFrames = document.getElementById('galaxy-scroll-frames');
+      const galaxyTotalFrames = 51;
+      
+      if (scrollPercent >= 0.63 && scrollPercent < 0.85) {
+        galaxyScrollFrames.style.opacity = 1;
+        galaxyScrollFrames.classList.add('visible');
+        
+        // Calculate which frame to show based on scroll progress
+        const galaxyFrameProgress = (scrollPercent - 0.63) / (0.85 - 0.63);
+        const galaxyFrameIndex = Math.min(Math.floor(galaxyFrameProgress * galaxyTotalFrames) + 1, galaxyTotalFrames);
+        const galaxyFrameNumber = String(galaxyFrameIndex).padStart(3, '0');
+        galaxyScrollFrames.src = `assets/galaxy-frames/ezgif-frame-${galaxyFrameNumber}.png`;
+      } else {
+        galaxyScrollFrames.classList.remove('visible');
+        galaxyScrollFrames.style.opacity = 0;
+        if (scrollPercent < 0.63) {
+          galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png'; // Reset to first frame
         }
       }
       
@@ -2027,12 +2878,36 @@ canvas {
         blackholesSubtitle.style.filter = '';
       }
       
-      // Black Holes text - visible from 0.31 to 0.35
+      // Black Holes text - fade in from 0.30 to 0.32, visible until 0.34, fade out 0.34 to 0.36
       const blackholeText = document.getElementById('blackhole-text');
-      if (scrollPercent >= 0.31 && scrollPercent < 0.35) {
-        if (blackholeText) blackholeText.classList.add('visible');
-      } else {
-        if (blackholeText) blackholeText.classList.remove('visible');
+      if (blackholeText) {
+        if (scrollPercent >= 0.30 && scrollPercent < 0.32) {
+          // Fade in phase
+          const fadeInProgress = (scrollPercent - 0.30) / 0.02;
+          blackholeText.style.opacity = fadeInProgress;
+          blackholeText.style.transform = `translate(-50%, -50%) scale(${0.9 + fadeInProgress * 0.1})`;
+          blackholeText.classList.add('visible');
+          blackholeText.classList.remove('fade-out');
+        } else if (scrollPercent >= 0.32 && scrollPercent < 0.34) {
+          // Fully visible
+          blackholeText.style.opacity = 1;
+          blackholeText.style.transform = 'translate(-50%, -50%) scale(1)';
+          blackholeText.classList.add('visible');
+          blackholeText.classList.remove('fade-out');
+        } else if (scrollPercent >= 0.34 && scrollPercent < 0.36) {
+          // Scroll up phase - text rolls upward
+          const scrollUpProgress = (scrollPercent - 0.34) / 0.02; // 0 to 1
+          const translateY = -50 - (scrollUpProgress * 100); // from -50% to -150% (scrolls up off screen)
+          blackholeText.style.opacity = 1 - scrollUpProgress * 0.8; // slight fade while scrolling
+          blackholeText.style.transform = `translate(-50%, ${translateY}%)`;
+          blackholeText.classList.add('visible');
+          blackholeText.classList.add('fade-out');
+        } else {
+          // Hidden
+          blackholeText.style.opacity = 0;
+          blackholeText.classList.remove('visible');
+          blackholeText.classList.remove('fade-out');
+        }
       }
       
       // Purple Galaxy background - appears after black hole hotspots (0.58+)
@@ -2076,7 +2951,7 @@ canvas {
         }
       }
       
-      // Planets background - appears after galaxy hotspots (0.88+)
+      // Planets background - appears from 0.88 until end
       const solarSystemSection = document.getElementById('solar-system-section');
       
       if (scrollPercent >= 0.88) {
@@ -2086,12 +2961,31 @@ canvas {
         if (timelineGalaxy) {
           timelineGalaxy.style.opacity = '0';
         }
-        // Show solar system section
-        if (solarSystemSection) solarSystemSection.classList.add('visible');
       } else {
         planetsBg.classList.remove('visible');
-        // Hide solar system section
+      }
+      
+      // Solar system section - only from 0.88 to 0.92
+      if (scrollPercent >= 0.88 && scrollPercent <= 0.92) {
+        if (solarSystemSection) solarSystemSection.classList.add('visible');
+      } else {
         if (solarSystemSection) solarSystemSection.classList.remove('visible');
+      }
+      
+      // Astrological Star Map - from 0.93 to end
+      const starmapSection = document.getElementById('starmap-section');
+      if (scrollPercent >= 0.93) {
+        if (starmapSection) starmapSection.classList.add('visible');
+      } else {
+        if (starmapSection) starmapSection.classList.remove('visible');
+      }
+      
+      // Footer - from 0.96 to end
+      const siteFooter = document.getElementById('site-footer');
+      if (scrollPercent >= 0.96) {
+        if (siteFooter) siteFooter.classList.add('visible');
+      } else {
+        if (siteFooter) siteFooter.classList.remove('visible');
       }
       
     }
