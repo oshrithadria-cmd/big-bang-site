@@ -1272,7 +1272,7 @@ canvas {
 .timeline-text {
   position: fixed;
   left: 80px;
-  bottom: 100px;
+  bottom: 50px;
   width: calc(100vw - 160px);
   max-width: 1400px;
   z-index: 5;
@@ -1502,6 +1502,32 @@ canvas {
 
 .timeline-description:last-child {
   margin-bottom: 0;
+}
+
+/* Timeline 1 ו-Timeline 3 – מיקום שמאלה ב-140px */
+#timeline-1,
+#timeline-3 {
+  left: 140px;
+}
+
+#timeline-1 .timeline-content {
+  margin-left: -140px;
+}
+
+/* Timeline 3 – תיבה מונמכת יותר */
+#timeline-3 {
+  bottom: 10px;
+}
+
+/* Timeline 3 – תיבת טקסט קצת יותר גדולה */
+#timeline-3 .timeline-content {
+  max-width: 400px;
+  margin-bottom: -190px;
+  margin-left: -140px;
+}
+#timeline-3 .timeline-description {
+  font-size: 17px;
+  line-height: 1.65;
 }
 
 @media (max-width: 768px) {
@@ -1984,20 +2010,8 @@ canvas {
     <p class="blackholes-subtitle">A black hole is a region in space where the force of gravity is so strong, not even light—the fastest known entity in our universe—can escape. The boundary of a black hole is called the event horizon, a point of no return beyond which we truly cannot see.</p>
   </div>
   
-  <!-- Timeline 2 - 13.2B Years Ago -->
-  <div class="timeline-text" id="timeline-2">
-    <div class="timeline-layout">
-      <h2 class="timeline-title">13.2B<br>YEARS<br>AGO</h2>
-      <div class="timeline-content">
-        <p class="timeline-description">
-          A black hole is a region in space where the force of gravity is so strong, not even light—the fastest known entity in our universe—can escape. The boundary of a black hole is called the event horizon, a point of no return beyond which we truly cannot see.
-        </p>
-        <p class="timeline-description">
-          When something crosses the event horizon, it collapses into the black hole's singularity—an infinitely small, infinitely dense point where space-time and the laws of physics no longer apply.
-        </p>
-      </div>
-    </div>
-  </div>
+  <!-- Timeline 2 - 13.2B Years Ago (hidden) -->
+  <div class="timeline-text" id="timeline-2" style="display:none;"></div>
   
 
   <!-- Logo -->
@@ -2056,16 +2070,16 @@ canvas {
     </div>
   </div>
   
-  <!-- Timeline 3 - Copy of Timeline 1 at 0.37 -->
+  <!-- Timeline 3 - Copy of Timeline 2 (13.2B, חור שחור) at 0.37 -->
   <div class="timeline-text" id="timeline-3">
     <div class="timeline-layout">
-      <h2 class="timeline-title">13.7B<br>YEARS<br>AGO</h2>
+      <h2 class="timeline-title">13.2B<br>YEARS<br>AGO</h2>
       <div class="timeline-content">
         <p class="timeline-description">
-          This tiny singularity violently exploded, and it is from this explosion—this "bang"—that all matter, energy, space, and time were created.
+          A black hole is a region in space where the force of gravity is so strong, not even light—the fastest known entity in our universe—can escape. The boundary of a black hole is called the event horizon, a point of no return beyond which we truly cannot see.
         </p>
         <p class="timeline-description">
-          What happened next were two major stages of the universe's evolution called the radiation and matter eras. They're defined by key events that help shape the universe.
+          When something crosses the event horizon, it collapses into the black hole's singularity—an infinitely small, infinitely dense point where space-time and the laws of physics no longer apply.
         </p>
       </div>
     </div>
@@ -2221,48 +2235,120 @@ canvas {
   
   <!-- Black Hole Hotspots -->
   <div class="explosion-hotspots" id="blackhole-hotspots">
-    <!-- Hotspot 1 - Event Horizon (top) -->
-    <div class="hotspot" style="top: 20%; left: 50%; transform: translateX(-50%);">
-      <div class="hotspot-tooltip" style="top: 30px; left: -120px;">
+    <!-- Hotspot 1 - Sagittarius A* (top-center) -->
+    <div class="hotspot" style="top: 15%; left: 38%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
-        <h4>Event Horizon</h4>
-        <p>The boundary of no return. Once anything crosses this invisible sphere, not even light can escape the black hole's gravitational pull. Time itself appears to stop at the event horizon from an outside observer's perspective.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/sagittarius-a-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Sagittarius A*</h4>
+            <p>Sagittarius A*, the supermassive black hole at the center of the Milky Way, has a mass of roughly 4 million suns and has a diameter about the distance between the Earth and our sun.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 2 - Singularity (right) -->
-    <div class="hotspot" style="top: 50%; left: 80%; transform: translateY(-50%);">
-      <div class="hotspot-tooltip" style="top: -60px; left: -280px;">
+    <!-- Hotspot 2 - How Scientists Study Black Holes (far right) -->
+    <div class="hotspot" style="top: 45%; left: 82%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: -555px;">
         <button class="close-btn">&times;</button>
-        <h4>The Singularity</h4>
-        <p>At the center lies a point of infinite density where all the black hole's mass is concentrated. Our current physics breaks down here - understanding singularities may require a theory of quantum gravity.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/how-scientists-study-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>How Scientists Study Black Holes</h4>
+            <p>Because black holes are invisible, the only way for scientists to detect and study them is to observe their effect on nearby matter.</p>
+            <p>Quasars – jets of particles that blast out of supermassive black holes.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 3 - Accretion Disk (bottom) -->
-    <div class="hotspot" style="top: 80%; left: 50%; transform: translateX(-50%);">
-      <div class="hotspot-tooltip" style="top: -140px; left: -120px;">
+    <!-- Hotspot 3 - Accretion Disks (bottom-right) -->
+    <div class="hotspot" style="top: 78%; left: 60%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: -555px;">
         <button class="close-btn">&times;</button>
-        <h4>Accretion Disk</h4>
-        <p>Matter spiraling into a black hole forms a superheated disk of gas and dust. Friction heats this material to millions of degrees, making it glow brightly in X-rays - which is how we detect black holes.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/accretion-disk-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>How Scientists Study Black Holes</h4>
+            <p>Because black holes are invisible, the only way for scientists to detect and study them is to observe their effect on nearby matter.</p>
+            <p>Accretion disks – disks of particles that form when gases and dust fall toward a black hole.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 4 - Hawking Radiation (left) -->
-    <div class="hotspot" style="top: 50%; left: 20%; transform: translateY(-50%);">
-      <div class="hotspot-tooltip" style="top: -60px; left: 30px;">
+    <!-- Hotspot 4 - Types of Black Holes (far left) -->
+    <div class="hotspot" style="top: 32%; left: 15%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: 30px;">
         <button class="close-btn">&times;</button>
-        <h4>Hawking Radiation</h4>
-        <p>Stephen Hawking predicted that black holes slowly emit radiation due to quantum effects near the event horizon. Over incredibly long timescales, black holes will eventually evaporate completely.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/types-blackholes-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Types of Black Holes</h4>
+            <p>Scientists have theorized several different types of black holes, with stellar and supermassive black holes being the most common.</p>
+            <p>Stellar black holes form when massive stars die and collapse. They're roughly 10 to 20 times the mass of our sun and scattered throughout the universe. There could be millions of these stellar black holes in the Milky Way alone.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 5 - Gravitational Lensing (top-right) -->
-    <div class="hotspot" style="top: 30%; left: 72%;">
-      <div class="hotspot-tooltip" style="top: 30px; left: -250px;">
+    <!-- Hotspot 5 - What is a Black Hole (top far-right) -->
+    <div class="hotspot" style="top: 20%; left: 75%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -555px;">
         <button class="close-btn">&times;</button>
-        <h4>Gravitational Lensing</h4>
-        <p>Black holes bend light so strongly that we can see objects behind them. This "gravitational lensing" creates stunning visual effects - light from distant stars wraps around the black hole, creating rings and arcs.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/what-is-blackhole-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>What is a Black Hole</h4>
+            <p>Supermassive black holes are giants by comparison, measuring millions, even billions of times more massive than our sun. They exist at the center of just about every large galaxy, including our own.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 6 - History & Discovery (left-center) -->
+    <div class="hotspot" style="top: 58%; left: 18%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: 30px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/history-discovery-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>History & Discovery</h4>
+            <p>Black holes remained largely unknown until the 20th century. In 1916, using Einstein's general theory of relativity, a German physicist named Karl Schwarzschild calculated that any mass could become a black hole if it were compressed tightly enough.</p>
+            <p>But it wasn't until 1971, when theory became reality, that astronomers studying the constellation Cygnus discovered the first black hole.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 7 - Types of Black Holes (bottom-left) -->
+    <div class="hotspot" style="top: 80%; left: 30%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: 30px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/types-blackholes2-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Types of Black Holes</h4>
+            <p>Scientists have theorized several different types of black holes, with stellar and supermassive black holes being the most common.</p>
+            <p>Stellar black holes form when massive stars die and collapse. They're roughly 10 to 20 times the mass of our sun and scattered throughout the universe. There could be millions of these stellar black holes in the Milky Way alone.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -2406,79 +2492,37 @@ canvas {
         timeline1.style.opacity = '0';
       }
       
-      // Timeline 3 - Scroll up then get sucked into black hole
+      // Timeline 3 - גלילה בלבד (בלי אפקט שאיבה)
       const timeline3 = document.getElementById('timeline-3');
       
       const timeline3Start = 0.37;
-      const timeline3ScrollEnd = 0.43;  // End of scroll phase
-      const timeline3SuckEnd = 0.48;    // End of black hole suck phase
+      const timeline3End = 0.48;
       
-      if (scrollPercent >= timeline3Start && scrollPercent <= timeline3SuckEnd) {
+      if (scrollPercent >= timeline3Start && scrollPercent <= timeline3End) {
+        const progress = (scrollPercent - timeline3Start) / (timeline3End - timeline3Start);
+        // נכנס מלמטה, עובר במסך, יוצא למעלה – עם אופסט למטה (תיבה נמוך יותר)
+        const offsetDownVh = 30; // תיבה מונמכת במסך
+        const translateY = (100 + offsetDownVh) - (progress * 170);
+        const opacity = progress < 0.05 ? progress * 20 : (progress > 0.9 ? (1 - progress) * 10 : 1);
         
-        // Use consistent top/left positioning throughout
-        const vh = window.innerHeight / 100;
-        const vw = window.innerWidth / 100;
-        
-        if (scrollPercent <= timeline3ScrollEnd) {
-          // PHASE 1: Scroll up from below
-          const scrollProgress = (scrollPercent - timeline3Start) / (timeline3ScrollEnd - timeline3Start);
-          
-          // Start below screen (120vh), end at 30vh from top
-          const startTop = 120 * vh;
-          const endTop = 30 * vh;
-          const currentTop = startTop + (endTop - startTop) * scrollProgress;
-          
-          const opacity = scrollProgress < 0.1 ? scrollProgress * 10 : 1;
-          
-          timeline3.style.left = '80px';
-          timeline3.style.top = currentTop + 'px';
-          timeline3.style.bottom = 'auto';
-          timeline3.style.transform = 'none';
-          timeline3.style.opacity = opacity;
-          timeline3.style.filter = 'blur(0px)';
-          
-        } else {
-          // PHASE 2: Get sucked into black hole - exact center of screen!
-          const suckProgress = (scrollPercent - timeline3ScrollEnd) / (timeline3SuckEnd - timeline3ScrollEnd);
-          
-          // Move toward exact center of screen while shrinking and spinning
-          const scale = Math.max(0, 1 - suckProgress * 1.2);
-          const rotation = suckProgress * 720; // 2 full rotations
-          const blur = suckProgress * 12;
-          const opacity = Math.max(0, 1 - suckProgress * 1.3);
-          
-          // Smoothly move from end of phase 1 position to exact center
-          const startLeft = 80; // px
-          const startTop = 30 * vh; // where phase 1 ended
-          const centerX = 50 * vw; // exact center X
-          const centerY = 50 * vh; // exact center Y
-          
-          const currentLeft = startLeft + (centerX - startLeft) * suckProgress;
-          const currentTop = startTop + (centerY - startTop) * suckProgress;
-          
-          timeline3.style.left = currentLeft + 'px';
-          timeline3.style.top = currentTop + 'px';
-          timeline3.style.bottom = 'auto';
-          timeline3.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`;
-          timeline3.style.transformOrigin = 'center center';
-          timeline3.style.opacity = opacity;
-          timeline3.style.filter = `blur(${blur}px)`;
-        }
-        
+        timeline3.style.top = '';
+        timeline3.style.bottom = '0px';  // צמוד לתחתית
+        timeline3.style.left = '';
+        timeline3.style.transform = `translateY(${translateY}vh)`;
+        timeline3.style.opacity = opacity;
+        timeline3.style.filter = 'blur(0px)';
       } else if (scrollPercent < timeline3Start) {
-        // Before - hide below screen
-        timeline3.style.left = '80px';
-        timeline3.style.top = '120vh';
-        timeline3.style.bottom = 'auto';
-        timeline3.style.transform = 'none';
+        timeline3.style.top = '';
+        timeline3.style.bottom = '0px';
+        timeline3.style.left = '';
+        timeline3.style.transform = 'translateY(100vh)';
         timeline3.style.opacity = '0';
         timeline3.style.filter = 'blur(0px)';
       } else {
-        // After - completely hidden at center
-        timeline3.style.left = '50%';
-        timeline3.style.top = '50%';
-        timeline3.style.bottom = 'auto';
-        timeline3.style.transform = 'translate(-50%, -50%) scale(0)';
+        timeline3.style.top = '';
+        timeline3.style.bottom = '0px';
+        timeline3.style.left = '';
+        timeline3.style.transform = 'translateY(-150vh)';
         timeline3.style.opacity = '0';
         timeline3.style.filter = 'blur(0px)';
       }

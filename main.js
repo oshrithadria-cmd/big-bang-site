@@ -227,7 +227,9 @@ flashImg.style.cssText = `
   opacity: 0;
   z-index: 10;
   mix-blend-mode: screen;
-  filter: brightness(1.2) contrast(1.15);
+  filter: brightness(1.2) contrast(1.2);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: auto;
   mask-image: radial-gradient(ellipse 75% 55% at center, transparent 12%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,1) 60%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 75% 55% at center, transparent 12%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,1) 60%, transparent 80%);
 `;
@@ -297,8 +299,8 @@ const tFlash = flashRaw < 0.5
   ? easeOutExpo(flashRaw * 2)
   : 1 - easeOutExpo((flashRaw - 0.5) * 2);
 
-// פיצוץ זוהר! (0.15 עד 0.30) - מתחיל יחד עם הבום
-const explodeRaw = phaseT(scrollProgress, 0.15, 0.30);
+// פיצוץ זוהר! (0.15 עד 0.28) - יותר איטי
+const explodeRaw = phaseT(scrollProgress, 0.15, 0.28);
 let tExplode;
 if (explodeRaw < 0.7) {
   tExplode = (explodeRaw / 0.7) * 0.25;
@@ -307,8 +309,8 @@ if (explodeRaw < 0.7) {
   tExplode = 0.25 + easeOutExpo(fastPart) * 0.75;
 }
 
-// חזרה לכוכבים (0.30 עד 0.36) - יותר הדרגתי
-const tAfter      = easeInOutCubic(phaseT(scrollProgress, 0.30, 0.36));
+// חזרה לכוכבים (0.26 עד 0.29) - נגמר לפני BLACK HOLES
+const tAfter      = easeInOutCubic(phaseT(scrollProgress, 0.26, 0.29));
 
 // *** BLACK HOLE - DISABLED ***
 const tHole = 0;
@@ -329,7 +331,7 @@ const tGalaxy     = easeInOutCubic(phaseT(scrollProgress, 0.70, 0.80));
 
   // knobs
   const gatherTightness = 0.45;    // smaller = tighter clusters
-  const explodeDistance = 16;      // bigger = stronger explosion
+  const explodeDistance = 22;      // bigger = stronger explosion (היה 16)
 
   const time = performance.now() * 0.001;
 
@@ -340,10 +342,13 @@ const tGalaxy     = easeInOutCubic(phaseT(scrollProgress, 0.70, 0.80));
     const by = basePositions[ix+1];
     const bz = basePositions[ix+2];
 
-    // star drift (subtle, always) - קצת יותר מהיר
-    let x = bx + Math.sin(time * 1.3 + i*0.01) * 0.05;
-    let y = by + Math.cos(time * 1.2 + i*0.008) * 0.05;
-    let z = bz + Math.sin(time*0.6 + i*0.004) * 0.03;
+    // star drift - מהירות אחידה לכל האתר
+    const driftMultiplier = 1.0;
+    const driftSpeed = 1.0;
+    
+    let x = bx + Math.sin(time * 1.3 * driftSpeed + i*0.01) * 0.05 * driftMultiplier;
+    let y = by + Math.cos(time * 1.2 * driftSpeed + i*0.008) * 0.05 * driftMultiplier;
+    let z = bz + Math.sin(time * 0.6 * driftSpeed + i*0.004) * 0.03 * driftMultiplier;
 
     const isLeft  = i < leftCount;
     const isRight = i >= leftCount && i < leftCount + rightCount;
@@ -377,8 +382,8 @@ if (isLeft || isRight) {
   x = cx; y = cy; z = cz;
 }
 
-    // 3) explosion - BOOM! פיצוץ ענק עם צבעים!
-    const shouldExplode = isLeft || isRight || (i % 2 === 0);
+    // 3) explosion - BOOM! רק אשכולות (8000 חלקיקים)
+    const shouldExplode = isLeft || isRight;
     if (shouldExplode && tExplode > 0) {
       const dx = explodeDirs[ix];
       const dy = explodeDirs[ix+1];
@@ -430,64 +435,11 @@ if (isLeft || isRight) {
       colors[ix+2] = origB;
     }
 
-    // 4) afterglow - חזרה חלקה לכוכבים
-    if (tAfter > 0) {
-      if (shouldExplode) {
-        const dx = explodeDirs[ix];
-        const dy = explodeDirs[ix+1];
-        const dz = explodeDirs[ix+2];
-        const speed = explodeSpeeds[i];
-        const finalDist = explodeDistance * speed * 2.5;
-        
-        const explodeX = dx * finalDist;
-        const explodeY = dy * finalDist;
-        const explodeZ = dz * finalDist;
-        
-        x = lerp(explodeX, bx, tAfter);
-        y = lerp(explodeY, by, tAfter);
-        z = lerp(explodeZ, bz, tAfter);
-      } else {
-        x = lerp(x, bx, tAfter);
-        y = lerp(y, by, tAfter);
-        z = lerp(z, bz, tAfter);
-      }
-      
-      // החזרת צבעים ללבן
-      const origB = 0.55 + ((i * 0.618033) % 1) * 0.45;
-      colors[ix] = lerp(colors[ix], origB, tAfter);
-      colors[ix+1] = lerp(colors[ix+1], origB, tAfter);
-      colors[ix+2] = lerp(colors[ix+2], origB, tAfter);
-    }
-
-    // ---- טווח 0.31-0.58: רק 10000 כוכבים נראים ----
-    if (scrollProgress >= 0.31 && scrollProgress < 0.58) {
-      // מסתירים הכל מלבד 10000 האחרונים
-      const isHidden = i < 12000;
-      if (isHidden) {
-        x = 1000;
-        y = 1000;
-        z = 1000;
-      }
-    }
-    // ---- טווח 0.58-0.88: רק 10000 כוכבים נראים ----
-    else if (scrollProgress >= 0.58 && scrollProgress < 0.88) {
-      // מסתירים הכל מלבד 10000 האחרונים
-      const isHidden = i < 12000;
-      if (isHidden) {
-        x = 1000;
-        y = 1000;
-        z = 1000;
-      }
-    }
-    // ---- טווח 0.88+: רק 2000 כוכבים נראים ----
-    else if (scrollProgress >= 0.88) {
-      // מסתירים הכל מלבד 2000 האחרונים
-      const isHidden = i < 20000;
-      if (isHidden) {
-        x = 1000;
-        y = 1000;
-        z = 1000;
-      }
+    // אחרי 0.29 – אפקט הפיצוץ נגמר: מסתירים את כל חלקיקי האשכולות (לא תראי אותם יותר)
+    if (scrollProgress >= 0.29 && (isLeft || isRight)) {
+      x = 1000;
+      y = 1000;
+      z = 1000;
     }
 
     posArr[ix]=x; posArr[ix+1]=y; posArr[ix+2]=z;
