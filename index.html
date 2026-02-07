@@ -138,155 +138,6 @@
       opacity: 1;
     }
     
-    /* Astrological Star Map Section */
-    .starmap-section {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 16;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.8s ease;
-      background: radial-gradient(ellipse at center, #0a0a1a 0%, #000005 100%);
-    }
-    
-    .starmap-section.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    
-    .starmap-title {
-      position: absolute;
-      top: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Inter', sans-serif;
-      font-size: 32px;
-      font-weight: 300;
-      color: #ffffff;
-      letter-spacing: 8px;
-      text-transform: uppercase;
-    }
-    
-    .starmap-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80vmin;
-      height: 80vmin;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: radial-gradient(ellipse at center, rgba(20, 20, 50, 0.3) 0%, transparent 70%);
-    }
-    
-    .constellation {
-      position: absolute;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .constellation:hover {
-      transform: scale(1.1);
-    }
-    
-    .constellation svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
-    }
-    
-    .constellation:hover svg {
-      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
-    }
-    
-    .constellation-name {
-      position: absolute;
-      bottom: -25px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.7);
-      white-space: nowrap;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    
-    .constellation-tooltip {
-      position: absolute;
-      background: rgba(0, 0, 0, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      padding: 20px 24px;
-      width: 280px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
-      z-index: 100;
-      pointer-events: none;
-    }
-    
-    .constellation-tooltip.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-    
-    .constellation-tooltip h4 {
-      margin: 0 0 8px 0;
-      font-size: 18px;
-      font-weight: 600;
-      color: #ffd700;
-    }
-    
-    .constellation-tooltip .zodiac-date {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 12px;
-    }
-    
-    .constellation-tooltip p {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.9);
-    }
-    
-    .constellation-tooltip .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 20px;
-      cursor: pointer;
-    }
-    
-    .starmap-stars {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    
-    .starmap-star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 3s ease-in-out infinite;
-    }
-    
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
-    
     /* Footer Section */
     .site-footer {
       position: fixed;
@@ -986,7 +837,7 @@
       50% { opacity: 1; transform: translateY(4px); }
     }
     .scroll-space {
-      height: 1200vh;
+      height: 960vh;
     }
     .content-sections {
       position: relative;
@@ -1504,10 +1355,10 @@ canvas {
   margin-bottom: 0;
 }
 
-/* Timeline 1 ו-Timeline 3 – מיקום שמאלה ב-140px */
+/* Timeline 1 ו-Timeline 3 – מיקום שמאלה ב-80px */
 #timeline-1,
 #timeline-3 {
-  left: 140px;
+  left: 80px;
 }
 
 #timeline-1 .timeline-content {
@@ -1528,6 +1379,12 @@ canvas {
 #timeline-3 .timeline-description {
   font-size: 17px;
   line-height: 1.65;
+}
+
+/* Timeline Galaxy – תיבת טקסט מוזזת */
+#timeline-galaxy .timeline-content {
+  margin-bottom: -40px;
+  margin-left: -140px;
 }
 
 @media (max-width: 768px) {
@@ -1726,214 +1583,6 @@ canvas {
         <p class="planet-description" id="planet-description">
           The Sun is the star at the center of our Solar System. It is a nearly perfect ball of hot plasma, heated to incandescence by nuclear fusion reactions in its core. The Sun radiates energy mainly as visible light and infrared radiation, and is the most important source of energy for life on Earth.
         </p>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Astrological Star Map Section -->
-  <div class="starmap-section" id="starmap-section">
-    <h2 class="starmap-title">Constellations</h2>
-    
-    <!-- Background stars -->
-    <div class="starmap-stars" id="starmap-stars"></div>
-    
-    <div class="starmap-container">
-      <!-- Aries -->
-      <div class="constellation" id="const-aries" style="top: 10%; left: 45%; width: 60px; height: 50px;">
-        <svg viewBox="0 0 60 50">
-          <circle cx="10" cy="25" r="3" fill="white"/>
-          <circle cx="30" cy="15" r="3" fill="white"/>
-          <circle cx="50" cy="25" r="3" fill="white"/>
-          <line x1="10" y1="25" x2="30" y2="15" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="30" y1="15" x2="50" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Aries</span>
-        <div class="constellation-tooltip" style="top: 60px; left: -110px;">
-          <button class="close-btn">&times;</button>
-          <h4>♈ Aries</h4>
-          <div class="zodiac-date">March 21 - April 19</div>
-          <p>The Ram constellation represents courage and leadership. In Greek mythology, it's the golden ram that rescued Phrixus and Helle.</p>
-        </div>
-      </div>
-      
-      <!-- Taurus -->
-      <div class="constellation" id="const-taurus" style="top: 20%; left: 70%; width: 70px; height: 60px;">
-        <svg viewBox="0 0 70 60">
-          <circle cx="15" cy="20" r="3" fill="white"/>
-          <circle cx="35" cy="30" r="4" fill="#ffd700"/>
-          <circle cx="55" cy="20" r="3" fill="white"/>
-          <circle cx="25" cy="45" r="2" fill="white"/>
-          <circle cx="45" cy="45" r="2" fill="white"/>
-          <line x1="15" y1="20" x2="35" y2="30" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="30" x2="55" y2="20" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="30" x2="25" y2="45" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="30" x2="45" y2="45" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Taurus</span>
-        <div class="constellation-tooltip" style="top: 70px; left: -200px;">
-          <button class="close-btn">&times;</button>
-          <h4>♉ Taurus</h4>
-          <div class="zodiac-date">April 20 - May 20</div>
-          <p>The Bull is one of the oldest constellations. The bright star Aldebaran marks the bull's eye, glowing with an orange hue.</p>
-        </div>
-      </div>
-      
-      <!-- Gemini -->
-      <div class="constellation" id="const-gemini" style="top: 45%; left: 85%; width: 50px; height: 70px;">
-        <svg viewBox="0 0 50 70">
-          <circle cx="15" cy="10" r="3" fill="#ffd700"/>
-          <circle cx="35" cy="10" r="3" fill="#ffd700"/>
-          <circle cx="15" cy="35" r="2" fill="white"/>
-          <circle cx="35" cy="35" r="2" fill="white"/>
-          <circle cx="15" cy="60" r="2" fill="white"/>
-          <circle cx="35" cy="60" r="2" fill="white"/>
-          <line x1="15" y1="10" x2="15" y2="60" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="10" x2="35" y2="60" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="15" y1="35" x2="35" y2="35" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Gemini</span>
-        <div class="constellation-tooltip" style="top: 0; left: -290px;">
-          <button class="close-btn">&times;</button>
-          <h4>♊ Gemini</h4>
-          <div class="zodiac-date">May 21 - June 20</div>
-          <p>The Twins represent Castor and Pollux from Greek mythology. These two bright stars make the heads of the twin brothers.</p>
-        </div>
-      </div>
-      
-      <!-- Cancer -->
-      <div class="constellation" id="const-cancer" style="top: 70%; left: 75%; width: 55px; height: 45px;">
-        <svg viewBox="0 0 55 45">
-          <circle cx="10" cy="22" r="2" fill="white"/>
-          <circle cx="27" cy="10" r="2" fill="white"/>
-          <circle cx="27" cy="35" r="2" fill="white"/>
-          <circle cx="45" cy="22" r="2" fill="white"/>
-          <line x1="10" y1="22" x2="27" y2="10" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="27" y1="10" x2="45" y2="22" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="10" y1="22" x2="27" y2="35" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="27" y1="35" x2="45" y2="22" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Cancer</span>
-        <div class="constellation-tooltip" style="top: -150px; left: -200px;">
-          <button class="close-btn">&times;</button>
-          <h4>♋ Cancer</h4>
-          <div class="zodiac-date">June 21 - July 22</div>
-          <p>The Crab is a faint constellation containing the famous Beehive Cluster, a swarm of over 1,000 stars visible to the naked eye.</p>
-        </div>
-      </div>
-      
-      <!-- Leo -->
-      <div class="constellation" id="const-leo" style="top: 85%; left: 50%; width: 80px; height: 60px;">
-        <svg viewBox="0 0 80 60">
-          <circle cx="10" cy="30" r="3" fill="#ffd700"/>
-          <circle cx="30" cy="15" r="2" fill="white"/>
-          <circle cx="50" cy="20" r="2" fill="white"/>
-          <circle cx="70" cy="30" r="2" fill="white"/>
-          <circle cx="55" cy="45" r="2" fill="white"/>
-          <circle cx="35" cy="50" r="2" fill="white"/>
-          <line x1="10" y1="30" x2="30" y2="15" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="30" y1="15" x2="50" y2="20" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="50" y1="20" x2="70" y2="30" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="70" y1="30" x2="55" y2="45" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="55" y1="45" x2="35" y2="50" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Leo</span>
-        <div class="constellation-tooltip" style="top: -160px; left: -100px;">
-          <button class="close-btn">&times;</button>
-          <h4>♌ Leo</h4>
-          <div class="zodiac-date">July 23 - August 22</div>
-          <p>The Lion features Regulus, one of the brightest stars in the night sky. Ancient cultures saw this as the king of beasts.</p>
-        </div>
-      </div>
-      
-      <!-- Virgo -->
-      <div class="constellation" id="const-virgo" style="top: 70%; left: 20%; width: 70px; height: 65px;">
-        <svg viewBox="0 0 70 65">
-          <circle cx="35" cy="8" r="2" fill="white"/>
-          <circle cx="20" cy="25" r="2" fill="white"/>
-          <circle cx="50" cy="25" r="2" fill="white"/>
-          <circle cx="35" cy="40" r="3" fill="#ffd700"/>
-          <circle cx="20" cy="55" r="2" fill="white"/>
-          <circle cx="50" cy="55" r="2" fill="white"/>
-          <line x1="35" y1="8" x2="20" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="8" x2="50" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="20" y1="25" x2="35" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="50" y1="25" x2="35" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="40" x2="20" y2="55" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="40" x2="50" y2="55" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Virgo</span>
-        <div class="constellation-tooltip" style="top: -160px; left: 0;">
-          <button class="close-btn">&times;</button>
-          <h4>♍ Virgo</h4>
-          <div class="zodiac-date">August 23 - September 22</div>
-          <p>The Maiden holds Spica, a brilliant blue-white star. Virgo is the second-largest constellation in the sky.</p>
-        </div>
-      </div>
-      
-      <!-- Libra -->
-      <div class="constellation" id="const-libra" style="top: 45%; left: 5%; width: 60px; height: 50px;">
-        <svg viewBox="0 0 60 50">
-          <circle cx="30" cy="10" r="2" fill="white"/>
-          <circle cx="10" cy="25" r="2" fill="white"/>
-          <circle cx="50" cy="25" r="2" fill="white"/>
-          <circle cx="10" cy="40" r="2" fill="white"/>
-          <circle cx="50" cy="40" r="2" fill="white"/>
-          <line x1="30" y1="10" x2="10" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="30" y1="10" x2="50" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="10" y1="25" x2="10" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="50" y1="25" x2="50" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Libra</span>
-        <div class="constellation-tooltip" style="top: 0; left: 70px;">
-          <button class="close-btn">&times;</button>
-          <h4>♎ Libra</h4>
-          <div class="zodiac-date">September 23 - October 22</div>
-          <p>The Scales is the only zodiac constellation representing an object rather than a living creature, symbolizing balance and justice.</p>
-        </div>
-      </div>
-      
-      <!-- Scorpio -->
-      <div class="constellation" id="const-scorpio" style="top: 20%; left: 10%; width: 65px; height: 70px;">
-        <svg viewBox="0 0 65 70">
-          <circle cx="10" cy="15" r="3" fill="#ff4444"/>
-          <circle cx="25" cy="25" r="2" fill="white"/>
-          <circle cx="35" cy="40" r="2" fill="white"/>
-          <circle cx="45" cy="55" r="2" fill="white"/>
-          <circle cx="55" cy="65" r="2" fill="white"/>
-          <line x1="10" y1="15" x2="25" y2="25" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="25" y1="25" x2="35" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="35" y1="40" x2="45" y2="55" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="45" y1="55" x2="55" y2="65" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Scorpio</span>
-        <div class="constellation-tooltip" style="top: 80px; left: 0;">
-          <button class="close-btn">&times;</button>
-          <h4>♏ Scorpio</h4>
-          <div class="zodiac-date">October 23 - November 21</div>
-          <p>The Scorpion features red supergiant Antares, whose name means "rival of Mars" due to its similar color.</p>
-        </div>
-      </div>
-      
-      <!-- Sagittarius -->
-      <div class="constellation" id="const-sagittarius" style="top: 5%; left: 25%; width: 70px; height: 60px;">
-        <svg viewBox="0 0 70 60">
-          <circle cx="10" cy="50" r="2" fill="white"/>
-          <circle cx="25" cy="35" r="2" fill="white"/>
-          <circle cx="40" cy="20" r="2" fill="white"/>
-          <circle cx="60" cy="10" r="3" fill="white"/>
-          <circle cx="50" cy="40" r="2" fill="white"/>
-          <line x1="10" y1="50" x2="25" y2="35" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="25" y1="35" x2="40" y2="20" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="40" y1="20" x2="60" y2="10" stroke="white" stroke-width="1" opacity="0.5"/>
-          <line x1="25" y1="35" x2="50" y2="40" stroke="white" stroke-width="1" opacity="0.5"/>
-        </svg>
-        <span class="constellation-name">Sagittarius</span>
-        <div class="constellation-tooltip" style="top: 70px; left: -50px;">
-          <button class="close-btn">&times;</button>
-          <h4>♐ Sagittarius</h4>
-          <div class="zodiac-date">November 22 - December 21</div>
-          <p>The Archer points toward the center of the Milky Way galaxy. This region is rich with nebulae and star clusters.</p>
-        </div>
       </div>
     </div>
   </div>
@@ -2355,48 +2004,131 @@ canvas {
 
   <!-- Galaxy Hotspots (Third Set) -->
   <div class="explosion-hotspots" id="galaxy-hotspots">
-    <!-- Hotspot 1 - Spiral Arms -->
-    <div class="hotspot" style="top: 25%; left: 25%;">
-      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+    <!-- Hotspot 1 - Elliptical Galaxies (top-left) -->
+    <div class="hotspot" style="top: 18%; left: 20%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
-        <h4>Spiral Arms</h4>
-        <p>The spiral arms of galaxies are regions of active star formation. They're not solid structures but density waves - areas where stars and gas are temporarily compressed, triggering the birth of new stars.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/elliptical-galaxies-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Elliptical Galaxies</h4>
+            <p>Elliptical galaxies are smooth and rounded or elongated in shape. They contain mostly older stars and show little new star formation.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 2 - Galactic Core -->
-    <div class="hotspot" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
-      <div class="hotspot-tooltip" style="top: 30px; left: 15px;">
+    <!-- Hotspot 2 - Spiral Galaxies (bottom-center) -->
+    <div class="hotspot" style="top: 88%; left: 48%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: -270px;">
         <button class="close-btn">&times;</button>
-        <h4>Galactic Core</h4>
-        <p>At the heart of most galaxies lies a supermassive black hole, millions to billions of times the mass of our Sun. Our Milky Way's central black hole, Sagittarius A*, is about 4 million solar masses.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/spiral-galaxies-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Spiral Galaxies</h4>
+            <p>Spiral galaxies have flat disk shapes with rotating spiral arms rich in gas, dust, and active star formation — like the Milky Way.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 3 - Star Clusters -->
-    <div class="hotspot" style="top: 35%; left: 75%;">
-      <div class="hotspot-tooltip" style="top: 30px; left: -250px;">
+    <!-- Hotspot 3 - Irregular Galaxies (top-right) -->
+    <div class="hotspot" style="top: 15%; left: 78%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -555px;">
         <button class="close-btn">&times;</button>
-        <h4>Star Clusters</h4>
-        <p>Galaxies contain two types of star clusters: open clusters with hundreds of young stars, and globular clusters - ancient spherical collections of hundreds of thousands of old stars orbiting the galactic core.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/irregular-galaxies-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Irregular Galaxies</h4>
+            <p>Irregular galaxies have no defined shape. Their chaotic structure is often caused by gravitational interactions or past collisions.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 4 - Dark Matter Halo -->
-    <div class="hotspot" style="top: 70%; left: 30%;">
-      <div class="hotspot-tooltip" style="top: -120px; left: 15px;">
+    <!-- Hotspot 4 - Galactic Transformation (far left) -->
+    <div class="hotspot" style="top: 55%; left: 18%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: 30px;">
         <button class="close-btn">&times;</button>
-        <h4>Dark Matter Halo</h4>
-        <p>Every galaxy is surrounded by a massive halo of invisible dark matter that extends far beyond the visible stars. This dark matter provides the gravitational glue that holds galaxies together.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/galactic-transformation-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Galactic Transformation</h4>
+            <p>Galaxies can change type over time due to collisions, mergers, and gravitational forces.</p>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Hotspot 5 - Interstellar Medium -->
-    <div class="hotspot" style="top: 65%; left: 70%;">
-      <div class="hotspot-tooltip" style="top: -140px; left: -250px;">
+    <!-- Hotspot 5 - Our Galaxy: The Milky Way (bottom-right) -->
+    <div class="hotspot" style="top: 78%; left: 72%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: -555px;">
         <button class="close-btn">&times;</button>
-        <h4>Interstellar Medium</h4>
-        <p>The space between stars isn't empty - it's filled with gas and dust called the interstellar medium. This material is the raw ingredient for new stars and contains complex molecules, including the building blocks of life.</p>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/milky-way-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Our Galaxy: The Milky Way</h4>
+            <p>The Milky Way is a barred spiral galaxy, home to hundreds of billions of stars, including our solar system.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 6 - Galaxy Formation & Evolution (right) -->
+    <div class="hotspot" style="top: 35%; left: 88%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: -555px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/galaxy-formation-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Galaxy Formation & Evolution</h4>
+            <p>Galaxies form over billions of years from gas and dust, evolving through collisions and mergers that reshape their structure and influence star formation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 7 - Cosmic Scale (bottom-left) -->
+    <div class="hotspot" style="top: 82%; left: 25%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: 30px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/cosmic-scale-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>Cosmic Scale</h4>
+            <p>The observable universe contains hundreds of billions to trillions of galaxies, organized into vast clusters and superclusters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hotspot 8 - A Living Universe (top-center) -->
+    <div class="hotspot" style="top: 12%; left: 50%;">
+      <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -270px;">
+        <button class="close-btn">&times;</button>
+        <div class="tooltip-content-row">
+          <video class="hotspot-video" autoplay loop muted playsinline>
+            <source src="assets/living-universe-hotspot.mp4" type="video/mp4">
+          </video>
+          <div class="tooltip-text">
+            <h4>A Living Universe</h4>
+            <p>Galaxies are not static — they continuously move, interact, and evolve over cosmic time.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -2594,8 +2326,8 @@ canvas {
         blackholeHotspots.classList.remove('visible');
       }
       
-      // Galaxy hotspots (0.78 - 0.88) - after galaxy forms
-      const galaxyStart = 0.78;
+      // Galaxy hotspots (0.83 - 0.88) - after galaxy forms
+      const galaxyStart = 0.83;
       const galaxyEnd = 0.88;
       
       if (scrollPercent >= galaxyStart && scrollPercent <= galaxyEnd) {
@@ -2674,48 +2406,6 @@ canvas {
       });
     }
     
-    // Constellation click handlers for Star Map
-    const constellations = document.querySelectorAll('.constellation');
-    constellations.forEach(constellation => {
-      constellation.addEventListener('click', (e) => {
-        e.stopPropagation();
-        // Close all other tooltips
-        document.querySelectorAll('.constellation-tooltip').forEach(t => t.classList.remove('active'));
-        // Open this tooltip
-        const tooltip = constellation.querySelector('.constellation-tooltip');
-        if (tooltip) tooltip.classList.add('active');
-      });
-    });
-    
-    // Handle constellation close buttons
-    document.querySelectorAll('.constellation-tooltip .close-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        btn.closest('.constellation-tooltip').classList.remove('active');
-      });
-    });
-    
-    // Close constellation tooltips when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.constellation')) {
-        document.querySelectorAll('.constellation-tooltip').forEach(t => t.classList.remove('active'));
-      }
-    });
-    
-    // Generate random background stars for star map
-    const starmapStars = document.getElementById('starmap-stars');
-    if (starmapStars) {
-      for (let i = 0; i < 150; i++) {
-        const star = document.createElement('div');
-        star.className = 'starmap-star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.animationDelay = Math.random() * 3 + 's';
-        star.style.width = (Math.random() * 2 + 1) + 'px';
-        star.style.height = star.style.width;
-        starmapStars.appendChild(star);
-      }
-    }
     
     // Music Player functionality
     const musicPlayer = document.getElementById('music-player');
@@ -2849,23 +2539,41 @@ canvas {
         }
       }
       
-      // Galaxy Scroll Frames - 0.63 to 0.85
+      // Galaxy Scroll Frames - fade in 0.67-0.70, full animation 0.70-0.88
       const galaxyScrollFrames = document.getElementById('galaxy-scroll-frames');
       const galaxyTotalFrames = 51;
       
-      if (scrollPercent >= 0.63 && scrollPercent < 0.85) {
+      // Fade in phase: 0.67-0.70
+      if (scrollPercent >= 0.67 && scrollPercent < 0.70) {
+        const t = (scrollPercent - 0.67) / 0.03; // 0 to 1
+        // easeOutQuint for dramatic entrance
+        const eased = 1 - Math.pow(1 - t, 5);
+        
+        galaxyScrollFrames.style.opacity = eased;
+        const scale = 0.85 + (eased * 0.15); // Scale from 0.85 to 1
+        const blur = (1 - eased) * 8; // Blur from 8px to 0
+        galaxyScrollFrames.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        galaxyScrollFrames.style.filter = `blur(${blur}px)`;
+        galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png';
+        galaxyScrollFrames.classList.add('visible');
+      }
+      // Full animation: 0.70-0.88
+      else if (scrollPercent >= 0.70 && scrollPercent < 0.88) {
         galaxyScrollFrames.style.opacity = 1;
+        galaxyScrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+        galaxyScrollFrames.style.filter = 'blur(0px)';
         galaxyScrollFrames.classList.add('visible');
         
         // Calculate which frame to show based on scroll progress
-        const galaxyFrameProgress = (scrollPercent - 0.63) / (0.85 - 0.63);
+        const galaxyFrameProgress = (scrollPercent - 0.70) / (0.88 - 0.70);
         const galaxyFrameIndex = Math.min(Math.floor(galaxyFrameProgress * galaxyTotalFrames) + 1, galaxyTotalFrames);
         const galaxyFrameNumber = String(galaxyFrameIndex).padStart(3, '0');
         galaxyScrollFrames.src = `assets/galaxy-frames/ezgif-frame-${galaxyFrameNumber}.png`;
       } else {
         galaxyScrollFrames.classList.remove('visible');
         galaxyScrollFrames.style.opacity = 0;
-        if (scrollPercent < 0.63) {
+        galaxyScrollFrames.style.filter = 'blur(0px)';
+        if (scrollPercent < 0.67) {
           galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png'; // Reset to first frame
         }
       }
@@ -2964,23 +2672,56 @@ canvas {
         grayMilkywayBg.classList.remove('visible'); // Hide gray milky way
         if (bgInner) bgInner.classList.add('hidden'); // Hide space bg to show purple
         
-        // GALAXY title visible from 0.60 to 0.68
-        if (scrollPercent >= 0.60 && scrollPercent < 0.68) {
-          if (galaxyText) galaxyText.classList.add('visible');
-        } else {
-          if (galaxyText) galaxyText.classList.remove('visible');
+        // GALAXY title - fade in 0.60-0.62, visible 0.62-0.65, scroll up out 0.65-0.67
+        if (galaxyText) {
+          if (scrollPercent >= 0.60 && scrollPercent < 0.62) {
+            // Fade in phase
+            const fadeInProgress = (scrollPercent - 0.60) / 0.02;
+            galaxyText.style.opacity = fadeInProgress;
+            galaxyText.style.transform = `translate(-50%, -50%) scale(${0.9 + fadeInProgress * 0.1})`;
+            galaxyText.classList.add('visible');
+          } else if (scrollPercent >= 0.62 && scrollPercent < 0.65) {
+            // Fully visible
+            galaxyText.style.opacity = 1;
+            galaxyText.style.transform = 'translate(-50%, -50%) scale(1)';
+            galaxyText.classList.add('visible');
+          } else if (scrollPercent >= 0.65 && scrollPercent < 0.67) {
+            // Scroll up phase - text rolls upward
+            const scrollUpProgress = (scrollPercent - 0.65) / 0.02;
+            const translateY = -50 - (scrollUpProgress * 100);
+            galaxyText.style.opacity = 1 - scrollUpProgress * 0.8;
+            galaxyText.style.transform = `translate(-50%, ${translateY}%)`;
+            galaxyText.classList.add('visible');
+          } else {
+            // Hidden
+            galaxyText.style.opacity = 0;
+            galaxyText.classList.remove('visible');
+          }
         }
         
-        // Timeline "10.8B YEARS AGO" visible from 0.68 onwards
-        if (scrollPercent >= 0.68 && scrollPercent < 0.85) {
+        // Timeline "10.8B YEARS AGO" - scroll through effect (0.68 to 0.82)
+        const galaxyTimeStart = 0.68;
+        const galaxyTimeEnd = 0.82;
+        if (scrollPercent >= galaxyTimeStart && scrollPercent < galaxyTimeEnd) {
           if (timelineGalaxy) {
-            timelineGalaxy.style.opacity = '1';
-            timelineGalaxy.style.transform = 'translateY(-50%)';
+            const progress = (scrollPercent - galaxyTimeStart) / (galaxyTimeEnd - galaxyTimeStart);
+            const translateY = 100 - (progress * 170); // enters from below, exits above
+            const opacity = progress < 0.05 ? progress * 20 : (progress > 0.9 ? (1 - progress) * 10 : 1);
+            timelineGalaxy.style.bottom = '0px';
+            timelineGalaxy.style.transform = `translateY(${translateY}vh)`;
+            timelineGalaxy.style.opacity = opacity;
+          }
+        } else if (scrollPercent < galaxyTimeStart) {
+          if (timelineGalaxy) {
+            timelineGalaxy.style.bottom = '0px';
+            timelineGalaxy.style.transform = 'translateY(100vh)';
+            timelineGalaxy.style.opacity = '0';
           }
         } else {
           if (timelineGalaxy) {
+            timelineGalaxy.style.bottom = '0px';
+            timelineGalaxy.style.transform = 'translateY(-150vh)';
             timelineGalaxy.style.opacity = '0';
-            timelineGalaxy.style.transform = 'translateY(100vh)';
           }
         }
       } else {
@@ -2991,6 +2732,7 @@ canvas {
         if (galaxyText) galaxyText.classList.remove('visible');
         if (timelineGalaxy) {
           timelineGalaxy.style.opacity = '0';
+          timelineGalaxy.style.bottom = '0px';
           timelineGalaxy.style.transform = 'translateY(100vh)';
         }
       }
@@ -3016,17 +2758,9 @@ canvas {
         if (solarSystemSection) solarSystemSection.classList.remove('visible');
       }
       
-      // Astrological Star Map - from 0.93 to end
-      const starmapSection = document.getElementById('starmap-section');
-      if (scrollPercent >= 0.93) {
-        if (starmapSection) starmapSection.classList.add('visible');
-      } else {
-        if (starmapSection) starmapSection.classList.remove('visible');
-      }
-      
-      // Footer - from 0.96 to end
+      // Footer - from 0.92 to end (right after planets)
       const siteFooter = document.getElementById('site-footer');
-      if (scrollPercent >= 0.96) {
+      if (scrollPercent >= 0.92) {
         if (siteFooter) siteFooter.classList.add('visible');
       } else {
         if (siteFooter) siteFooter.classList.remove('visible');

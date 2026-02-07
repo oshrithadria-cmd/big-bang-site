@@ -442,6 +442,14 @@ if (isLeft || isRight) {
       z = 1000;
     }
 
+    // מ-0.88 (פלנטות) – רק 3000 כוכבים רגילים עד הסוף
+    const starStart = leftCount + rightCount; // 8000 - תחילת הכוכבים הרגילים
+    if (scrollProgress >= 0.88 && i >= starStart && i >= starStart + 3000) {
+      x = 1000;
+      y = 1000;
+      z = 1000;
+    }
+
     posArr[ix]=x; posArr[ix+1]=y; posArr[ix+2]=z;
   } // end of for loop
 
