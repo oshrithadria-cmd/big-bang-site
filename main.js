@@ -327,6 +327,13 @@ const tGalaxyForm = phaseT(scrollProgress, 0.68, 0.78);
 // גלקסיה (0.70 עד 0.80)
 const tGalaxy     = easeInOutCubic(phaseT(scrollProgress, 0.70, 0.80));
 
+// הורדה הדרגתית של כוכבים: מ-14,000 ל-10,000 (בין 0.29 ל-0.88)
+const starStart = leftCount + rightCount; // 8000
+const totalRegularStars = particleCount - starStart; // 14000
+const starsToHide = totalRegularStars - 10000; // 4000
+const tFadeStars = phaseT(scrollProgress, 0.29, 0.88);
+const visibleRegularStars = totalRegularStars - Math.floor(tFadeStars * starsToHide);
+
   const posArr = geometry.attributes.position.array;
 
   // knobs
@@ -442,9 +449,8 @@ if (isLeft || isRight) {
       z = 1000;
     }
 
-    // מ-0.88 (פלנטות) – רק 3000 כוכבים רגילים עד הסוף
-    const starStart = leftCount + rightCount; // 8000 - תחילת הכוכבים הרגילים
-    if (scrollProgress >= 0.88 && i >= starStart && i >= starStart + 3000) {
+    // הורדה הדרגתית: מ-0.29 עד 0.88, מוריד כוכבים רגילים מ-14,000 ל-10,000
+    if (i >= starStart + visibleRegularStars) {
       x = 1000;
       y = 1000;
       z = 1000;

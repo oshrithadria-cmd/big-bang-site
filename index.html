@@ -75,7 +75,7 @@
       object-fit: contain;
       z-index: 2;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.8s ease;
       pointer-events: none;
       -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
       mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
@@ -1050,6 +1050,15 @@ canvas {
   transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
+.blackhole-text .hero-title {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 1), 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 0, 0, 0.7);
+}
+
+.blackhole-text .hero-subtitle {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 1), 0 0 25px rgba(0, 0, 0, 1), 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
 .blackhole-text.visible {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
@@ -1087,16 +1096,18 @@ canvas {
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 1), 0 0 40px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 0, 0, 0.7);
 }
 
 .galaxy-subtitle {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 18px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.95);
   margin: 30px auto 0;
   line-height: 1.8;
   text-align: center;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 1), 0 0 25px rgba(0, 0, 0, 1), 0 0 50px rgba(0, 0, 0, 0.8);
 }
 
 /* Scroll to start hint */
@@ -1172,6 +1183,27 @@ canvas {
 
 .explosion-hotspots.visible {
   opacity: 1;
+}
+
+.explosion-section-title {
+  position: absolute;
+  top: 38px;
+  left: 60px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 2px;
+  pointer-events: none;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 60px rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.explosion-hotspots.visible .explosion-section-title {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .hotspot {
@@ -1355,9 +1387,10 @@ canvas {
   margin-bottom: 0;
 }
 
-/* Timeline 1 ו-Timeline 3 – מיקום שמאלה ב-80px */
+/* Timeline 1, Timeline 3, Timeline Galaxy – מיקום שמאלה ב-80px */
 #timeline-1,
-#timeline-3 {
+#timeline-3,
+#timeline-galaxy {
   left: 80px;
 }
 
@@ -1373,7 +1406,7 @@ canvas {
 /* Timeline 3 – תיבת טקסט קצת יותר גדולה */
 #timeline-3 .timeline-content {
   max-width: 400px;
-  margin-bottom: -190px;
+  margin-bottom: -54px;
   margin-left: -140px;
 }
 #timeline-3 .timeline-description {
@@ -1727,9 +1760,6 @@ canvas {
         <p class="timeline-description">
           A black hole is a region in space where the force of gravity is so strong, not even light—the fastest known entity in our universe—can escape. The boundary of a black hole is called the event horizon, a point of no return beyond which we truly cannot see.
         </p>
-        <p class="timeline-description">
-          When something crosses the event horizon, it collapses into the black hole's singularity—an infinitely small, infinitely dense point where space-time and the laws of physics no longer apply.
-        </p>
       </div>
     </div>
   </div>
@@ -1737,6 +1767,7 @@ canvas {
   <!-- Interactive Space Hotspots -->
   <!-- Original Explosion Hotspots -->
   <div class="explosion-hotspots" id="explosion-hotspots">
+    <div class="explosion-section-title">From Energy to Stars</div>
     <!-- Hotspot 1 - Planck Epoch (למעלה שמאל) -->
     <div class="hotspot" id="hotspot-1" style="top: 20%; left: 22%;">
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
@@ -1884,6 +1915,7 @@ canvas {
   
   <!-- Black Hole Hotspots -->
   <div class="explosion-hotspots" id="blackhole-hotspots">
+    <div class="explosion-section-title">The Dark Core of the Cosmos</div>
     <!-- Hotspot 1 - Sagittarius A* (top-center) -->
     <div class="hotspot" style="top: 15%; left: 38%;">
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
@@ -2004,6 +2036,7 @@ canvas {
 
   <!-- Galaxy Hotspots (Third Set) -->
   <div class="explosion-hotspots" id="galaxy-hotspots">
+    <div class="explosion-section-title">The Architecture of the Universe</div>
     <!-- Hotspot 1 - Elliptical Galaxies (top-left) -->
     <div class="hotspot" style="top: 18%; left: 20%;">
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
@@ -2228,13 +2261,13 @@ canvas {
       const timeline3 = document.getElementById('timeline-3');
       
       const timeline3Start = 0.37;
-      const timeline3End = 0.48;
+      const timeline3End = 0.50;
       
       if (scrollPercent >= timeline3Start && scrollPercent <= timeline3End) {
         const progress = (scrollPercent - timeline3Start) / (timeline3End - timeline3Start);
-        // נכנס מלמטה, עובר במסך, יוצא למעלה – עם אופסט למטה (תיבה נמוך יותר)
-        const offsetDownVh = 30; // תיבה מונמכת במסך
-        const translateY = (100 + offsetDownVh) - (progress * 170);
+        // נכנס מלמטה, עובר במסך, יוצא למעלה – יותר גבוה במסך
+        const offsetDownVh = 15; // תיבה גבוהה יותר במסך
+        const translateY = (100 + offsetDownVh) - (progress * 160);
         const opacity = progress < 0.05 ? progress * 20 : (progress > 0.9 ? (1 - progress) * 10 : 1);
         
         timeline3.style.top = '';
@@ -2316,18 +2349,90 @@ canvas {
         explosionHotspots.classList.remove('visible');
       }
       
-      // Black hole hotspots (0.50 - 0.56)
+      // Black hole hotspots (0.50 - 0.58, suction from 0.51)
       const blackholeStart = 0.50;
-      const blackholeEnd = 0.56;
+      const blackholeEnd = 0.58;
+      const blackholeSuckStart = 0.51;
+      
+      // Store original positions once
+      if (!blackholeHotspots._origPositions) {
+        blackholeHotspots._origPositions = [];
+        blackholeHotspots.querySelectorAll('.hotspot').forEach(dot => {
+          blackholeHotspots._origPositions.push({
+            top: parseFloat(dot.style.top),
+            left: parseFloat(dot.style.left)
+          });
+        });
+      }
+      
+      const bhDots = blackholeHotspots.querySelectorAll('.hotspot');
+      const origPos = blackholeHotspots._origPositions;
+      const bhTitle = blackholeHotspots.querySelector('.explosion-section-title');
       
       if (scrollPercent >= blackholeStart && scrollPercent <= blackholeEnd) {
         blackholeHotspots.classList.add('visible');
+        
+        if (scrollPercent >= blackholeSuckStart) {
+          // 0.51-0.58: slow suction toward center with blur
+          const suckProgress = (scrollPercent - blackholeSuckStart) / (blackholeEnd - blackholeSuckStart);
+          // easeInCubic - starts very slow, accelerates like gravity
+          const eased = suckProgress * suckProgress * suckProgress;
+          
+          bhDots.forEach((dot, i) => {
+            const origTop = origPos[i].top;
+            const origLeft = origPos[i].left;
+            const newTop = origTop + (50 - origTop) * eased;
+            const newLeft = origLeft + (50 - origLeft) * eased;
+            const scale = Math.max(0, 1 - eased * 1.2);
+            const blurT = Math.max(0, (suckProgress - 0.9) / 0.1); // blur only in last 10%
+            const blur = blurT * blurT * 10;
+            
+            dot.style.top = newTop + '%';
+            dot.style.left = newLeft + '%';
+            dot.style.transform = `scale(${scale})`;
+            dot.style.opacity = Math.max(0, 1 - eased * 1.3);
+            dot.style.filter = `blur(${blur}px)`;
+          });
+          
+          if (bhTitle) {
+            bhTitle.style.opacity = Math.max(0, 1 - suckProgress * 1.5);
+          }
+        } else {
+          // 0.50-0.51: normal state
+          bhDots.forEach((dot, i) => {
+            dot.style.top = origPos[i].top + '%';
+            dot.style.left = origPos[i].left + '%';
+            dot.style.transform = '';
+            dot.style.opacity = '';
+            dot.style.filter = '';
+          });
+          if (bhTitle) bhTitle.style.opacity = '';
+        }
       } else {
         blackholeHotspots.classList.remove('visible');
+        // After suction ends - keep dots at center (hidden), don't snap back
+        bhDots.forEach((dot, i) => {
+          if (scrollPercent > blackholeEnd) {
+            // Already past - keep hidden at center
+            dot.style.top = '50%';
+            dot.style.left = '50%';
+            dot.style.transform = 'scale(0)';
+            dot.style.opacity = '0';
+            dot.style.filter = 'blur(8px)';
+          } else {
+            // Before start - restore originals
+            dot.style.top = origPos[i].top + '%';
+            dot.style.left = origPos[i].left + '%';
+            dot.style.transform = '';
+            dot.style.opacity = '';
+            dot.style.filter = '';
+          }
+        });
+        if (bhTitle) bhTitle.style.opacity = '';
       }
       
-      // Galaxy hotspots (0.83 - 0.88) - after galaxy forms
-      const galaxyStart = 0.83;
+      // Galaxy hotspots (0.85 - 0.88) - after timeline text
+      const galaxyStart = 0.85;
       const galaxyEnd = 0.88;
       
       if (scrollPercent >= galaxyStart && scrollPercent <= galaxyEnd) {
@@ -2474,6 +2579,8 @@ canvas {
     const blackholesTitle = document.querySelector('.blackholes-title');
     const blackholesSubtitle = document.querySelector('.blackholes-subtitle');
     
+    let bhAutoPlayStart = -1;
+    
     function updateMilkywayBg() {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = window.scrollY / maxScroll;
@@ -2492,28 +2599,26 @@ canvas {
         grayMilkywayBg.classList.remove('visible');
       }
       
-      // Scroll Frames - כניסה אלגנטית מ-0.37, אנימציה מלאה מ-0.40 עד 0.56
+      // Scroll Frames - כניסה חלקה מ-0.35, אנימציה מלאה מ-0.40 עד 0.56
       const scrollFrames = document.getElementById('scroll-frames');
-      const totalFrames = 28;
+      const totalFrames = 51;
       
-      // Strong fade in: 0.37-0.40
-      if (scrollPercent >= 0.37 && scrollPercent < 0.40) {
-        const t = (scrollPercent - 0.37) / 0.03; // 0 to 1
-        // easeOutQuint for dramatic entrance
-        const eased = 1 - Math.pow(1 - t, 5);
+      // Smooth fade in: 0.35-0.40 (overlaps with text fade-out for seamless transition)
+      if (scrollPercent >= 0.35 && scrollPercent < 0.40) {
+        const t = (scrollPercent - 0.35) / 0.05;
+        const eased = 1 - Math.pow(1 - t, 3);
         
-        // Strong fade + scale + blur effect
         scrollFrames.style.opacity = eased;
-        const scale = 0.85 + (eased * 0.15); // Scale from 0.85 to 1
-        const blur = (1 - eased) * 8; // Blur from 8px to 0
+        const scale = 0.92 + (eased * 0.08);
+        const blur = (1 - eased) * 5;
         scrollFrames.style.transform = `translate(-50%, -50%) scale(${scale})`;
         scrollFrames.style.filter = `blur(${blur}px)`;
         scrollFrames.src = 'assets/video-frames/ezgif-frame-001.png';
         grayMilkywayBg.classList.remove('visible');
         milkywayBg.classList.remove('visible');
       }
-      // Full animation: 0.40-0.56
-      else if (scrollPercent >= 0.40 && scrollPercent < 0.56) {
+      // Part 1 - Scroll: 0.40-0.50 (frames 1-25)
+      else if (scrollPercent >= 0.40 && scrollPercent < 0.50) {
         scrollFrames.style.opacity = 1;
         scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
         scrollFrames.style.filter = 'blur(0px)';
@@ -2523,11 +2628,77 @@ canvas {
         const bgEl = document.querySelector('.bg');
         if (bgEl) bgEl.style.display = 'none';
         
-        // Calculate which frame to show based on scroll progress
-        const frameProgress = (scrollPercent - 0.40) / (0.56 - 0.40);
-        const frameIndex = Math.min(Math.floor(frameProgress * totalFrames) + 1, totalFrames);
+        const frameProgress = (scrollPercent - 0.40) / (0.50 - 0.40);
+        const frameIndex = Math.min(Math.floor(frameProgress * 25) + 1, 25);
         const frameNumber = String(frameIndex).padStart(3, '0');
         scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
+        bhAutoPlayStart = -1;
+      }
+      // Part 2 - Auto-play loop: 0.50-0.53 (all 51 frames looping from 15)
+      else if (scrollPercent >= 0.50 && scrollPercent < 0.53) {
+        scrollFrames.style.opacity = 1;
+        scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+        scrollFrames.style.filter = 'blur(0px)';
+        scrollFrames.classList.add('visible');
+        grayMilkywayBg.classList.remove('visible');
+        milkywayBg.classList.remove('visible');
+        const bgEl = document.querySelector('.bg');
+        if (bgEl) bgEl.style.display = 'none';
+        
+        // Auto-play: ping-pong loop starting from frame 25 (25→51→51→25→25→51...)
+        if (bhAutoPlayStart < 0) bhAutoPlayStart = performance.now();
+        const elapsed = (performance.now() - bhAutoPlayStart) / 1000;
+        const loopFrames = totalFrames - 25 + 1; // frames 25-51 = 27 frames
+        const halfLoop = 2.0; // 2s forward, 2s backward
+        const fullLoop = halfLoop * 2;
+        const loopTime = elapsed % fullLoop;
+        let frameIndex;
+        if (loopTime < halfLoop) {
+          // Forward: 25 → 51
+          const t = loopTime / halfLoop;
+          frameIndex = 25 + Math.floor(t * (loopFrames - 1));
+        } else {
+          // Backward: 51 → 25
+          const t = (loopTime - halfLoop) / halfLoop;
+          frameIndex = 51 - Math.floor(t * (loopFrames - 1));
+        }
+        const frameNumber = String(frameIndex).padStart(3, '0');
+        scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
+      }
+      // Part 3 - Scroll + linger + fade out: 0.53-0.65
+      else if (scrollPercent >= 0.53 && scrollPercent < 0.65) {
+        scrollFrames.classList.add('visible');
+        grayMilkywayBg.classList.remove('visible');
+        milkywayBg.classList.remove('visible');
+        const bgEl = document.querySelector('.bg');
+        if (bgEl) bgEl.style.display = 'none';
+        
+        // Frames scroll: 0.53-0.56
+        if (scrollPercent < 0.56) {
+          const frameProgress = (scrollPercent - 0.53) / (0.56 - 0.53);
+          const frameIndex = Math.min(Math.floor(frameProgress * 26) + 26, 51);
+          const frameNumber = String(frameIndex).padStart(3, '0');
+          scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
+        }
+        
+        // 0.58-0.61: black hole lingers on screen after suction
+        // Natural fade out: 0.61-0.65 (slow, just opacity)
+        if (scrollPercent >= 0.61) {
+          const fadeProgress = Math.min((scrollPercent - 0.61) / 0.04, 1);
+          // easeInOutCubic for a natural fade
+          const eased = fadeProgress < 0.5
+            ? 4 * fadeProgress * fadeProgress * fadeProgress
+            : 1 - Math.pow(-2 * fadeProgress + 2, 3) / 2;
+          scrollFrames.style.opacity = 1 - eased;
+          scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+          scrollFrames.style.filter = 'blur(0px)';
+        } else {
+          scrollFrames.style.opacity = 1;
+          scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+          scrollFrames.style.filter = 'blur(0px)';
+        }
+        
+        bhAutoPlayStart = -1;
       } else {
         scrollFrames.classList.remove('visible');
         scrollFrames.style.opacity = 0;
@@ -2539,33 +2710,32 @@ canvas {
         }
       }
       
-      // Galaxy Scroll Frames - fade in 0.67-0.70, full animation 0.70-0.88
+      // Galaxy Scroll Frames - fade in 0.74-0.77, full animation 0.77-0.88
       const galaxyScrollFrames = document.getElementById('galaxy-scroll-frames');
       const galaxyTotalFrames = 51;
       
-      // Fade in phase: 0.67-0.70
-      if (scrollPercent >= 0.67 && scrollPercent < 0.70) {
-        const t = (scrollPercent - 0.67) / 0.03; // 0 to 1
-        // easeOutQuint for dramatic entrance
-        const eased = 1 - Math.pow(1 - t, 5);
+      // Smooth fade in phase: 0.74-0.77
+      if (scrollPercent >= 0.74 && scrollPercent < 0.77) {
+        const t = (scrollPercent - 0.74) / 0.03;
+        // easeOutCubic - smooth deceleration
+        const eased = 1 - Math.pow(1 - t, 3);
         
         galaxyScrollFrames.style.opacity = eased;
-        const scale = 0.85 + (eased * 0.15); // Scale from 0.85 to 1
-        const blur = (1 - eased) * 8; // Blur from 8px to 0
+        const scale = 0.92 + (eased * 0.08); // Scale from 0.92 to 1 (subtler)
+        const blur = (1 - eased) * 5; // Blur from 5px to 0 (less intense)
         galaxyScrollFrames.style.transform = `translate(-50%, -50%) scale(${scale})`;
         galaxyScrollFrames.style.filter = `blur(${blur}px)`;
         galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png';
         galaxyScrollFrames.classList.add('visible');
       }
-      // Full animation: 0.70-0.88
-      else if (scrollPercent >= 0.70 && scrollPercent < 0.88) {
+      // Full animation: 0.77-0.88
+      else if (scrollPercent >= 0.77 && scrollPercent < 0.88) {
         galaxyScrollFrames.style.opacity = 1;
         galaxyScrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
         galaxyScrollFrames.style.filter = 'blur(0px)';
         galaxyScrollFrames.classList.add('visible');
         
-        // Calculate which frame to show based on scroll progress
-        const galaxyFrameProgress = (scrollPercent - 0.70) / (0.88 - 0.70);
+        const galaxyFrameProgress = (scrollPercent - 0.77) / (0.88 - 0.77);
         const galaxyFrameIndex = Math.min(Math.floor(galaxyFrameProgress * galaxyTotalFrames) + 1, galaxyTotalFrames);
         const galaxyFrameNumber = String(galaxyFrameIndex).padStart(3, '0');
         galaxyScrollFrames.src = `assets/galaxy-frames/ezgif-frame-${galaxyFrameNumber}.png`;
@@ -2573,7 +2743,7 @@ canvas {
         galaxyScrollFrames.classList.remove('visible');
         galaxyScrollFrames.style.opacity = 0;
         galaxyScrollFrames.style.filter = 'blur(0px)';
-        if (scrollPercent < 0.67) {
+        if (scrollPercent < 0.74) {
           galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png'; // Reset to first frame
         }
       }
@@ -2630,27 +2800,29 @@ canvas {
         blackholesSubtitle.style.filter = '';
       }
       
-      // Black Holes text - fade in from 0.30 to 0.32, visible until 0.34, fade out 0.34 to 0.36
+      // Black Holes text - fade in from 0.30 to 0.32, visible until 0.35, fade out 0.35 to 0.38
       const blackholeText = document.getElementById('blackhole-text');
       if (blackholeText) {
         if (scrollPercent >= 0.30 && scrollPercent < 0.32) {
           // Fade in phase
           const fadeInProgress = (scrollPercent - 0.30) / 0.02;
-          blackholeText.style.opacity = fadeInProgress;
-          blackholeText.style.transform = `translate(-50%, -50%) scale(${0.9 + fadeInProgress * 0.1})`;
+          const eased = 1 - Math.pow(1 - fadeInProgress, 3);
+          blackholeText.style.opacity = eased;
+          blackholeText.style.transform = `translate(-50%, -50%) scale(${0.9 + eased * 0.1})`;
           blackholeText.classList.add('visible');
           blackholeText.classList.remove('fade-out');
-        } else if (scrollPercent >= 0.32 && scrollPercent < 0.34) {
+        } else if (scrollPercent >= 0.32 && scrollPercent < 0.35) {
           // Fully visible
           blackholeText.style.opacity = 1;
           blackholeText.style.transform = 'translate(-50%, -50%) scale(1)';
           blackholeText.classList.add('visible');
           blackholeText.classList.remove('fade-out');
-        } else if (scrollPercent >= 0.34 && scrollPercent < 0.36) {
-          // Scroll up phase - text rolls upward
-          const scrollUpProgress = (scrollPercent - 0.34) / 0.02; // 0 to 1
-          const translateY = -50 - (scrollUpProgress * 100); // from -50% to -150% (scrolls up off screen)
-          blackholeText.style.opacity = 1 - scrollUpProgress * 0.8; // slight fade while scrolling
+        } else if (scrollPercent >= 0.35 && scrollPercent < 0.38) {
+          // Scroll up phase - text rolls upward (overlaps with frames fade-in)
+          const scrollUpProgress = (scrollPercent - 0.35) / 0.03; // 0 to 1, slower
+          const eased = scrollUpProgress * scrollUpProgress; // easeInQuad - starts slow
+          const translateY = -50 - (eased * 80); // smoother movement
+          blackholeText.style.opacity = 1 - eased;
           blackholeText.style.transform = `translate(-50%, ${translateY}%)`;
           blackholeText.classList.add('visible');
           blackholeText.classList.add('fade-out');
@@ -2662,34 +2834,36 @@ canvas {
         }
       }
       
-      // Purple Galaxy background - appears after black hole hotspots (0.58+)
+      // Purple Galaxy background - appears after black hole is gone (0.65+)
       const bgInner = document.querySelector('.bg-inner');
       const galaxyText = document.getElementById('galaxy-text');
       const timelineGalaxy = document.getElementById('timeline-galaxy');
       
-      if (scrollPercent >= 0.58) {
+      if (scrollPercent >= 0.65) {
         purpleGalaxyBg.classList.add('visible');
-        grayMilkywayBg.classList.remove('visible'); // Hide gray milky way
-        if (bgInner) bgInner.classList.add('hidden'); // Hide space bg to show purple
+        grayMilkywayBg.classList.remove('visible');
+        if (bgInner) bgInner.classList.add('hidden');
         
-        // GALAXY title - fade in 0.60-0.62, visible 0.62-0.65, scroll up out 0.65-0.67
+        // GALAXY title - fade in 0.68-0.70, visible 0.70-0.73, scroll up out 0.73-0.76
         if (galaxyText) {
-          if (scrollPercent >= 0.60 && scrollPercent < 0.62) {
+          if (scrollPercent >= 0.68 && scrollPercent < 0.70) {
             // Fade in phase
-            const fadeInProgress = (scrollPercent - 0.60) / 0.02;
-            galaxyText.style.opacity = fadeInProgress;
-            galaxyText.style.transform = `translate(-50%, -50%) scale(${0.9 + fadeInProgress * 0.1})`;
+            const fadeInProgress = (scrollPercent - 0.68) / 0.02;
+            const eased = 1 - Math.pow(1 - fadeInProgress, 3);
+            galaxyText.style.opacity = eased;
+            galaxyText.style.transform = `translate(-50%, -50%) scale(${0.9 + eased * 0.1})`;
             galaxyText.classList.add('visible');
-          } else if (scrollPercent >= 0.62 && scrollPercent < 0.65) {
+          } else if (scrollPercent >= 0.70 && scrollPercent < 0.73) {
             // Fully visible
             galaxyText.style.opacity = 1;
             galaxyText.style.transform = 'translate(-50%, -50%) scale(1)';
             galaxyText.classList.add('visible');
-          } else if (scrollPercent >= 0.65 && scrollPercent < 0.67) {
-            // Scroll up phase - text rolls upward
-            const scrollUpProgress = (scrollPercent - 0.65) / 0.02;
-            const translateY = -50 - (scrollUpProgress * 100);
-            galaxyText.style.opacity = 1 - scrollUpProgress * 0.8;
+          } else if (scrollPercent >= 0.73 && scrollPercent < 0.76) {
+            // Scroll up phase - text rolls upward (overlaps with frames fade-in)
+            const scrollUpProgress = (scrollPercent - 0.73) / 0.03;
+            const eased = scrollUpProgress * scrollUpProgress;
+            const translateY = -50 - (eased * 80);
+            galaxyText.style.opacity = 1 - eased;
             galaxyText.style.transform = `translate(-50%, ${translateY}%)`;
             galaxyText.classList.add('visible');
           } else {
@@ -2699,27 +2873,24 @@ canvas {
           }
         }
         
-        // Timeline "10.8B YEARS AGO" - scroll through effect (0.68 to 0.82)
-        const galaxyTimeStart = 0.68;
-        const galaxyTimeEnd = 0.82;
+        // Timeline "10.8B YEARS AGO" - same scroll effect as timeline-1 (0.75 to 0.85)
+        const galaxyTimeStart = 0.75;
+        const galaxyTimeEnd = 0.85;
         if (scrollPercent >= galaxyTimeStart && scrollPercent < galaxyTimeEnd) {
           if (timelineGalaxy) {
             const progress = (scrollPercent - galaxyTimeStart) / (galaxyTimeEnd - galaxyTimeStart);
-            const translateY = 100 - (progress * 170); // enters from below, exits above
-            const opacity = progress < 0.05 ? progress * 20 : (progress > 0.9 ? (1 - progress) * 10 : 1);
-            timelineGalaxy.style.bottom = '0px';
+            const translateY = 100 - (progress * 170);
+            const opacity = progress < 0.05 ? progress * 20 : (progress > 0.85 ? (1 - progress) * 6.67 : 1);
             timelineGalaxy.style.transform = `translateY(${translateY}vh)`;
             timelineGalaxy.style.opacity = opacity;
           }
         } else if (scrollPercent < galaxyTimeStart) {
           if (timelineGalaxy) {
-            timelineGalaxy.style.bottom = '0px';
             timelineGalaxy.style.transform = 'translateY(100vh)';
             timelineGalaxy.style.opacity = '0';
           }
         } else {
           if (timelineGalaxy) {
-            timelineGalaxy.style.bottom = '0px';
             timelineGalaxy.style.transform = 'translateY(-150vh)';
             timelineGalaxy.style.opacity = '0';
           }
@@ -2770,6 +2941,15 @@ canvas {
     
     window.addEventListener('scroll', updateMilkywayBg);
     updateMilkywayBg();
+    
+    // Auto-play loop: keeps updating frames during video phase (0.50-0.53)
+    function bhAutoPlayLoop() {
+      requestAnimationFrame(bhAutoPlayLoop);
+      if (bhAutoPlayStart >= 0) {
+        updateMilkywayBg();
+      }
+    }
+    bhAutoPlayLoop();
     
     // Timeline Navigation
     const timelineNavPoints = document.querySelectorAll('.timeline-nav-point');
