@@ -101,6 +101,9 @@
     .purple-galaxy-bg.visible {
       opacity: 1;
     }
+    .purple-galaxy-bg.fading-in {
+      transition: opacity 1.5s ease;
+    }
     
     /* Black Hole Video */
     .blackhole-video {
@@ -130,7 +133,6 @@
       background: url('assets/planets-bg.png') center center / cover no-repeat;
       z-index: 1;
       opacity: 0;
-      transition: opacity 1.5s ease;
       pointer-events: none;
     }
     
@@ -294,22 +296,33 @@
       transform: scale(1.05);
     }
     
-    .music-wave-video {
+    .music-icon-svg {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      transition: opacity 0.3s ease, filter 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
     }
     
-    .music-player.paused .music-wave-video {
-      opacity: 0.3;
-      filter: grayscale(1);
+    .music-icon-svg svg {
+      width: 22px;
+      height: 22px;
+    }
+    
+    .music-player.paused .music-icon-svg {
+      opacity: 0.4;
+    }
+    
+    .music-player.paused .sound-wave-1,
+    .music-player.paused .sound-wave-2 {
+      display: none;
     }
     
     .music-player-container {
       position: relative;
-      width: 120px;
-      height: 60px;
+      width: 60px;
+      height: 30px;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -322,30 +335,15 @@
       border-color: rgba(100, 200, 200, 0.4);
     }
     
-    .music-stop-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      color: white;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
-    }
     
-    .music-player.paused .music-stop-icon {
-      opacity: 1;
-    }
     
     .music-label {
       position: absolute;
-      bottom: -22px;
+      bottom: -16px;
       left: 50%;
       transform: translateX(-50%);
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 8px;
       color: rgba(255, 255, 255, 0.6);
       white-space: nowrap;
       letter-spacing: 1px;
@@ -358,8 +356,8 @@
       }
       
       .music-player-container {
-        width: 80px;
-        height: 40px;
+        width: 50px;
+        height: 25px;
       }
     }
     
@@ -372,7 +370,6 @@
       z-index: 15;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.8s ease;
     }
     
     .solar-system-section.visible {
@@ -945,16 +942,9 @@
       color: #ffffff;
     }
     
-    /* Left Section Navigation */
+    /* Left Section Navigation - hidden */
     .section-nav {
-      position: fixed;
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
+      display: none;
     }
     
     .section-nav-item {
@@ -1739,9 +1729,262 @@ canvas {
     font-size: 14px;
   }
 }
+    /* Language Toggle */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 60px;
+      z-index: 2000;
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .lang-toggle:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .lang-toggle.active {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Accessibility Menu */
+    .a11y-toggle {
+      position: fixed;
+      left: 30px;
+      bottom: 85px;
+      z-index: 2000;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    
+    .a11y-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .a11y-toggle svg {
+      width: 20px;
+      height: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .a11y-toggle:hover svg {
+      opacity: 1;
+    }
+    
+    .a11y-toggle.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .a11y-panel {
+      position: fixed;
+      left: 30px;
+      bottom: 85px;
+      z-index: 1999;
+      background: rgba(10, 10, 20, 0.92);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 20px 18px;
+      width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-10px);
+      transition: all 0.3s ease;
+    }
+    
+    .a11y-panel.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(46px);
+    }
+    
+    .a11y-panel-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 14px;
+    }
+    
+    .a11y-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 10px;
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 6px;
+    }
+    
+    .a11y-btn:last-child {
+      margin-bottom: 0;
+    }
+    
+    .a11y-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .a11y-btn.active {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    
+    .a11y-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      flex-shrink: 0;
+    }
+    
+    .a11y-btn-reset {
+      margin-top: 10px;
+      border-color: rgba(255, 100, 100, 0.2);
+      color: rgba(255, 100, 100, 0.7);
+    }
+    
+    .a11y-btn-reset:hover {
+      background: rgba(255, 100, 100, 0.1);
+      color: rgba(255, 100, 100, 1);
+      border-color: rgba(255, 100, 100, 0.3);
+    }
+
+    /* Accessibility States */
+    
+    body.a11y-high-contrast {
+      filter: contrast(1.5);
+    }
+    
+    body.a11y-grayscale {
+      filter: grayscale(1);
+    }
+    
+    body.a11y-high-contrast.a11y-grayscale {
+      filter: contrast(1.5) grayscale(1);
+    }
+    
+    body.a11y-highlight-links a,
+    body.a11y-highlight-links [role="link"],
+    body.a11y-highlight-links .planet-nav-item,
+    body.a11y-highlight-links .timeline-nav-point {
+      outline: 2px solid #ffff00 !important;
+      outline-offset: 2px;
+    }
+    
+    body.a11y-big-cursor,
+    body.a11y-big-cursor * {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M5 2l20 14-10 2 6 12-4 2-6-12-6 8z' fill='white' stroke='black' stroke-width='1'/%3E%3C/svg%3E") 5 2, auto !important;
+    }
+
+    @media (max-width: 768px) {
+      .a11y-toggle {
+        left: 16px;
+        bottom: 65px;
+        width: 30px;
+        height: 30px;
+      }
+      .a11y-panel {
+        left: 16px;
+        bottom: 65px;
+        width: 180px;
+        padding: 16px 14px;
+      }
+      .a11y-panel.open {
+        transform: translateX(38px);
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Language Toggle -->
+  <button class="lang-toggle" id="lang-toggle">HE</button>
+
+  <!-- Accessibility Menu -->
+  <button class="a11y-toggle" id="a11y-toggle" aria-label="Accessibility menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="4" r="2"/>
+      <path d="M11 7v5h6l2 5"/>
+      <path d="M11 12H8"/>
+      <circle cx="8" cy="19" r="3" fill="none"/>
+      <path d="M14 19h3"/>
+    </svg>
+  </button>
+  
+  <div class="a11y-panel" id="a11y-panel">
+    <div class="a11y-panel-title">Accessibility</div>
+    
+    <button class="a11y-btn" data-action="font-increase">
+      <svg viewBox="0 0 24 24"><path d="M4 20h8l-4-16-4 16z"/><line x1="6" y1="15" x2="10" y2="15"/><line x1="17" y1="10" x2="17" y2="18"/><line x1="13" y1="14" x2="21" y2="14"/></svg>
+      Increase Text
+    </button>
+    
+    <button class="a11y-btn" data-action="font-decrease">
+      <svg viewBox="0 0 24 24"><path d="M4 20h8l-4-16-4 16z"/><line x1="6" y1="15" x2="10" y2="15"/><line x1="13" y1="14" x2="21" y2="14"/></svg>
+      Decrease Text
+    </button>
+    
+    <button class="a11y-btn" data-action="high-contrast">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20V2z" fill="currentColor"/></svg>
+      High Contrast
+    </button>
+    
+    <button class="a11y-btn" data-action="grayscale">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+      Grayscale
+    </button>
+    
+    <button class="a11y-btn" data-action="highlight-links">
+      <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Highlight Links
+    </button>
+    
+    <button class="a11y-btn" data-action="big-cursor">
+      <svg viewBox="0 0 24 24"><path d="M5 2l14 10-7 1.5 4 8.5-3 1.5-4-8.5L5 20V2z"/></svg>
+      Big Cursor
+    </button>
+    
+    <button class="a11y-btn a11y-btn-reset" data-action="reset">
+      <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      Reset All
+    </button>
+  </div>
+
   <!-- Left Section Navigation -->
   <div class="section-nav" id="section-nav">
     <div class="section-nav-item active" data-section="bigbang" data-scroll="0.10">
@@ -1812,19 +2055,19 @@ canvas {
         <span class="timeline-nav-label">-13.2B</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.48">
+      <div class="timeline-nav-point" data-scroll="0.40">
         <span class="timeline-nav-label">Black Holes</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.58">
+      <div class="timeline-nav-point" data-scroll="0.55">
         <span class="timeline-nav-label">-10.8B</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.68">
+      <div class="timeline-nav-point" data-scroll="0.67">
         <span class="timeline-nav-label">Galaxy</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.88">
+      <div class="timeline-nav-point" data-scroll="0.93">
         <span class="timeline-nav-label">Solar System</span>
         <div class="timeline-nav-dot"></div>
       </div>
@@ -2010,10 +2253,13 @@ canvas {
   <!-- Music Player -->
   <div class="music-player" id="music-player">
     <div class="music-player-container">
-      <video class="music-wave-video" id="music-wave-video" loop muted playsinline>
-        <source src="assets/music-wave-video.mp4" type="video/mp4">
-      </video>
-      <span class="music-stop-icon">✕</span>
+      <div class="music-icon-svg" id="music-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path class="sound-wave-1" d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path class="sound-wave-2" d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>
+      </div>
     </div>
     <span class="music-label">Sound On</span>
   </div>
@@ -2860,7 +3106,7 @@ canvas {
     // Music Player functionality
     const musicPlayer = document.getElementById('music-player');
     const backgroundMusic = document.getElementById('background-music');
-    const musicWaveVideo = document.getElementById('music-wave-video');
+    const musicIcon = document.getElementById('music-icon');
     const musicLabel = musicPlayer.querySelector('.music-label');
     let isPlaying = false;
     
@@ -2869,7 +3115,6 @@ canvas {
       if (!isPlaying) {
         backgroundMusic.volume = 0.3;
         backgroundMusic.play().then(() => {
-          musicWaveVideo.play();
           isPlaying = true;
           musicPlayer.classList.remove('paused');
           musicLabel.textContent = 'Sound On';
@@ -2889,13 +3134,11 @@ canvas {
       e.stopPropagation();
       if (isPlaying) {
         backgroundMusic.pause();
-        musicWaveVideo.pause();
         isPlaying = false;
         musicPlayer.classList.add('paused');
         musicLabel.textContent = 'Sound Off';
       } else {
         backgroundMusic.play().then(() => {
-          musicWaveVideo.play();
           isPlaying = true;
           musicPlayer.classList.remove('paused');
           musicLabel.textContent = 'Sound On';
@@ -2937,8 +3180,8 @@ canvas {
         milkywayBg.classList.remove('visible');
       }
       
-      // Purple Milky Way starts at 0.29 (after green background)
-      if (scrollPercent >= 0.29 && scrollPercent < 0.58) {
+      // Purple Milky Way starts at 0.29, extends to cover until purple galaxy takes over
+      if (scrollPercent >= 0.29 && scrollPercent < 0.63) {
         grayMilkywayBg.classList.add('visible');
       } else {
         grayMilkywayBg.classList.remove('visible');
@@ -2948,9 +3191,9 @@ canvas {
       const scrollFrames = document.getElementById('scroll-frames');
       const totalFrames = 51;
       
-      // Smooth fade in: 0.35-0.40 (overlaps with text fade-out for seamless transition)
-      if (scrollPercent >= 0.35 && scrollPercent < 0.40) {
-        const t = (scrollPercent - 0.35) / 0.05;
+      // Smooth fade in: 0.36-0.40 (overlaps with text fade-out for seamless transition)
+      if (scrollPercent >= 0.36 && scrollPercent < 0.40) {
+        const t = (scrollPercent - 0.36) / 0.04;
         const eased = 1 - Math.pow(1 - t, 3);
         
         scrollFrames.style.opacity = eased;
@@ -2979,117 +3222,115 @@ canvas {
         scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
         bhAutoPlayStart = -1;
       }
-      // Part 2 - Auto-play loop: 0.50-0.53 (all 51 frames looping from 15)
-      else if (scrollPercent >= 0.50 && scrollPercent < 0.53) {
+      // Part 2 - Auto-play loop: 0.51-0.53 (during black hole hotspots)
+      else if (scrollPercent >= 0.51 && scrollPercent < 0.54) {
+        scrollFrames.classList.add('visible');
         scrollFrames.style.opacity = 1;
         scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
         scrollFrames.style.filter = 'blur(0px)';
-        scrollFrames.classList.add('visible');
         grayMilkywayBg.classList.remove('visible');
         milkywayBg.classList.remove('visible');
         const bgEl = document.querySelector('.bg');
         if (bgEl) bgEl.style.display = 'none';
         
-        // Auto-play: ping-pong loop starting from frame 25 (25→51→51→25→25→51...)
+        // Auto-play: ping-pong loop (25→51→25...)
         if (bhAutoPlayStart < 0) bhAutoPlayStart = performance.now();
         const elapsed = (performance.now() - bhAutoPlayStart) / 1000;
-        const loopFrames = totalFrames - 25 + 1; // frames 25-51 = 27 frames
-        const halfLoop = 2.0; // 2s forward, 2s backward
+        const loopFrames = totalFrames - 25 + 1;
+        const halfLoop = 2.0;
         const fullLoop = halfLoop * 2;
         const loopTime = elapsed % fullLoop;
         let frameIndex;
         if (loopTime < halfLoop) {
-          // Forward: 25 → 51
           const t = loopTime / halfLoop;
           frameIndex = 25 + Math.floor(t * (loopFrames - 1));
         } else {
-          // Backward: 51 → 25
           const t = (loopTime - halfLoop) / halfLoop;
           frameIndex = 51 - Math.floor(t * (loopFrames - 1));
         }
         const frameNumber = String(frameIndex).padStart(3, '0');
         scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
       }
-      // Part 3 - Scroll + linger + fade out: 0.53-0.65
-      else if (scrollPercent >= 0.53 && scrollPercent < 0.65) {
+      // Part 3 - Scroll frames: 0.54-0.62 (continue scrolling to end)
+      else if (scrollPercent >= 0.54 && scrollPercent < 0.62) {
         scrollFrames.classList.add('visible');
-        grayMilkywayBg.classList.remove('visible');
+        scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+        scrollFrames.style.filter = 'blur(0px)';
         milkywayBg.classList.remove('visible');
         const bgEl = document.querySelector('.bg');
         if (bgEl) bgEl.style.display = 'none';
+        bhAutoPlayStart = -1;
         
-        // Frames scroll: 0.53-0.56
-        if (scrollPercent < 0.56) {
-          const frameProgress = (scrollPercent - 0.53) / (0.56 - 0.53);
-          const frameIndex = Math.min(Math.floor(frameProgress * 26) + 26, 51);
+        // Frames scroll: 0.54-0.59
+        if (scrollPercent < 0.59) {
+          const frameProgress = (scrollPercent - 0.54) / (0.59 - 0.54);
+          const frameIndex = Math.min(Math.floor(frameProgress * 26) + 25, 51);
           const frameNumber = String(frameIndex).padStart(3, '0');
           scrollFrames.src = `assets/video-frames/ezgif-frame-${frameNumber}.png`;
         }
         
-        // 0.58-0.61: black hole lingers on screen after suction
-        // Natural fade out: 0.61-0.65 (slow, just opacity)
-        if (scrollPercent >= 0.61) {
-          const fadeProgress = Math.min((scrollPercent - 0.61) / 0.04, 1);
-          // easeInOutCubic for a natural fade
-          const eased = fadeProgress < 0.5
-            ? 4 * fadeProgress * fadeProgress * fadeProgress
-            : 1 - Math.pow(-2 * fadeProgress + 2, 3) / 2;
+        // 0.59-0.62: quick fade out
+        if (scrollPercent >= 0.59) {
+          const fadeProgress = Math.min((scrollPercent - 0.59) / 0.03, 1);
+          const eased = fadeProgress * fadeProgress; // fast easeIn
           scrollFrames.style.opacity = 1 - eased;
-          scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
-          scrollFrames.style.filter = 'blur(0px)';
         } else {
           scrollFrames.style.opacity = 1;
-          scrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
-          scrollFrames.style.filter = 'blur(0px)';
         }
-        
-        bhAutoPlayStart = -1;
       } else {
         scrollFrames.classList.remove('visible');
         scrollFrames.style.opacity = 0;
         // החזרת רקעים כשיוצאים מטווח הפריימים
         const bgEl = document.querySelector('.bg');
-        if (bgEl && scrollPercent < 0.56) bgEl.style.display = 'block';
+        if (bgEl && scrollPercent < 0.36) bgEl.style.display = 'block';
         if (scrollPercent < 0.37) {
           scrollFrames.src = 'assets/video-frames/ezgif-frame-001.png'; // Reset to first frame
         }
       }
       
-      // Galaxy Scroll Frames - fade in 0.74-0.77, full animation 0.77-0.88
+      // Galaxy Scroll Frames - fade in 0.72-0.75, full animation 0.75-0.89 (no effect)
       const galaxyScrollFrames = document.getElementById('galaxy-scroll-frames');
       const galaxyTotalFrames = 51;
       
-      // Smooth fade in phase: 0.74-0.77
-      if (scrollPercent >= 0.74 && scrollPercent < 0.77) {
-        const t = (scrollPercent - 0.74) / 0.03;
-        // easeOutCubic - smooth deceleration
-        const eased = 1 - Math.pow(1 - t, 3);
-        
+      // Smooth fade in phase: 0.72-0.75
+      if (scrollPercent >= 0.72 && scrollPercent < 0.75) {
+        const t = (scrollPercent - 0.72) / 0.03;
+        const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
         galaxyScrollFrames.style.opacity = eased;
-        const scale = 0.92 + (eased * 0.08); // Scale from 0.92 to 1 (subtler)
-        const blur = (1 - eased) * 5; // Blur from 5px to 0 (less intense)
+        const scale = 0.92 + (eased * 0.08);
+        const blur = (1 - eased) * 5;
         galaxyScrollFrames.style.transform = `translate(-50%, -50%) scale(${scale})`;
         galaxyScrollFrames.style.filter = `blur(${blur}px)`;
         galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png';
         galaxyScrollFrames.classList.add('visible');
       }
-      // Full animation: 0.77-0.88
-      else if (scrollPercent >= 0.77 && scrollPercent < 0.88) {
-        galaxyScrollFrames.style.opacity = 1;
-        galaxyScrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
-        galaxyScrollFrames.style.filter = 'blur(0px)';
+      // Full animation: 0.75-0.87, then dissolve 0.87-0.91
+      else if (scrollPercent >= 0.75 && scrollPercent < 0.91) {
         galaxyScrollFrames.classList.add('visible');
         
-        const galaxyFrameProgress = (scrollPercent - 0.77) / (0.88 - 0.77);
-        const galaxyFrameIndex = Math.min(Math.floor(galaxyFrameProgress * galaxyTotalFrames) + 1, galaxyTotalFrames);
-        const galaxyFrameNumber = String(galaxyFrameIndex).padStart(3, '0');
-        galaxyScrollFrames.src = `assets/galaxy-frames/ezgif-frame-${galaxyFrameNumber}.png`;
+        if (scrollPercent < 0.87) {
+          // Plain frames
+          galaxyScrollFrames.style.opacity = 1;
+          galaxyScrollFrames.style.filter = 'blur(0px)';
+          galaxyScrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+          const galaxyFrameProgress = (scrollPercent - 0.75) / (0.87 - 0.75);
+          const galaxyFrameIndex = Math.min(Math.floor(galaxyFrameProgress * galaxyTotalFrames) + 1, galaxyTotalFrames);
+          const galaxyFrameNumber = String(galaxyFrameIndex).padStart(3, '0');
+          galaxyScrollFrames.src = `assets/galaxy-frames/ezgif-frame-${galaxyFrameNumber}.png`;
+        } else {
+          // 0.87-0.91: gentle dissolve
+          const fadeOut = (scrollPercent - 0.87) / 0.04;
+          const eased = fadeOut * fadeOut * (3 - 2 * fadeOut); // smoothstep
+          galaxyScrollFrames.style.opacity = 1 - eased;
+          galaxyScrollFrames.style.filter = `blur(${eased * 3}px)`;
+          galaxyScrollFrames.style.transform = 'translate(-50%, -50%) scale(1)';
+        }
       } else {
         galaxyScrollFrames.classList.remove('visible');
         galaxyScrollFrames.style.opacity = 0;
         galaxyScrollFrames.style.filter = 'blur(0px)';
-        if (scrollPercent < 0.74) {
-          galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png'; // Reset to first frame
+        if (scrollPercent < 0.72) {
+          galaxyScrollFrames.src = 'assets/galaxy-frames/ezgif-frame-001.png';
         }
       }
       
@@ -3145,30 +3386,32 @@ canvas {
         blackholesSubtitle.style.filter = '';
       }
       
-      // Black Holes text - fade in from 0.30 to 0.32, visible until 0.35, fade out 0.35 to 0.38
+      // Black Holes text - smooth fade in 0.30-0.33, visible 0.33-0.35, smooth fade out 0.35-0.38
       const blackholeText = document.getElementById('blackhole-text');
       if (blackholeText) {
-        if (scrollPercent >= 0.30 && scrollPercent < 0.32) {
-          // Fade in phase
-          const fadeInProgress = (scrollPercent - 0.30) / 0.02;
-          const eased = 1 - Math.pow(1 - fadeInProgress, 3);
+        if (scrollPercent >= 0.30 && scrollPercent < 0.33) {
+          // Smooth fade in - longer and softer
+          const fadeInProgress = (scrollPercent - 0.30) / 0.03;
+          const eased = fadeInProgress * fadeInProgress * (3 - 2 * fadeInProgress); // smoothstep
           blackholeText.style.opacity = eased;
-          blackholeText.style.transform = `translate(-50%, -50%) scale(${0.9 + eased * 0.1})`;
+          const scale = 0.92 + eased * 0.08;
+          const translateY = -50 + (1 - eased) * 8;
+          blackholeText.style.transform = `translate(-50%, ${translateY}%) scale(${scale})`;
           blackholeText.classList.add('visible');
           blackholeText.classList.remove('fade-out');
-        } else if (scrollPercent >= 0.32 && scrollPercent < 0.35) {
+        } else if (scrollPercent >= 0.33 && scrollPercent < 0.35) {
           // Fully visible
           blackholeText.style.opacity = 1;
           blackholeText.style.transform = 'translate(-50%, -50%) scale(1)';
           blackholeText.classList.add('visible');
           blackholeText.classList.remove('fade-out');
         } else if (scrollPercent >= 0.35 && scrollPercent < 0.38) {
-          // Scroll up phase - text rolls upward (overlaps with frames fade-in)
-          const scrollUpProgress = (scrollPercent - 0.35) / 0.03; // 0 to 1, slower
-          const eased = scrollUpProgress * scrollUpProgress; // easeInQuad - starts slow
-          const translateY = -50 - (eased * 80); // smoother movement
+          // Smooth scroll up + fade out
+          const scrollUpProgress = (scrollPercent - 0.35) / 0.03;
+          const eased = scrollUpProgress * scrollUpProgress * (3 - 2 * scrollUpProgress); // smoothstep
+          const translateY = -50 - (eased * 60);
           blackholeText.style.opacity = 1 - eased;
-          blackholeText.style.transform = `translate(-50%, ${translateY}%)`;
+          blackholeText.style.transform = `translate(-50%, ${translateY}%) scale(${1 - eased * 0.05})`;
           blackholeText.classList.add('visible');
           blackholeText.classList.add('fade-out');
         } else {
@@ -3184,33 +3427,106 @@ canvas {
       const galaxyText = document.getElementById('galaxy-text');
       const timelineGalaxy = document.getElementById('timeline-galaxy');
       
-      if (scrollPercent >= 0.65) {
-        purpleGalaxyBg.classList.add('visible');
-        grayMilkywayBg.classList.remove('visible');
+      if (scrollPercent >= 0.60) {
+        // Quick crossfade: purple galaxy fades in 0.60-0.63
+        if (scrollPercent < 0.63) {
+          const fadeT = (scrollPercent - 0.60) / 0.03;
+          purpleGalaxyBg.style.opacity = fadeT * fadeT; // easeIn - fast reveal
+          purpleGalaxyBg.classList.add('visible');
+        } else if (scrollPercent < 0.89) {
+          // Fully visible
+          purpleGalaxyBg.style.opacity = '';
+          purpleGalaxyBg.classList.add('visible');
+        } else if (scrollPercent < 0.94) {
+          // 0.89-0.94: slow fade out as planets bg takes over
+          const fadeOut = (scrollPercent - 0.89) / 0.05;
+          // easeInOutQuad - gentle S curve
+          const eased = fadeOut < 0.5
+            ? 2 * fadeOut * fadeOut
+            : 1 - Math.pow(-2 * fadeOut + 2, 2) / 2;
+          purpleGalaxyBg.style.opacity = 1 - eased;
+          purpleGalaxyBg.classList.add('visible');
+        } else {
+          purpleGalaxyBg.style.opacity = 0;
+          purpleGalaxyBg.classList.remove('visible');
+        }
+        if (scrollPercent >= 0.63) grayMilkywayBg.classList.remove('visible');
         if (bgInner) bgInner.classList.add('hidden');
         
-        // GALAXY title - fade in 0.68-0.70, visible 0.70-0.73, scroll up out 0.73-0.76
+        // GALAXY title - letter-by-letter reveal 0.64-0.70, visible 0.70-0.73, split apart 0.73-0.77
         if (galaxyText) {
-          if (scrollPercent >= 0.68 && scrollPercent < 0.70) {
-            // Fade in phase
-            const fadeInProgress = (scrollPercent - 0.68) / 0.02;
-            const eased = 1 - Math.pow(1 - fadeInProgress, 3);
-            galaxyText.style.opacity = eased;
-            galaxyText.style.transform = `translate(-50%, -50%) scale(${0.9 + eased * 0.1})`;
+          const galaxyTitle = galaxyText.querySelector('.galaxy-title');
+          const galaxySub = galaxyText.querySelector('.galaxy-subtitle');
+
+          if (scrollPercent >= 0.64 && scrollPercent < 0.70) {
+            // Letter-by-letter reveal with blur
+            const revealProgress = (scrollPercent - 0.64) / 0.06;
             galaxyText.classList.add('visible');
+            galaxyText.style.opacity = 1;
+            galaxyText.style.transform = 'translate(-50%, -50%)';
+
+            // Title letters
+            if (galaxyTitle && !galaxyTitle._lettersWrapped) {
+              const text = galaxyTitle.textContent;
+              galaxyTitle.innerHTML = text.split('').map(ch =>
+                ch === ' ' ? ' ' : `<span class="galaxy-letter">${ch}</span>`
+              ).join('');
+              galaxyTitle._lettersWrapped = true;
+            }
+            const letters = galaxyTitle ? galaxyTitle.querySelectorAll('.galaxy-letter') : [];
+            letters.forEach((letter, i) => {
+              const letterDelay = i / letters.length;
+              const letterProgress = Math.max(0, Math.min(1, (revealProgress - letterDelay * 0.6) / 0.4));
+              const eased = letterProgress * letterProgress * (3 - 2 * letterProgress);
+              letter.style.opacity = eased;
+              letter.style.filter = `blur(${(1 - eased) * 12}px)`;
+              letter.style.transform = `translateY(${(1 - eased) * 20}px)`;
+              letter.style.display = 'inline-block';
+            });
+
+            // Subtitle fades in at end
+            if (galaxySub) {
+              const subProgress = Math.max(0, (revealProgress - 0.6) / 0.4);
+              const subEased = subProgress * subProgress * (3 - 2 * subProgress);
+              galaxySub.style.opacity = subEased;
+              galaxySub.style.filter = `blur(${(1 - subEased) * 8}px)`;
+            }
           } else if (scrollPercent >= 0.70 && scrollPercent < 0.73) {
             // Fully visible
             galaxyText.style.opacity = 1;
-            galaxyText.style.transform = 'translate(-50%, -50%) scale(1)';
+            galaxyText.style.transform = 'translate(-50%, -50%)';
             galaxyText.classList.add('visible');
-          } else if (scrollPercent >= 0.73 && scrollPercent < 0.76) {
-            // Scroll up phase - text rolls upward (overlaps with frames fade-in)
-            const scrollUpProgress = (scrollPercent - 0.73) / 0.03;
-            const eased = scrollUpProgress * scrollUpProgress;
-            const translateY = -50 - (eased * 80);
-            galaxyText.style.opacity = 1 - eased;
-            galaxyText.style.transform = `translate(-50%, ${translateY}%)`;
+            const letters = galaxyTitle ? galaxyTitle.querySelectorAll('.galaxy-letter') : [];
+            letters.forEach(letter => {
+              letter.style.opacity = 1;
+              letter.style.filter = 'blur(0px)';
+              letter.style.transform = 'translateY(0)';
+            });
+            if (galaxySub) {
+              galaxySub.style.opacity = 1;
+              galaxySub.style.filter = 'blur(0px)';
+            }
+          } else if (scrollPercent >= 0.73 && scrollPercent < 0.77) {
+            // Letters split apart and fade
+            const exitProgress = (scrollPercent - 0.73) / 0.04;
+            const eased = exitProgress * exitProgress;
             galaxyText.classList.add('visible');
+            galaxyText.style.opacity = 1 - eased * 0.3;
+            galaxyText.style.transform = 'translate(-50%, -50%)';
+
+            const letters = galaxyTitle ? galaxyTitle.querySelectorAll('.galaxy-letter') : [];
+            letters.forEach((letter, i) => {
+              const center = letters.length / 2;
+              const offset = (i - center) * eased * 40;
+              const yOffset = -eased * 50 + Math.sin(i * 0.8) * eased * 30;
+              letter.style.transform = `translate(${offset}px, ${yOffset}px)`;
+              letter.style.opacity = 1 - eased;
+              letter.style.filter = `blur(${eased * 8}px)`;
+            });
+            if (galaxySub) {
+              galaxySub.style.opacity = 1 - eased;
+              galaxySub.style.filter = `blur(${eased * 6}px)`;
+            }
           } else {
             // Hidden
             galaxyText.style.opacity = 0;
@@ -3218,9 +3534,9 @@ canvas {
           }
         }
         
-        // Timeline "10.8B YEARS AGO" - same scroll effect as timeline-1 (0.75 to 0.85)
-        const galaxyTimeStart = 0.75;
-        const galaxyTimeEnd = 0.85;
+        // Timeline "10.8B YEARS AGO" - same scroll effect as timeline-1 (0.73 to 0.83)
+        const galaxyTimeStart = 0.73;
+        const galaxyTimeEnd = 0.83;
         if (scrollPercent >= galaxyTimeStart && scrollPercent < galaxyTimeEnd) {
           if (timelineGalaxy) {
             const progress = (scrollPercent - galaxyTimeStart) / (galaxyTimeEnd - galaxyTimeStart);
@@ -3242,6 +3558,7 @@ canvas {
         }
       } else {
         purpleGalaxyBg.classList.remove('visible');
+        purpleGalaxyBg.style.opacity = '';
         if (bgInner) bgInner.classList.remove('hidden');
         
         // Hide galaxy text
@@ -3253,34 +3570,75 @@ canvas {
         }
       }
       
-      // Planets background - appears from 0.88 until end
+      // Planets background - gentle fade in from 0.89 to 0.94
       const solarSystemSection = document.getElementById('solar-system-section');
       
-      if (scrollPercent >= 0.88) {
+      if (scrollPercent >= 0.89) {
         planetsBg.classList.add('visible');
-        purpleGalaxyBg.classList.remove('visible'); // Hide purple galaxy
+        
+        // 0.89-0.94: slow fade in, synced with purple galaxy fade out
+        if (scrollPercent < 0.94) {
+          const fadeT = (scrollPercent - 0.89) / 0.05;
+          // easeInOutQuad - gentle S curve matching the galaxy fade
+          const eased = fadeT < 0.5
+            ? 2 * fadeT * fadeT
+            : 1 - Math.pow(-2 * fadeT + 2, 2) / 2;
+          planetsBg.style.opacity = eased;
+        } else {
+          planetsBg.style.opacity = '';
+        }
+        
         if (galaxyText) galaxyText.classList.remove('visible');
         if (timelineGalaxy) {
           timelineGalaxy.style.opacity = '0';
         }
       } else {
         planetsBg.classList.remove('visible');
+        planetsBg.style.opacity = '';
       }
       
-      // Solar system section - only from 0.88 to 0.92
-      if (scrollPercent >= 0.88 && scrollPercent <= 0.92) {
-        if (solarSystemSection) solarSystemSection.classList.add('visible');
+      // Solar system section - enters after bg starts (0.92-0.98)
+      if (scrollPercent >= 0.92) {
+        if (solarSystemSection) {
+          solarSystemSection.classList.add('visible');
+          
+          if (scrollPercent < 0.98) {
+            // 0.92-0.98: gentle rise from below + fade + slight blur clear
+            const t = (scrollPercent - 0.92) / 0.06;
+            // easeOutQuint - very smooth deceleration
+            const eased = 1 - Math.pow(1 - t, 5);
+            const translateY = (1 - eased) * 30; // starts 30vh below
+            // Opacity comes in gently
+            const opacityT = Math.min(t * 1.2, 1);
+            const opacity = opacityT * opacityT * (3 - 2 * opacityT);
+            // Slight blur that clears as it settles
+            const blur = (1 - eased) * 2;
+            solarSystemSection.style.transform = `translateY(${translateY}vh)`;
+            solarSystemSection.style.opacity = opacity;
+            solarSystemSection.style.filter = `blur(${blur}px)`;
+          } else {
+            // Fully settled
+            solarSystemSection.style.transform = 'translateY(0)';
+            solarSystemSection.style.opacity = '';
+            solarSystemSection.style.filter = '';
+          }
+        }
         const sunVideo = document.getElementById('planet-image');
         if (sunVideo && sunVideo.tagName === 'VIDEO' && sunVideo.paused) {
           sunVideo.play().catch(() => {});
         }
       } else {
-        if (solarSystemSection) solarSystemSection.classList.remove('visible');
+        if (solarSystemSection) {
+          solarSystemSection.classList.remove('visible');
+          solarSystemSection.style.opacity = '';
+          solarSystemSection.style.transform = '';
+          solarSystemSection.style.filter = '';
+        }
       }
       
-      // Footer - from 0.92 to end (right after planets)
+      // Footer - from 0.98 to end
       const siteFooter = document.getElementById('site-footer');
-      if (scrollPercent >= 0.92) {
+      if (scrollPercent >= 0.98) {
         if (siteFooter) siteFooter.classList.add('visible');
       } else {
         if (siteFooter) siteFooter.classList.remove('visible');
@@ -3745,6 +4103,157 @@ canvas {
       switchPlanet(planetOrder[nextIdx]);
     });
 
+  </script>
+
+  <!-- Accessibility Menu Script -->
+  <script>
+    const a11yToggle = document.getElementById('a11y-toggle');
+    const a11yPanel = document.getElementById('a11y-panel');
+    let fontScale = 100;
+    let isHebrew = false;
+    
+    const hebrewTranslations = {
+      // Big Bang section
+      '.hero-content .hero-title': 'המפץ הגדול',
+      '.hero-content .hero-subtitle': 'תיאוריית המפץ הגדול גורסת שהיקום התחיל כנקודה חמה וצפופה\nאינסופית ברוחב של מילימטרים בודדים. היא הייתה דומה לחור\nשחור בעל עוצמה אדירה לפני כ-13.7 מיליארד שנה.',
+      // Black Holes section
+      '#blackhole-text .hero-title': 'חורים שחורים',
+      '#blackhole-text .hero-subtitle': 'חור שחור הוא אזור בחלל שבו כוח הכבידה חזק כל כך,\nשאפילו אור - הישות המהירה ביותר ביקום - לא יכול לברוח.\nהגבול של חור שחור נקרא אופק האירועים, נקודת אל-חזור\nשמעבר לה באמת לא ניתן לראות.',
+      // Galaxy section
+      '.galaxy-title': 'גלקסיה',
+      '.galaxy-subtitle': 'גלקסיה היא מערכת הקשורה בכבידה של כוכבים, שרידי כוכבים,\nגז בין-כוכבי, אבק וחומר אפל. המילה נגזרת מהיוונית\n"גלקסיאס", שפירושו "חלבי", התייחסות לגלקסיית שביל החלב שלנו.',
+      // Timeline 1 - Big Bang
+      '#timeline-1 .timeline-description': 'הנקודה הזעירה הזו התפוצצה באלימות, ומהפיצוץ הזה - מה"מפץ" - נוצרו כל החומר, האנרגיה, המרחב והזמן.',
+      // Timeline 2 - Black Holes
+      '#timeline-2 .timeline-description': 'חור שחור הוא אזור בחלל שבו כוח הכבידה כה עוצמתי, שאפילו אור - הישות המהירה ביותר ביקום - אינו יכול לחמוק ממנו. גבולו של החור השחור נקרא אופק האירועים, נקודת אל-חזור שמעבר לה אי אפשר לראות דבר.',
+      // Timeline Galaxy
+      '#timeline-galaxy .timeline-description': 'הגלקסיות הראשונות החלו להיווצר, כאשר הכבידה משכה יחד עננים עצומים של מימן שנותרו מהמפץ הגדול. גלקסיות מוקדמות אלה היו קטנות ולא סדירות, והתמזגו במשך מיליארדי שנים ליצירת הספירלות והאליפטיות המרהיבות שאנו רואים היום.',
+      // Footer
+      '.footer-tagline': 'חוקרים את היקום מהמפץ הגדול ועד הכוכבים שמנחים אותנו היום.',
+      '.footer-copyright': '© 2026 Origin. כל הזכויות שמורות. נוצר עם ✦ בין הכוכבים.',
+      // Accessibility panel
+      '.a11y-panel-title': 'נגישות',
+      // Timeline nav
+      '.timeline-nav-point[data-scroll="0.15"] .timeline-nav-label': 'המפץ הגדול',
+      '.timeline-nav-point[data-scroll="0.40"] .timeline-nav-label': 'חורים שחורים',
+      '.timeline-nav-point[data-scroll="0.67"] .timeline-nav-label': 'גלקסיה',
+      '.timeline-nav-point[data-scroll="0.93"] .timeline-nav-label': 'מערכת השמש',
+      // Music
+      '.music-label': 'צליל פועל',
+    };
+    
+    // Store original English text
+    const englishOriginals = {};
+    
+    function toggleHebrew() {
+      isHebrew = !isHebrew;
+      
+      if (isHebrew) {
+        document.body.style.direction = 'ltr'; // keep LTR layout
+        
+        for (const [selector, hebrewText] of Object.entries(hebrewTranslations)) {
+          const el = document.querySelector(selector);
+          if (el) {
+            if (!englishOriginals[selector]) {
+              englishOriginals[selector] = el.innerHTML;
+            }
+            el.innerHTML = hebrewText.replace(/\n/g, '<br>');
+          }
+        }
+      } else {
+        for (const [selector, originalHTML] of Object.entries(englishOriginals)) {
+          const el = document.querySelector(selector);
+          if (el) {
+            el.innerHTML = originalHTML;
+          }
+        }
+      }
+    }
+    
+    function applyFontScale() {
+      const scale = fontScale / 100;
+      document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a, li, td, th, label, .timeline-text, .galaxy-title, .galaxy-subtitle, .blackhole-text-content, .planet-nav-item, .footer-title, .footer-text, .footer-copyright, .planet-title-overlay, .stat-value, .stat-label, .planet-description, .music-label, .timeline-nav-label').forEach(el => {
+        if (scale === 1) {
+          el.style.removeProperty('--a11y-scale');
+          el.style.fontSize = '';
+        } else {
+          const computed = parseFloat(window.getComputedStyle(el).fontSize);
+          if (!el.dataset.origFontSize) el.dataset.origFontSize = computed;
+          el.style.fontSize = (parseFloat(el.dataset.origFontSize) * scale) + 'px';
+        }
+      });
+      if (scale === 1) {
+        document.querySelectorAll('[data-orig-font-size]').forEach(el => delete el.dataset.origFontSize);
+      }
+    }
+    
+    // Language toggle
+    const langToggle = document.getElementById('lang-toggle');
+    langToggle.addEventListener('click', () => {
+      toggleHebrew();
+      langToggle.classList.toggle('active');
+      langToggle.textContent = isHebrew ? 'EN' : 'HE';
+    });
+
+    a11yToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      a11yPanel.classList.toggle('open');
+      a11yToggle.classList.toggle('active');
+    });
+    
+    // Close panel on outside click
+    document.addEventListener('click', (e) => {
+      if (!a11yPanel.contains(e.target) && !a11yToggle.contains(e.target)) {
+        a11yPanel.classList.remove('open');
+        a11yToggle.classList.remove('active');
+      }
+    });
+    
+    document.querySelectorAll('.a11y-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        
+        switch (action) {
+          case 'font-increase':
+            fontScale = Math.min(fontScale + 15, 160);
+            applyFontScale();
+            break;
+            
+          case 'font-decrease':
+            fontScale = Math.max(fontScale - 15, 70);
+            applyFontScale();
+            break;
+            
+          case 'high-contrast':
+            document.body.classList.toggle('a11y-high-contrast');
+            btn.classList.toggle('active');
+            break;
+            
+          case 'grayscale':
+            document.body.classList.toggle('a11y-grayscale');
+            btn.classList.toggle('active');
+            break;
+            
+          case 'highlight-links':
+            document.body.classList.toggle('a11y-highlight-links');
+            btn.classList.toggle('active');
+            break;
+            
+          case 'big-cursor':
+            document.body.classList.toggle('a11y-big-cursor');
+            btn.classList.toggle('active');
+            break;
+            
+          case 'reset':
+            fontScale = 100;
+            applyFontScale();
+            if (isHebrew) toggleHebrew();
+            document.body.classList.remove('a11y-high-contrast', 'a11y-grayscale', 'a11y-highlight-links', 'a11y-big-cursor');
+            document.querySelectorAll('.a11y-btn.active').forEach(b => b.classList.remove('active'));
+            break;
+        }
+      });
+    });
   </script>
 </body>
 </html>

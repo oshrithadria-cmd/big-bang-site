@@ -299,14 +299,20 @@ const tFlash = flashRaw < 0.5
   ? easeOutExpo(flashRaw * 2)
   : 1 - easeOutExpo((flashRaw - 0.5) * 2);
 
-// פיצוץ זוהר! (0.15 עד 0.28) - יותר איטי
+// פיצוץ זוהר! (0.15 עד 0.28) - איטי בהתחלה, מאיץ אחרי
 const explodeRaw = phaseT(scrollProgress, 0.15, 0.28);
 let tExplode;
-if (explodeRaw < 0.7) {
-  tExplode = (explodeRaw / 0.7) * 0.25;
+if (explodeRaw < 0.5) {
+  // חצי ראשון - מאוד איטי (רק 10% מהפיצוץ)
+  tExplode = (explodeRaw / 0.5) * 0.10;
+} else if (explodeRaw < 0.8) {
+  // אמצע - מתחיל להאיץ
+  const midPart = (explodeRaw - 0.5) / 0.3;
+  tExplode = 0.10 + midPart * 0.25;
 } else {
-  const fastPart = (explodeRaw - 0.7) / 0.3;
-  tExplode = 0.25 + easeOutExpo(fastPart) * 0.75;
+  // סוף - פיצוץ מלא
+  const fastPart = (explodeRaw - 0.8) / 0.2;
+  tExplode = 0.35 + easeOutExpo(fastPart) * 0.65;
 }
 
 // חזרה לכוכבים (0.26 עד 0.29) - נגמר לפני BLACK HOLES
