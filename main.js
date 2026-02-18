@@ -333,12 +333,11 @@ const tGalaxyForm = phaseT(scrollProgress, 0.68, 0.78);
 // גלקסיה (0.70 עד 0.80)
 const tGalaxy     = easeInOutCubic(phaseT(scrollProgress, 0.70, 0.80));
 
-// הורדה הדרגתית של כוכבים: מ-14,000 ל-10,000 (בין 0.29 ל-0.88)
 const starStart = leftCount + rightCount; // 8000
 const totalRegularStars = particleCount - starStart; // 14000
-const starsToHide = totalRegularStars - 10000; // 4000
-const tFadeStars = phaseT(scrollProgress, 0.29, 0.88);
-const visibleRegularStars = totalRegularStars - Math.floor(tFadeStars * starsToHide);
+const visibleRegularStars = scrollProgress >= 0.89 ? 2000
+  : scrollProgress >= 0.29 ? 5500
+  : totalRegularStars;
 
   const posArr = geometry.attributes.position.array;
 

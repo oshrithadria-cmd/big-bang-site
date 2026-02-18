@@ -10,6 +10,13 @@
   <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-014.png">
   <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-021.png">
   <link rel="preload" as="image" href="assets/video-frames/ezgif-frame-028.png">
+  <!-- Preload key galaxy frames for smooth scroll -->
+  <link rel="preload" as="image" href="assets/galaxy-frames/ezgif-frame-001.png">
+  <link rel="preload" as="image" href="assets/galaxy-frames/ezgif-frame-010.png">
+  <link rel="preload" as="image" href="assets/galaxy-frames/ezgif-frame-020.png">
+  <link rel="preload" as="image" href="assets/galaxy-frames/ezgif-frame-030.png">
+  <link rel="preload" as="image" href="assets/galaxy-frames/ezgif-frame-040.png">
+  <link rel="preload" as="image" href="assets/galaxy-frames/ezgif-frame-051.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;800&display=swap" rel="stylesheet">
@@ -306,8 +313,8 @@
     }
     
     .music-icon-svg svg {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
     }
     
     .music-player.paused .music-icon-svg {
@@ -321,25 +328,33 @@
     
     .music-player-container {
       position: relative;
-      width: 60px;
-      height: 30px;
+      width: 48px;
+      height: 48px;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: box-shadow 0.3s ease;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
     }
     
     .music-player:not(.paused) .music-player-container {
-      box-shadow: 0 4px 30px rgba(100, 200, 200, 0.4);
+      box-shadow: 0 2px 20px rgba(100, 200, 200, 0.4);
       border-color: rgba(100, 200, 200, 0.4);
+    }
+    
+    .music-player:hover .music-player-container {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
     }
     
     
     
     .music-label {
       position: absolute;
-      bottom: -16px;
+      bottom: -20px;
       left: 50%;
       transform: translateX(-50%);
       font-family: 'Inter', sans-serif;
@@ -889,7 +904,7 @@
     .timeline-nav-points {
       display: flex;
       flex-direction: column;
-      gap: 50px;
+      gap: 30px;
       position: relative;
       padding: 20px 0;
     }
@@ -1474,7 +1489,7 @@ canvas {
   left: 60px;
   font-family: 'Inter', sans-serif;
   font-weight: 800;
-  font-size: 26px;
+  font-size: 34px;
   color: rgba(255, 255, 255, 0.9);
   letter-spacing: 2px;
   pointer-events: none;
@@ -1560,6 +1575,28 @@ canvas {
   }
 }
 
+/* Hotspot hover label - title next to dot */
+.hotspot-label {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 14px);
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.hotspot:hover .hotspot-label,
+.hotspot.active-hotspot .hotspot-label {
+  opacity: 1;
+}
+
 .hotspot-tooltip {
   position: absolute;
   background: rgba(0, 0, 0, 0.9);
@@ -1590,7 +1627,7 @@ canvas {
   margin: 0 0 8px 0;
   font-size: 16px;
   font-weight: 600;
-  color: #ffcc66;
+  color: #ffffff;
 }
 
 .hotspot-tooltip p {
@@ -1735,28 +1772,32 @@ canvas {
       top: 20px;
       right: 60px;
       z-index: 2000;
-      background: none;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.85);
       font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      padding: 4px 8px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 8px 16px;
       cursor: pointer;
       transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     }
     
     .lang-toggle:hover {
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.5);
+      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
     }
     
     .lang-toggle.active {
       color: #fff;
       border-color: rgba(255, 255, 255, 0.6);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.18);
     }
 
     /* Accessibility Menu */
@@ -1765,27 +1806,29 @@ canvas {
       left: 30px;
       bottom: 85px;
       z-index: 2000;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
       backdrop-filter: blur(8px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     }
     
     .a11y-toggle:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
     }
     
     .a11y-toggle svg {
-      width: 20px;
-      height: 20px;
+      width: 26px;
+      height: 26px;
       transition: all 0.3s ease;
     }
     
@@ -1796,6 +1839,7 @@ canvas {
     .a11y-toggle.active {
       background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
     }
 
     .a11y-panel {
@@ -1916,8 +1960,8 @@ canvas {
       .a11y-toggle {
         left: 16px;
         bottom: 65px;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
       }
       .a11y-panel {
         left: 16px;
@@ -2044,30 +2088,42 @@ canvas {
     <div class="timeline-nav-progress" id="timeline-nav-progress"></div>
     <div class="timeline-nav-points">
       <div class="timeline-nav-point active" data-scroll="0">
-        <span class="timeline-nav-label">-13.7B</span>
+        <span class="timeline-nav-label">The Big Bang</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.15">
-        <span class="timeline-nav-label">Big Bang</span>
+      <div class="timeline-nav-point" data-scroll="0.07">
+        <span class="timeline-nav-label">13.7B Years Ago</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.31">
-        <span class="timeline-nav-label">-13.2B</span>
+      <div class="timeline-nav-point" data-scroll="0.25">
+        <span class="timeline-nav-label">From Energy to Stars</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.40">
+      <div class="timeline-nav-point" data-scroll="0.30">
         <span class="timeline-nav-label">Black Holes</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.55">
-        <span class="timeline-nav-label">-10.8B</span>
+      <div class="timeline-nav-point" data-scroll="0.37">
+        <span class="timeline-nav-label">13.2B Years Ago</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.67">
+      <div class="timeline-nav-point" data-scroll="0.50">
+        <span class="timeline-nav-label">The Dark Core</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.64">
         <span class="timeline-nav-label">Galaxy</span>
         <div class="timeline-nav-dot"></div>
       </div>
-      <div class="timeline-nav-point" data-scroll="0.93">
+      <div class="timeline-nav-point" data-scroll="0.73">
+        <span class="timeline-nav-label">10.8B Years Ago</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.85">
+        <span class="timeline-nav-label">Architecture of the Universe</span>
+        <div class="timeline-nav-dot"></div>
+      </div>
+      <div class="timeline-nav-point" data-scroll="0.92">
         <span class="timeline-nav-label">Solar System</span>
         <div class="timeline-nav-dot"></div>
       </div>
@@ -2351,7 +2407,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/planck-epoch.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2367,7 +2423,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -540px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/grand-unification.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2383,7 +2439,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: 15px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/inflationary-epoch.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2399,7 +2455,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/quark-epoch.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2415,7 +2471,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: -540px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/hadron-epoch.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2431,7 +2487,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -540px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/radiation-era.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2447,7 +2503,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: 15px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/lepton-nuclear-epochs.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2463,7 +2519,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: -270px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/atoms-gas-clouds.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2479,7 +2535,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -220px; left: -540px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/galactic-stellar-epoch.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2499,7 +2555,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/sagittarius-a-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2515,7 +2571,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: -555px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/how-scientists-study-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2532,7 +2588,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: -555px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/accretion-disk-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2549,7 +2605,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: 30px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/types-blackholes-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2566,7 +2622,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -555px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/what-is-blackhole-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2582,7 +2638,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: 30px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/history-discovery-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2599,7 +2655,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: 30px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/types-blackholes2-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2620,7 +2676,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: 15px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/elliptical-galaxies-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2636,7 +2692,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: -270px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/spiral-galaxies-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2652,7 +2708,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -555px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/irregular-galaxies-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2668,7 +2724,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: 30px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/galactic-transformation-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2684,7 +2740,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: -555px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/milky-way-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2700,7 +2756,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -60px; left: -555px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/galaxy-formation-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2716,7 +2772,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: -240px; left: 30px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/cosmic-scale-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -2732,7 +2788,7 @@ canvas {
       <div class="hotspot-tooltip hotspot-tooltip-video" style="top: 30px; left: -270px;">
         <button class="close-btn">&times;</button>
         <div class="tooltip-content-row">
-          <video class="hotspot-video" autoplay loop muted playsinline>
+          <video class="hotspot-video" loop muted playsinline preload="none">
             <source src="assets/living-universe-hotspot.mp4" type="video/mp4">
           </video>
           <div class="tooltip-text">
@@ -3043,6 +3099,19 @@ canvas {
       }
     }
     
+    // Helper: pause all hotspot videos and play the one in active tooltip
+    function pauseAllHotspotVideos() {
+      document.querySelectorAll('.hotspot-video').forEach(v => {
+        v.pause();
+      });
+    }
+    function playTooltipVideo(tooltip) {
+      const video = tooltip.querySelector('.hotspot-video');
+      if (video) {
+        video.play().catch(() => {});
+      }
+    }
+    
     // Handle hotspot clicks
     hotspots.forEach(hotspot => {
       hotspot.addEventListener('click', (e) => {
@@ -3051,16 +3120,19 @@ canvas {
         const isActive = tooltip.classList.contains('active');
         const container = hotspot.closest('.explosion-hotspots');
         
-        // Close all other tooltips and remove classes
+        // Close all other tooltips and pause videos
         document.querySelectorAll('.hotspot-tooltip').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active-hotspot'));
         document.querySelectorAll('.explosion-hotspots').forEach(c => c.classList.remove('tooltip-open'));
+        pauseAllHotspotVideos();
         
         // Toggle this tooltip
         if (!isActive) {
           tooltip.classList.add('active');
           hotspot.classList.add('active-hotspot');
           if (container) container.classList.add('tooltip-open');
+          // Play the video inside this tooltip
+          playTooltipVideo(tooltip);
         }
       });
     });
@@ -3072,6 +3144,7 @@ canvas {
         btn.closest('.hotspot-tooltip').classList.remove('active');
         document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active-hotspot'));
         document.querySelectorAll('.explosion-hotspots').forEach(c => c.classList.remove('tooltip-open'));
+        pauseAllHotspotVideos();
       });
     });
     
@@ -3081,9 +3154,22 @@ canvas {
         document.querySelectorAll('.hotspot-tooltip').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active-hotspot'));
         document.querySelectorAll('.explosion-hotspots').forEach(c => c.classList.remove('tooltip-open'));
+        pauseAllHotspotVideos();
       }
     });
     
+    // Extract h4 titles from tooltips and create hover labels next to dots
+    document.querySelectorAll('.hotspot').forEach(hotspot => {
+      const h4 = hotspot.querySelector('.tooltip-text h4');
+      if (h4) {
+        const label = document.createElement('span');
+        label.className = 'hotspot-label';
+        label.textContent = h4.textContent;
+        hotspot.appendChild(label);
+        h4.remove();
+      }
+    });
+
     // Explosion hotspots - hide others on hover
     const explosionHotspotsEl = document.getElementById('explosion-hotspots');
     if (explosionHotspotsEl) {
@@ -3152,11 +3238,27 @@ canvas {
     
     // Preload all video frames for smooth scroll animation
     const frameCache = [];
-    for (let i = 1; i <= 28; i++) {
+    for (let i = 1; i <= 51; i++) {
       const img = new Image();
       img.src = `assets/video-frames/ezgif-frame-${String(i).padStart(3, '0')}.png`;
       frameCache.push(img);
     }
+    
+    // Preload all galaxy frames immediately for smooth scroll animation
+    const galaxyFrameCache = [];
+    let galaxyFramesPreloaded = false;
+    function preloadGalaxyFrames() {
+      if (galaxyFramesPreloaded) return;
+      galaxyFramesPreloaded = true;
+      for (let i = 1; i <= 51; i++) {
+        const img = new Image();
+        img.src = `assets/galaxy-frames/ezgif-frame-${String(i).padStart(3, '0')}.png`;
+        galaxyFrameCache.push(img);
+      }
+      console.log('Galaxy frames preloading started');
+    }
+    // Start preloading galaxy frames after a short delay (don't block initial load)
+    setTimeout(preloadGalaxyFrames, 2000);
     
     // Milky Way background control
     const milkywayBg = document.getElementById('milkyway-bg');
@@ -4134,10 +4236,16 @@ canvas {
       // Accessibility panel
       '.a11y-panel-title': 'נגישות',
       // Timeline nav
-      '.timeline-nav-point[data-scroll="0.15"] .timeline-nav-label': 'המפץ הגדול',
-      '.timeline-nav-point[data-scroll="0.40"] .timeline-nav-label': 'חורים שחורים',
-      '.timeline-nav-point[data-scroll="0.67"] .timeline-nav-label': 'גלקסיה',
-      '.timeline-nav-point[data-scroll="0.93"] .timeline-nav-label': 'מערכת השמש',
+      '.timeline-nav-point[data-scroll="0"] .timeline-nav-label': 'המפץ הגדול',
+      '.timeline-nav-point[data-scroll="0.07"] .timeline-nav-label': 'לפני 13.7 מיליארד שנה',
+      '.timeline-nav-point[data-scroll="0.25"] .timeline-nav-label': 'מאנרגיה לכוכבים',
+      '.timeline-nav-point[data-scroll="0.30"] .timeline-nav-label': 'חורים שחורים',
+      '.timeline-nav-point[data-scroll="0.37"] .timeline-nav-label': 'לפני 13.2 מיליארד שנה',
+      '.timeline-nav-point[data-scroll="0.50"] .timeline-nav-label': 'הליבה האפלה',
+      '.timeline-nav-point[data-scroll="0.64"] .timeline-nav-label': 'גלקסיה',
+      '.timeline-nav-point[data-scroll="0.73"] .timeline-nav-label': 'לפני 10.8 מיליארד שנה',
+      '.timeline-nav-point[data-scroll="0.85"] .timeline-nav-label': 'מבנה היקום',
+      '.timeline-nav-point[data-scroll="0.92"] .timeline-nav-label': 'מערכת השמש',
       // Music
       '.music-label': 'צליל פועל',
     };
